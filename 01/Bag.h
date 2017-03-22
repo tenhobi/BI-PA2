@@ -7,9 +7,6 @@ class Bag {
 public:
     Bag ();
     Bag (const Bag &b);
-    void aa ();
-    void bb ();
-    void cc ();
     ~Bag ();
     void vloz (int x);
     bool odeber (int x);
