@@ -1,5 +1,6 @@
 cmake-build-debug/
 .idea/
+vgcore.*
 
 # Created by https://www.gitignore.io/api/c,c++,jetbrains,visualstudio,visualstudiocode,sublimetext,eclipse,vim
 
