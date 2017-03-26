@@ -515,11 +515,11 @@ int main (void) {
 
     assert (!rotateImage("sample/input_09.img", "sample/output_09.img", -275, ENDIAN_LITTLE));
 
-    assert (rotateImage("sample/in_2226435.bin", "sample/output_2226435.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_2226435.img", "sample/ref_2226435.bin"));
+    assert (rotateImage("sample/input_10.img", "sample/output_10.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("sample/output_10.img", "sample/ref_10.img"));
 
-    assert (rotateImage("sample/in_2226520.bin", "sample/output_2226520.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_2226520.img", "sample/ref_2226520.bin"));
+    assert (rotateImage("sample/input_11.img", "sample/output_11.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("sample/output_11.img", "sample/ref_11.img"));
 
     // extra inputs (optional & bonus tests)
     assert (rotateImage("sample/extra_input_00.img", "sample/extra_out_00.img", 90, ENDIAN_LITTLE)
