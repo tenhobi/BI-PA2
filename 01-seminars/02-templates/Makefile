@@ -15,7 +15,7 @@ COLOR_GOOD=\033[1;32m
 
 ### Tasks
 
-.PHONY: all build rebuild clean run runclean doc
+.PHONY: all build rebuild clean run runclean rundirect doc
 
 all: run
 
@@ -33,8 +33,9 @@ rebuild: clean build
 clean:
 	@echo "$(COLOR_INFO)removing object files$(COLOR_DEFAULT)"
 	$(shell find $(SOURCEDIR) -type f -name "*.o" -exec rm {} \;)
-	@rm -f $(EXECUTABLE)
 	@echo "$(COLOR_INFO)removing executable files$(COLOR_DEFAULT)"
+	@rm -f $(EXECUTABLE)
+	@echo "$(COLOR_GOOD)CLEAN OK$(COLOR_DEFAULT)"
 
 run: build
 	@echo "$(COLOR_INFO)starting executable$(COLOR_DEFAULT)"
@@ -42,6 +43,9 @@ run: build
 	@echo "$(COLOR_GOOD)EXECUTABLE OK$(COLOR_DEFAULT)"
 
 runclean: rebuild run
+
+rundirect:
+	./$(EXECUTABLE)
 
 doc:
 	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
