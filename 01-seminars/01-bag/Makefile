@@ -24,7 +24,7 @@ all: run
 	@$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 build: $(SOURCES:.cpp=.o)
-	@echo "$(COLOR_INFO)compiled with flags $(COLOR_DEFAULT)$(CXXFLAGS)"
+	@echo "$(COLOR_INFO)compiling with flags $(COLOR_DEFAULT)$(CXXFLAGS)"
 	@$(CXX) $(CXXFLAGS) $(SOURCES:.cpp=.o) -o $(EXECUTABLE)
 	@echo "$(COLOR_GOOD)BUILD OK$(COLOR_DEFAULT)"
 
@@ -39,10 +39,10 @@ clean:
 run: build
 	@echo "$(COLOR_INFO)starting executable$(COLOR_DEFAULT)"
 	@./$(EXECUTABLE)
-	@echo "$(COLOR_INFO)finished executable$(COLOR_DEFAULT)"
+	@echo "$(COLOR_GOOD)EXECUTABLE OK$(COLOR_DEFAULT)"
 
 runclean: rebuild run
 
 doc:
 	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
-	@echo "$(COLOR_GOOD)BUILD OK$(COLOR_DEFAULT)"
+	@echo "$(COLOR_GOOD)DOC OK$(COLOR_DEFAULT)"
