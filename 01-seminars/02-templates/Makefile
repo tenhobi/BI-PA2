@@ -45,7 +45,7 @@ run: build
 runclean: rebuild run
 
 rundirect:
-	./$(EXECUTABLE)
+	@./$(EXECUTABLE)
 
 doc:
 	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
