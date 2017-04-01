@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Integer.hpp"
 
 template<typename T>
 void print (T arr, int len) {
@@ -7,27 +8,6 @@ void print (T arr, int len) {
   }
   std::cout << std::endl;
 }
-
-class Integer {
-public:
-    Integer (int x) : x(x) {};
-
-    Integer operator + (const Integer &b) const {
-      return Integer(x + b.x);
-    }
-
-    friend std::ostream &operator << (std::ostream &os, const Integer &x) {
-      os << x.x;
-      return os;
-    }
-
-    // c++ 11 only
-    operator int () const {
-      return x;
-    }
-private:
-    int x;
-};
 
 template<class T>
 T sum (const T &a, const T &b) {
@@ -38,7 +18,7 @@ int main () {
 
   std::cout << sum(1, 2) << std::endl;
   std::cout << sum<int>('A', '2') << std::endl;
-  std::cout << sum(Integer(3), Integer(5)) << std::endl;
+  std::cout << sum(Integer(3), Integer(11)) << std::endl;
 
   return 0;
 }
