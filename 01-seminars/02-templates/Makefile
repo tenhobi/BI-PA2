@@ -1,13 +1,9 @@
 # In this project, you can use these tasks:
 #
-# - compile			compiles outdated object files and creates the executable
-# - run				does 'compile' and then runs the executable file
-# - clean			cleans all the compiled files
-# ---
-# - recompile		does 'clean' and then 'compile' tasks
-# - runclean		does 'recompile' and then 'run' tasks
-#
-# some of the tasks can be modified by VALGRIND=true
+# - compile		compiles outdated object files and creates the executable
+# - run			does 'compile' and then runs the executable file
+# - clean		cleans all the compiled files
+# - check		does a clean compilation ('check' and 'compile') and runs check tool
 
 ## Variables
 
@@ -16,12 +12,8 @@ CXXFLAGS := -std=c++11 -Wall -pedantic -Werror -Wextra
 EXECUTABLE := program.out
 SOURCEDIR := src/
 SOURCES := $(shell find $(SOURCEDIR) -name "*.cpp")
-VALGRIND ?= false
-VALGRINDFLAGS := --leak-check=yes --tool=memcheck
-
-ifeq ($(VALGRIND), true)
-CXXFLAGS += -g -O2
-endif
+CHECK := valgrind
+CHECKFLAGS := --leak-check=yes --tool=memcheck
 
 ## Colors
 
@@ -44,7 +36,19 @@ compile: $(SOURCES:.cpp=.o)
 	@$(CXX) $(CXXFLAGS) $(SOURCES:.cpp=.o) -o $(EXECUTABLE)
 	@echo "$(COLOR_GOOD)COMPILE OK$(COLOR_DEFAULT)"
 
-recompile: clean compile
+run: compile
+	@echo "$(COLOR_INFO)starting executable$(COLOR_DEFAULT)"
+	@./$(EXECUTABLE)
+	@echo "$(COLOR_GOOD)RUN OK$(COLOR_DEFAULT)"
+
+check: clean compile
+	@echo "$(COLOR_INFO)starting check in $(CHECK) with flags$(COLOR_DEFAULT) $(CHECKFLAGS)"
+	$(CHECK) ./$(EXECUTABLE) $(CHECKFLAGS)
+	@echo "$(COLOR_GOOD)CHECK OK$(COLOR_DEFAULT)"
+
+doc:
+	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
+	@echo "$(COLOR_GOOD)DOC OK$(COLOR_DEFAULT)"
 
 clean:
 	@echo "$(COLOR_INFO)removing object files$(COLOR_DEFAULT)"
@@ -55,22 +59,6 @@ clean:
 	$(shell find $(SOURCEDIR) -type f -name "*.d" -exec rm {} \;)
 	@echo "$(COLOR_GOOD)CLEAN OK$(COLOR_DEFAULT)"
 
-run: compile
-ifeq ($(VALGRIND), true)
-	@echo "$(COLOR_INFO)starting executable in valgrind with flags$(COLOR_DEFAULT) $(VALGRINDFLAGS)"
-	@valgrind $(VALGRINDFLAGS) ./$(EXECUTABLE)
-else
-	@echo "$(COLOR_INFO)starting executable$(COLOR_DEFAULT)"
-	@./$(EXECUTABLE)
-endif
-	@echo "$(COLOR_GOOD)RUN OK$(COLOR_DEFAULT)"
-
-runclean: recompile run
-
-doc:
-	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
-	@echo "$(COLOR_GOOD)DOC OK$(COLOR_DEFAULT)"
-
-.PHONY: all build rebuild clean run runclean rundirect doc
+.PHONY: all compile run check doc clean
 
 -include $(SOURCES:.cpp=.d)
