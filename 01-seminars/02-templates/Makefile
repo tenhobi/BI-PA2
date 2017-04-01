@@ -1,9 +1,5 @@
-# In this project, you can use these tasks:
-#
-# - compile		compiles outdated object files and creates the executable
-# - run			does 'compile' and then runs the executable file
-# - clean		cleans all the compiled files
-# - check		does a clean compilation ('check' and 'compile') and runs check tool
+.DEFAULT_GOAL := help
+.PHONY: all compile run check doc clean
 
 ## Variables
 
@@ -23,8 +19,6 @@ COLOR_INFO=\033[1;36m
 COLOR_GOOD=\033[1;32m
 
 ## Tasks
-
-all: compile
 
 %.o: %.cpp
 	@echo "$(COLOR_STATUS)$^ -> $@$(COLOR_DEFAULT)"
@@ -59,6 +53,15 @@ clean:
 	$(shell find $(SOURCEDIR) -type f -name "*.d" -exec rm {} \;)
 	@echo "$(COLOR_GOOD)CLEAN OK$(COLOR_DEFAULT)"
 
-.PHONY: all compile run check doc clean
+help:
+	@echo "Usage: $(COLOR_INFO)make$(COLOR_DEFAULT) $(COLOR_STATUS)[TARGET]$(COLOR_DEFAULT)"
+	@echo
+	@echo "TARGETS:"
+	@echo "  $(COLOR_STATUS)compile$(COLOR_DEFAULT)   compiles outdated object files and creates the executable"
+	@echo "  $(COLOR_STATUS)run$(COLOR_DEFAULT)       does the 'compile' task and then runs the executable file"
+	@echo "  $(COLOR_STATUS)check$(COLOR_DEFAULT)     does a clean compilation and runs check tool"
+	@echo "  $(COLOR_STATUS)doc$(COLOR_DEFAULT)       generates the project documentation"
+	@echo "  $(COLOR_STATUS)clean$(COLOR_DEFAULT)     removes all of the compiled files and executable"
+	@echo "  $(COLOR_STATUS)help$(COLOR_DEFAULT)      print this message"
 
 -include $(SOURCES:.cpp=.d)
