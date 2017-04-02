@@ -20,16 +20,27 @@ class CVATRegister {
 public:
     CVATRegister (void);
     ~CVATRegister (void);
-    bool NewCompany (const string &name, const string &addr, const string &taxID);
-    bool CancelCompany (const string &name, const string &addr);
-    bool CancelCompany (const string &taxID);
-    bool Invoice (const string &taxID, unsigned int amount);
-    bool Invoice (const string &name, const string &addr, unsigned int amount);
-    bool Audit (const string &name, const string &addr, unsigned int &sumIncome) const;
-    bool Audit (const string &taxID, unsigned int &sumIncome) const;
+    bool NewCompany (const std::string &name, const std::string &addr, const std::string &taxID);
+    bool CancelCompany (const std::string &name, const std::string &addr);
+    bool CancelCompany (const std::string &taxID);
+    bool Invoice (const std::string &taxID, unsigned int amount);
+    bool Invoice (const std::string &name, const std::string &addr, unsigned int amount);
+    bool Audit (const std::string &name, const std::string &addr, unsigned int &sumIncome) const;
+    bool Audit (const std::string &taxID, unsigned int &sumIncome) const;
     unsigned int MedianInvoice (void) const;
 private:
-    // todo
+    class Company {
+    public:
+        std::size_t nameAddress;
+        std::size_t id;
+        unsigned int income;
+    };
+
+    std::vector<Company *> companyNameList;
+    std::vector<Company *> companyIdList;
+    std::vector<unsigned int> companyInvoiceList;
+    static bool compareNameList (const Company *company1, const Company *company2);
+    static bool compareIdList (const Company *company1, const Company *company2);
 };
 
 CVATRegister::CVATRegister (void) {
@@ -37,47 +48,230 @@ CVATRegister::CVATRegister (void) {
 }
 
 CVATRegister::~CVATRegister (void) {
-
+    // only once, because companyIdList has the same pointers
+    for (unsigned int i = 0; i < companyNameList.size(); i++) {
+        if (companyNameList[i] != NULL) {
+            delete companyNameList[i];
+        }
+    }
 }
 
-bool CVATRegister::NewCompany (const string &name, const string &addr, const string &taxID) {
-    return false;
+bool CVATRegister::NewCompany (const std::string &name, const std::string &addr, const std::string &taxID) {
+    Company *company = new Company;
+
+    company->income = 0;
+
+    // temporary data
+    std::string companyName = name;
+    std::string companyAddress = addr;
+
+    // transform and hash name + adress
+    std::transform(companyName.begin(), companyName.end(), companyName.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.end(), companyAddress.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.begin() + 1, companyAddress.begin(), ::toupper);
+    company->nameAddress = std::hash<std::string>{}(companyName + companyAddress);
+
+    // transform and hash id
+    company->id = std::hash<std::string>{}(taxID);
+
+    // if company matches something in nameList or idList, return false
+    if (std::binary_search(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList) ||
+        std::binary_search(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList)) {
+        delete company;
+        return false;
+    }
+
+    // add company
+    companyNameList.insert(std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList), company);
+    companyIdList.insert(std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList), company);
+    return true;
 }
 
-bool CVATRegister::CancelCompany (const string &name, const string &addr) {
-    return false;
+bool CVATRegister::CancelCompany (const std::string &name, const std::string &addr) {
+    Company *company = new Company;
+
+    // temporary data
+    std::string companyName = name;
+    std::string companyAddress = addr;
+
+    // transform and hash name + adress
+    std::transform(companyName.begin(), companyName.end(), companyName.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.end(), companyAddress.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.begin() + 1, companyAddress.begin(), ::toupper);
+    company->nameAddress = std::hash<std::string>{}(companyName + companyAddress);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::iterator iterator = std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyNameList.end()  || (*iterator)->nameAddress != company->nameAddress) {
+        delete company;
+        return false;
+    }
+
+    company->id = (*iterator)->id;
+
+    companyNameList.erase(std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList));
+    companyIdList.erase(std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList));
+
+    delete company;
+    return true;
 }
 
-bool CVATRegister::CancelCompany (const string &taxID) {
-    return false;
+bool CVATRegister::CancelCompany (const std::string &taxID) {
+    Company *company = new Company;
+
+    // transform and hash id
+    company->id = std::hash<std::string>{}(taxID);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::iterator iterator = std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyIdList.end() || (*iterator)->id != company->id) {
+        delete company;
+        return false;
+    }
+
+    company->nameAddress = (*iterator)->nameAddress;
+
+    companyIdList.erase(std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList));
+    companyNameList.erase(std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList));
+    delete company;
+    return true;
 }
 
-bool CVATRegister::Invoice (const string &taxID, unsigned int amount) {
-    return false;
+bool CVATRegister::Invoice (const std::string &taxID, unsigned int amount) {
+    Company *company = new Company;
+
+    // transform and hash id
+    company->id = std::hash<std::string>{}(taxID);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::iterator iterator = std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyIdList.end() || (*iterator)->id != company->id) {
+        delete company;
+        return false;
+    }
+
+    companyInvoiceList.push_back(amount);
+    (*iterator)->income += amount;
+
+    delete company;
+    return true;
 }
 
-bool CVATRegister::Invoice (const string &name, const string &addr, unsigned int amount) {
-    return false;
+bool CVATRegister::Invoice (const std::string &name, const std::string &addr, unsigned int amount) {
+    Company *company = new Company;
+
+    // temporary data
+    std::string companyName = name;
+    std::string companyAddress = addr;
+
+    // transform and hash name + adress
+    std::transform(companyName.begin(), companyName.end(), companyName.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.end(), companyAddress.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.begin() + 1, companyAddress.begin(), ::toupper);
+    company->nameAddress = std::hash<std::string>{}(companyName + companyAddress);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::iterator iterator = std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyNameList.end() || (*iterator)->nameAddress != company->nameAddress) {
+        delete company;
+        return false;
+    }
+
+    companyInvoiceList.push_back(amount);
+    (*iterator)->income += amount;
+
+    delete company;
+    return true;
 }
 
-bool CVATRegister::Audit (const string &name, const string &addr, unsigned int &sumIncome) const {
-    return false;
+bool CVATRegister::Audit (const std::string &name, const std::string &addr, unsigned int &sumIncome) const {
+    Company *company = new Company;
+
+    // temporary data
+    std::string companyName = name;
+    std::string companyAddress = addr;
+
+    // transform and hash name + adress
+    std::transform(companyName.begin(), companyName.end(), companyName.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.end(), companyAddress.begin(), ::tolower);
+    std::transform(companyAddress.begin(), companyAddress.begin() + 1, companyAddress.begin(), ::toupper);
+    company->nameAddress = std::hash<std::string>{}(companyName + companyAddress);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::const_iterator iterator = std::lower_bound(companyNameList.begin(), companyNameList.end(), company, CVATRegister::compareNameList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyNameList.end() || (*iterator)->nameAddress != company->nameAddress) {
+        delete company;
+        return false;
+    }
+
+    sumIncome = (*iterator)->income;
+    delete company;
+    return true;
 }
 
-bool CVATRegister::Audit (const string &taxID, unsigned int &sumIncome) const {
-    return false;
+bool CVATRegister::Audit (const std::string &taxID, unsigned int &sumIncome) const {
+    Company *company = new Company;
+
+    // transform and hash id
+    company->id = std::hash<std::string>{}(taxID);
+
+    // find iterator
+    std::vector<CVATRegister::Company *>::const_iterator iterator = std::lower_bound(companyIdList.begin(), companyIdList.end(), company, CVATRegister::compareIdList);
+
+    // if company is found then remove company from both lists
+    if (iterator >= companyIdList.end() || (*iterator)->id != company->id) {
+        delete company;
+        return false;
+    }
+
+    sumIncome = (*iterator)->income;
+    delete company;
+    return true;
 }
 
 unsigned int CVATRegister::MedianInvoice (void) const {
-    return 0;
+    if (companyInvoiceList.size() == 0) {
+        return 0;
+    }
+
+    std::vector<unsigned int> companyInvoiceListSorted;
+    companyInvoiceListSorted = companyInvoiceList;
+
+    std::sort(companyInvoiceListSorted.begin(), companyInvoiceListSorted.end());
+
+    return companyInvoiceListSorted[(companyInvoiceListSorted.size() / 2)];
+}
+
+bool CVATRegister::compareNameList (const CVATRegister::Company *company1, const CVATRegister::Company *company2) {
+    if (company1 != NULL && company2 != NULL) {
+        return company1->nameAddress < company2->nameAddress;
+    }
+
+    return false;
+}
+
+bool CVATRegister::compareIdList (const CVATRegister::Company *company1, const CVATRegister::Company *company2) {
+    if (company1 != NULL && company2 != NULL) {
+        return company1->id < company2->id;
+    }
+
+    return false;
 }
 
 #ifndef __PROGTEST__
 
 int main (void) {
     unsigned int sumIncome;
-
-    return 0;
 
     CVATRegister b1;
     assert (b1.NewCompany("ACME", "Kolejni", "666/666/666"));

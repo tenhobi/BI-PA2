@@ -4,12 +4,12 @@
 ## Variables
 
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -pedantic -Werror -Wextra
+CXXFLAGS := -std=c++11 -Wall -pedantic -Werror -g -O2
 EXECUTABLE := program.out
 SOURCEDIR := src/
 SOURCES := $(shell find $(SOURCEDIR) -name "*.cpp")
 CHECK := valgrind
-CHECKFLAGS := --leak-check=yes --tool=memcheck
+CHECKFLAGS := --leak-check=full --tool=memcheck
 
 ## Colors
 
@@ -37,7 +37,7 @@ run: compile
 
 check: clean compile
 	@echo "$(COLOR_INFO)starting check in $(CHECK) with flags$(COLOR_DEFAULT) $(CHECKFLAGS)"
-	$(CHECK) ./$(EXECUTABLE) $(CHECKFLAGS)
+	$(CHECK) $(CHECKFLAGS) ./$(EXECUTABLE)
 	@echo "$(COLOR_GOOD)CHECK OK$(COLOR_DEFAULT)"
 
 doc:
