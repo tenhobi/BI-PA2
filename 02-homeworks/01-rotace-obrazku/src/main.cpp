@@ -487,68 +487,68 @@ bool identicalFiles (const char *fileName1, const char *fileName2) {
 
 int main (void) {
 
-    assert (rotateImage("sample/input_00.img", "sample/output_00.img", 0, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_00.img", "sample/ref_00.img"));
+    assert (rotateImage("../sample/input_00.img", "../sample/output_00.img", 0, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_00.img", "../sample/ref_00.img"));
 
-    assert (rotateImage("sample/input_01.img", "sample/output_01.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_01.img", "sample/ref_01.img"));
+    assert (rotateImage("../sample/input_01.img", "../sample/output_01.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_01.img", "../sample/ref_01.img"));
 
-    assert (rotateImage("sample/input_02.img", "sample/output_02.img", 540, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_02.img", "sample/ref_02.img"));
+    assert (rotateImage("../sample/input_02.img", "../sample/output_02.img", 540, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_02.img", "../sample/ref_02.img"));
 
-    assert (rotateImage("sample/input_03.img", "sample/output_03.img", -900450, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_03.img", "sample/ref_03.img"));
+    assert (rotateImage("../sample/input_03.img", "../sample/output_03.img", -900450, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_03.img", "../sample/ref_03.img"));
 
-    assert (rotateImage("sample/input_04.img", "sample/output_04.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_04.img", "sample/ref_04.img"));
+    assert (rotateImage("../sample/input_04.img", "../sample/output_04.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_04.img", "../sample/ref_04.img"));
 
-    assert (rotateImage("sample/input_05.img", "sample/output_05.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_05.img", "sample/ref_05.img"));
+    assert (rotateImage("../sample/input_05.img", "../sample/output_05.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_05.img", "../sample/ref_05.img"));
 
-    assert (rotateImage("sample/input_06.img", "sample/output_06.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_06.img", "sample/ref_06.img"));
+    assert (rotateImage("../sample/input_06.img", "../sample/output_06.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_06.img", "../sample/ref_06.img"));
 
-    assert (rotateImage("sample/input_07.img", "sample/output_07.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_07.img", "sample/ref_07.img"));
+    assert (rotateImage("../sample/input_07.img", "../sample/output_07.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_07.img", "../sample/ref_07.img"));
 
-    assert (!rotateImage("sample/input_08.img", "sample/output_08.img", 270, ENDIAN_LITTLE));
+    assert (!rotateImage("../sample/input_08.img", "../sample/output_08.img", 270, ENDIAN_LITTLE));
 
-    assert (!rotateImage("sample/input_09.img", "sample/output_09.img", -275, ENDIAN_LITTLE));
+    assert (!rotateImage("../sample/input_09.img", "../sample/output_09.img", -275, ENDIAN_LITTLE));
 
-    assert (rotateImage("sample/input_10.img", "sample/output_10.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_10.img", "sample/ref_10.img"));
+    assert (rotateImage("../sample/in_2226435.bin", "../sample/output_2226435.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_2226435.img", "../sample/ref_2226435.bin"));
 
-    assert (rotateImage("sample/input_11.img", "sample/output_11.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/output_11.img", "sample/ref_11.img"));
+    assert (rotateImage("../sample/in_2226520.bin", "../sample/output_2226520.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("../sample/output_2226520.img", "../sample/ref_2226520.bin"));
 
     // extra inputs (optional & bonus tests)
-    assert (rotateImage("sample/extra_input_00.img", "sample/extra_out_00.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("sample/extra_out_00.img", "sample/extra_ref_00.img"));
-    assert (rotateImage("sample/extra_input_01.img", "sample/extra_out_01.img", 90, ENDIAN_BIG)
-            && identicalFiles("sample/extra_out_01.img", "sample/extra_ref_01.img"));
-    assert (rotateImage("sample/extra_input_02.img", "sample/extra_out_02.img", 180, ENDIAN_BIG)
-            && identicalFiles("sample/extra_out_02.img", "sample/extra_ref_02.img"));
-    assert (rotateImage("sample/extra_input_03.img", "sample/extra_out_03.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("sample/extra_out_03.img", "sample/extra_ref_03.img"));
+    assert (rotateImage("../sample/extra_input_00.img", "../sample/extra_out_00.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("../sample/extra_out_00.img", "../sample/extra_ref_00.img"));
+    assert (rotateImage("../sample/extra_input_01.img", "../sample/extra_out_01.img", 90, ENDIAN_BIG)
+            && identicalFiles("../sample/extra_out_01.img", "../sample/extra_ref_01.img"));
+    assert (rotateImage("../sample/extra_input_02.img", "../sample/extra_out_02.img", 180, ENDIAN_BIG)
+            && identicalFiles("../sample/extra_out_02.img", "../sample/extra_ref_02.img"));
+    assert (rotateImage("../sample/extra_input_03.img", "../sample/extra_out_03.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("../sample/extra_out_03.img", "../sample/extra_ref_03.img"));
 
     return 0;
 
-    assert (rotateImage("sample/extra_input_04.img", "extra_out_04.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("extra_out_04.img", "sample/extra_ref_04.img"));
-    assert (rotateImage("sample/extra_input_05.img", "extra_out_05.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("extra_out_05.img", "sample/extra_ref_05.img"));
-    assert (rotateImage("sample/extra_input_06.img", "extra_out_06.img", 180, ENDIAN_BIG)
-            && identicalFiles("extra_out_06.img", "sample/extra_ref_06.img"));
-    assert (rotateImage("sample/extra_input_07.img", "extra_out_07.img", 0, ENDIAN_BIG)
-            && identicalFiles("extra_out_07.img", "sample/extra_ref_07.img"));
-    assert (rotateImage("sample/extra_input_08.img", "extra_out_08.img", 90, ENDIAN_LITTLE)
-            && identicalFiles("extra_out_08.img", "sample/extra_ref_08.img"));
-    assert (rotateImage("sample/extra_input_09.img", "extra_out_09.img", 270, ENDIAN_LITTLE)
-            && identicalFiles("extra_out_09.img", "sample/extra_ref_09.img"));
-    assert (rotateImage("sample/extra_input_10.img", "extra_out_10.img", 180, ENDIAN_BIG)
-            && identicalFiles("extra_out_10.img", "sample/extra_ref_10.img"));
-    assert (rotateImage("sample/extra_input_11.img", "extra_out_11.img", 0, ENDIAN_BIG)
-            && identicalFiles("extra_out_11.img", "sample/extra_ref_11.img"));
+    assert (rotateImage("../sample/extra_input_04.img", "extra_out_04.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("extra_out_04.img", "../sample/extra_ref_04.img"));
+    assert (rotateImage("../sample/extra_input_05.img", "extra_out_05.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("extra_out_05.img", "../sample/extra_ref_05.img"));
+    assert (rotateImage("../sample/extra_input_06.img", "extra_out_06.img", 180, ENDIAN_BIG)
+            && identicalFiles("extra_out_06.img", "../sample/extra_ref_06.img"));
+    assert (rotateImage("../sample/extra_input_07.img", "extra_out_07.img", 0, ENDIAN_BIG)
+            && identicalFiles("extra_out_07.img", "../sample/extra_ref_07.img"));
+    assert (rotateImage("../sample/extra_input_08.img", "extra_out_08.img", 90, ENDIAN_LITTLE)
+            && identicalFiles("extra_out_08.img", "../sample/extra_ref_08.img"));
+    assert (rotateImage("../sample/extra_input_09.img", "extra_out_09.img", 270, ENDIAN_LITTLE)
+            && identicalFiles("extra_out_09.img", "../sample/extra_ref_09.img"));
+    assert (rotateImage("../sample/extra_input_10.img", "extra_out_10.img", 180, ENDIAN_BIG)
+            && identicalFiles("extra_out_10.img", "../sample/extra_ref_10.img"));
+    assert (rotateImage("../sample/extra_input_11.img", "extra_out_11.img", 0, ENDIAN_BIG)
+            && identicalFiles("extra_out_11.img", "../sample/extra_ref_11.img"));
 
     return 0;
 }
