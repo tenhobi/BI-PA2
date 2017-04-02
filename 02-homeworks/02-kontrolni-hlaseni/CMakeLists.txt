@@ -3,5 +3,5 @@ project(02_kontrolni_hlaseni)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES src/main.cpp)
 add_executable(02_kontrolni_hlaseni ${SOURCE_FILES})
