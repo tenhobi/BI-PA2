@@ -4,7 +4,7 @@
 ## Variables
 
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -pedantic -Werror -g -O2
+CXXFLAGS := -std=c++11 -Wall -pedantic -Werror -Wextra
 EXECUTABLE := program.out
 SOURCEDIR := src/
 SOURCES := $(shell find $(SOURCEDIR) -name "*.cpp")
@@ -37,7 +37,7 @@ run: compile
 
 check: clean compile
 	@echo "$(COLOR_INFO)starting check in $(CHECK) with flags$(COLOR_DEFAULT) $(CHECKFLAGS)"
-	$(CHECK) $(CHECKFLAGS) ./$(EXECUTABLE)
+	$(CHECK) ./$(EXECUTABLE) $(CHECKFLAGS)
 	@echo "$(COLOR_GOOD)CHECK OK$(COLOR_DEFAULT)"
 
 doc:
