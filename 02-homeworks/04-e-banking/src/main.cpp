@@ -9,22 +9,147 @@
 #include <iostream>
 #include <sstream>
 
-// ---
-#include <string>
-#include <vector>
-// ---
-
 using namespace std;
 
 #endif /* __PROGTEST__ */
 
+template<class T>
+class Victor {
+public:
+    Victor ();
+    Victor (const Victor& victor);
+    ~Victor ();
+    unsigned int size () const;
+    T& operator [] (int index) const;
+//    Victor & operator = (const Victor& victor);
+    void clear ();
+    void push_back (const T& item);
+    Victor& operator = (const Victor& victor);
+private:
+    unsigned int dataAlocated;
+    unsigned int dataSize;
+    T* data;
+};
+
+template<class T>
+Victor<T>::Victor () {
+    dataSize = 0;
+    dataAlocated = 5;
+    data = new T[dataAlocated];
+}
+
+template<class T>
+Victor<T>::Victor (const Victor& victor) {
+    dataSize = victor.dataSize;
+    dataAlocated = victor.dataAlocated;
+    data = new T[dataAlocated];
+    for (unsigned int i = 0; i < dataSize; ++i) {
+        data[i] = victor.data[i];
+    }
+}
+
+template<class T>
+Victor<T>::~Victor () {
+    delete[] data;
+}
+
+template<class T>
+unsigned int Victor<T>::size () const {
+    return dataSize;
+}
+
+template<class T>
+T& Victor<T>::operator [] (int index) const {
+    return data[index];
+}
+//
+//Victor& Victor::operator = (const Victor& victor) {
+//    return <#initializer#>;
+//}
+
+template<class T>
+void Victor<T>::clear () {
+    delete[] data;
+
+    dataSize = 0;
+    dataAlocated = 5;
+    data = new T[dataAlocated];
+}
+
+template<class T>
+void Victor<T>::push_back (const T& item) {
+    if (dataSize >= dataAlocated) {
+        T* tmp = new T[dataAlocated *= 2];
+
+        for (unsigned int i = 0; i < dataSize; ++i) {
+            tmp[i] = data[i];
+        }
+
+        delete[] data;
+        data = tmp;
+    }
+
+    data[dataSize++] = item;
+}
+
+template<class T>
+Victor<T>& Victor<T>::operator = (const Victor& victor) {
+    if (this == &victor) {
+        return *this;
+    }
+
+    Victor* v = new Victor;
+
+    v->dataSize = victor.dataSize;
+    v->dataAlocated = victor.dataAlocated;
+    v->data = new T[dataAlocated];
+    for (unsigned int i = 0; i < dataSize; ++i) {
+        v->data[i] = victor.data[i];
+    }
+
+    return *v;
+}
+
+// ---------------
+
 class Rope {
 public:
+    Rope (const char* input);
+    ~Rope ();
+    friend ostream& operator << (ostream& os, const Rope& rope);
+    bool operator == (const Rope& rope) const;
 private:
+    char* data;
+    unsigned int dataSize;
 };
+
+Rope::Rope (const char* input) {
+    dataSize = (unsigned int) (strlen(input) + 1);
+    data = new char[dataSize];
+
+    for (unsigned int i = 0; i < dataSize; i++) {
+        data[i] = input[i];
+    }
+}
+
+Rope::~Rope () {
+    delete[] data;
+}
+
+ostream& operator << (ostream& os, const Rope& rope) {
+    os << rope.data;
+    return os;
+}
+
+bool Rope::operator == (const Rope& rope) const {
+    return !strcmp(data, rope.data);
+}
+
+// ---------------
 
 class MyTransaction {
 public:
+    MyTransaction ();
     MyTransaction (const string debitAcc, const string creditAcc, const int amount, const string signature);
 //    MyTransaction (const MyTransaction& account);
     string debitAcc;
@@ -35,6 +160,10 @@ public:
 
 MyTransaction::MyTransaction (const string debitAcc, const string creditAcc, const int amount, const string signature) : debitAcc(debitAcc), creditAcc(creditAcc), amount(amount),
                                                                                                                          signature(signature) {}
+
+MyTransaction::MyTransaction () {
+
+}
 
 //MyTransaction::MyTransaction (const MyTransaction& transaction) {
 //    debitAcc = transaction.debitAcc;
@@ -60,7 +189,7 @@ public:
     int Balance ();
     friend std::ostream& operator << (std::ostream& os, const MyAccount& account);
 private:
-    vector<MyTransaction> transactionList;
+    Victor<MyTransaction> transactionList;
 };
 
 MyAccount::MyAccount () {
@@ -132,7 +261,7 @@ public:
     MyAccount& Account (const char* accID);
 //    CBank& operator = (const CBank& other);
 private:
-    vector<MyAccount> accountList;
+    Victor<MyAccount> accountList;
 };
 
 CBank::CBank () {}
@@ -166,8 +295,8 @@ bool CBank::Transaction (const char* debAccID, const char* credAccID, int amount
         return false;
     }
 
-    MyAccount *debitAcc = NULL;
-    MyAccount *creditAcc = NULL;
+    MyAccount* debitAcc = NULL;
+    MyAccount* creditAcc = NULL;
     int flag = 0;
 
     for (unsigned int i = 0; i < accountList.size(); ++i) {
@@ -343,6 +472,7 @@ int main (void) {
                     "987654:\n   -500\n + 300, from: 123456, sign: XAbG5uKz6E=\n + 2890, from: 123456, sign: AbG5uKz6E=\n + 2890, from: 111111, sign: Okh6e+8rAiuT5=\n + 123, from: 111111, sign: asdf78wrnASDT3W\n = 5703\n"));
     os.str("");
     os << x7.Account("111111");
+    cout << x7.Account("111111");
     assert (!strcmp(os.str().c_str(), "111111:\n   5000\n - 2890, to: 987654, sign: Okh6e+8rAiuT5=\n - 789, to: 987654, sign: SGDFTYE3sdfsd3W\n = 1321\n"));
 
     try {
@@ -376,8 +506,6 @@ int main (void) {
     os.str("");
     os << x9.Account("111111");
     assert (!strcmp(os.str().c_str(), "111111:\n   5000\n - 2890, to: 987654, sign: Okh6e+8rAiuT5=\n - 789, to: 987654, sign: SGDFTYE3sdfsd3W\n = 1321\n"));
-
-    cout << "aaa";
 
     return 0;
 }
