@@ -21,11 +21,9 @@ using namespace std;
 
 class CDate {
 public:
-    //---------------------------------------------------------------------------------------------
     CDate (int y, int m, int d) : m_Year(y), m_Month(m), m_Day(d) {
     }
 
-    //---------------------------------------------------------------------------------------------
     int Compare (const CDate& x) const {
         if (m_Year != x.m_Year)
             return m_Year - x.m_Year;
@@ -34,22 +32,18 @@ public:
         return m_Day - x.m_Day;
     }
 
-    //---------------------------------------------------------------------------------------------
     int Year (void) const {
         return m_Year;
     }
 
-    //---------------------------------------------------------------------------------------------
     int Month (void) const {
         return m_Month;
     }
 
-    //---------------------------------------------------------------------------------------------
     int Day (void) const {
         return m_Day;
     }
 
-    //---------------------------------------------------------------------------------------------
     friend ostream& operator << (ostream& os,
                                  const CDate& x) {
         char oldFill = os.fill();
@@ -58,7 +52,7 @@ public:
                   << setw(2) << (int) x.m_Day
                   << setfill(oldFill);
     }
-    //---------------------------------------------------------------------------------------------
+
 private:
     int16_t m_Year;
     int8_t m_Month;
@@ -113,6 +107,8 @@ string NormalizeName (const string& name) {
     return normalized;
 }
 
+//---------------------------------------------------------------------------------------------
+
 class CInvoice {
 public:
     CInvoice (const CDate& date, const string& seller, const string& buyer, unsigned int amount, double VAT) : m_Date(date), m_Seller(seller), m_Buyer(buyer), m_Amount(amount),
@@ -129,7 +125,7 @@ public:
     }
 
     string Buyer (void) const {
-        return m_Buyer;
+        return m_CompanyBuyerName;
     }
 
     string NormBuyer (void) const {
@@ -137,7 +133,7 @@ public:
     }
 
     string Seller (void) const {
-        return m_Seller;
+        return m_CompanySellerName;
     }
 
     string NormSeller (void) const {
@@ -152,6 +148,11 @@ public:
         return m_VAT;
     }
 
+    string m_CompanySellerName;
+    string m_CompanyBuyerName;
+
+    int Id;
+
 private:
     CDate m_Date;
     string m_Seller;
@@ -161,6 +162,8 @@ private:
     unsigned int m_Amount;
     double m_VAT;
 };
+
+//---------------------------------------------------------------------------------------------
 
 class CCompany {
 public:
@@ -173,9 +176,10 @@ public:
 
     unordered_map<string, CInvoice> invoices;
 
-private:
     string m_Name;
 };
+
+//---------------------------------------------------------------------------------------------
 
 class CSortOpt {
 public:
@@ -191,21 +195,20 @@ public:
         keyList.push_back({key, ascending});
         return *this;
     }
+
     vector<pair<int, bool>> keyList;
 private:
 
 };
 
+//---------------------------------------------------------------------------------------------
+
 struct CompareInvoice {
 public:
-    static const int LESS = 0;
-    static const int EQUAL = 1;
-    static const int MORE = 2;
-    CompareInvoice(const CSortOpt& sortBy): sortKeys(sortBy) {}
+    CompareInvoice (const CSortOpt& sortBy) : sortKeys(sortBy) {}
 
     bool operator () (const CInvoice& a, const CInvoice& b) {
         for (auto& x: sortKeys.keyList) {
-//            cout << x.first << " " << x.second << endl;
             switch (x.first) {
                 case CSortOpt::BY_DATE:
                     if (x.second ? (a.Date().Compare(b.Date()) < 0) : (b.Date().Compare(a.Date()) < 0)) {
@@ -216,55 +219,69 @@ public:
 
                     break;
                 case CSortOpt::BY_BUYER:
-                    if (x.second ? (a.NormBuyer() < b.NormBuyer()) : (b.NormBuyer() < a.NormBuyer())) {
+                    if (x.second ? (a.Buyer() < b.Buyer()) : (b.Buyer() < a.Buyer())) {
                         return true;
-                    } else if (a.NormBuyer() == b.NormBuyer()) {
+                    }
+
+                    if (a.Buyer() == b.Buyer()) {
                         continue;
                     }
 
                     break;
                 case CSortOpt::BY_SELLER:
-                    if (x.second ? (a.NormSeller() < b.NormSeller()) : (b.NormSeller() < a.NormSeller())) {
+                    if (x.second ? (a.Seller() < b.Seller()) : (b.Seller() < a.Seller())) {
                         return true;
-                    } else if (a.NormSeller() == b.NormSeller()) {
+                    }
+
+                    if (a.Seller() == b.Seller()) {
                         continue;
                     }
 
                     break;
                 case CSortOpt::BY_AMOUNT:
                     if (x.second ? (a.Amount() < b.Amount()) : (b.Amount() < a.Amount())) {
-                        return CompareInvoice::LESS;
-                    } else if (a.Amount() == b.Amount()) {
-                        return CompareInvoice::EQUAL;
+                        return true;
                     }
+
+                    if (a.Amount() == b.Amount()) {
+                        continue;
+                    }
+
                     break;
                 case CSortOpt::BY_VAT:
                     if (x.second ? (a.VAT() < b.VAT()) : (b.VAT() < a.VAT())) {
-                        return CompareInvoice::LESS;
-                    } else if (a.VAT() == b.VAT()) {
-                        return CompareInvoice::EQUAL;
+                        return true;
                     }
+
+                    if (a.VAT() == b.VAT()) {
+                        continue;
+                    }
+
                     break;
                 default:
                     break;
             }
+
+            return false;
         }
 
         return false;
     }
+
 private:
     CSortOpt sortKeys;
 
 };
 
+//---------------------------------------------------------------------------------------------
+
 class CVATRegister {
 public:
-    CVATRegister (void) {
+    CVATRegister (void) {}
 
-    }
+    static int ID;
 
     bool RegisterCompany (const string& name) {
-
         string normalizedName = NormalizeName(name);
 
         if (companies.count(normalizedName) == 0) {
@@ -288,11 +305,19 @@ public:
                      to_string(x.Amount()) + "_" +
                      to_string(x.VAT());
 
+        int myId = CVATRegister::ID++;
+
         if (companies.at(x.NormSeller()).invoices.count(key) == 0) {
             companies.at(x.NormSeller()).invoices.insert({key, x});
             companies.at(x.NormSeller()).invoices.at(key).isIssued = true;
+            companies.at(x.NormSeller()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).Id = myId;
             companies.at(x.NormBuyer()).invoices.insert({key, x});
             companies.at(x.NormBuyer()).invoices.at(key).isIssued = true;
+            companies.at(x.NormBuyer()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).Id = myId;
             return true;
         }
 
@@ -318,11 +343,19 @@ public:
                      to_string(x.Amount()) + "_" +
                      to_string(x.VAT());
 
+        int myId = CVATRegister::ID++;
+
         if (companies.at(x.NormSeller()).invoices.count(key) == 0) {
             companies.at(x.NormSeller()).invoices.insert({key, x});
             companies.at(x.NormSeller()).invoices.at(key).isAccepted = true;
+            companies.at(x.NormSeller()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).Id = myId;
             companies.at(x.NormBuyer()).invoices.insert({key, x});
             companies.at(x.NormBuyer()).invoices.at(key).isAccepted = true;
+            companies.at(x.NormBuyer()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).Id = myId;
             return true;
         }
 
@@ -396,18 +429,18 @@ public:
         for (auto x : companies.at(companyName).invoices) {
             if ((x.second.isAccepted && !x.second.isIssued) || (!x.second.isAccepted && x.second.isIssued)) {
                 sortedInvoicesList.push_back(x.second);
-                cout <<  x.second.Seller() << " _ " << x.second.Buyer() << " _ " << x.second.Amount() << endl;
+                cout << x.second.Seller() << " _ " << x.second.Buyer() << " _ " << x.second.Amount() << endl;
             }
         }
 
         sortedInvoicesList.sort(CompareInvoice(sortBy));
-
         return sortedInvoicesList;
     }
 
-private:
     unordered_map<string, CCompany> companies;
 };
+
+int CVATRegister::ID = 0;
 
 #ifndef __PROGTEST__
 
@@ -416,13 +449,7 @@ bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
     cout << "--- my sort" << endl;
 
     for (auto x: a) {
-        cout << x.Seller() << " _ " << x.Buyer() << " _ " << x.Amount() << " _ " << x.Date().Day() << ". " << x.Date().Month() << ". " << x.Date().Year() << endl;
-    }
-
-    cout << "--- reference sort" << endl;
-
-    for (auto x: b) {
-        cout << x.Seller() << " _ " << x.Buyer() << " _ " << x.Amount() << " _ " << x.Date().Day() << ". " << x.Date().Month() << ". " << x.Date().Year() << endl;
+        cout << x.Seller() << " _ " << x.Buyer() << " _ " << x.Amount() << " _ " << x.VAT() << " _ " << x.Id << endl;
     }
 
     if (a.size() != b.size()) {
@@ -434,11 +461,28 @@ bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
             CInvoice ai = a.front();
             CInvoice bi = b.front();
 
-            if (ai.Buyer() != bi.Buyer() ||
-                ai.Seller() != bi.Seller() ||
-                !ai.Date().Compare(bi.Date()) ||
-                ai.Amount() != bi.Amount() ||
-                ai.VAT() != bi.VAT()) {
+            if (ai.Buyer() != bi.Buyer()) {
+//                cout << "eq 1" << endl;
+                return false;
+            }
+
+            if (ai.Seller() != bi.Seller()) {
+//                cout << "eq 2" << endl;
+                return false;
+            }
+
+            if (!ai.Date().Compare(bi.Date())) {
+//                cout << "eq 3" << endl;
+                return false;
+            }
+
+            if (ai.Amount() != bi.Amount()) {
+//                cout << "eq 4" << endl;
+                return false;
+            }
+
+            if (ai.VAT() != bi.VAT()) {
+//                cout << "eq 5" << endl;
                 return false;
             }
         }
@@ -456,7 +500,6 @@ int main (void) {
     assert (r.RegisterCompany("Third Company, Ltd."));
     assert (!r.RegisterCompany("Third Company, Ltd."));
     assert (!r.RegisterCompany(" Third  Company,  Ltd.  "));
-
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 20)));
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 2), "FirSt Company", "Second Company ", 200, 30)));
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 100, 30)));
@@ -464,11 +507,9 @@ int main (void) {
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 1), "Second Company ", "First Company", 300, 30)));
     assert (r.AddIssued(CInvoice(CDate(2000, 1, 1), "Third  Company,  Ltd.", "  Second    COMPANY ", 400, 34)));
-    assert (!r.AddIssued(CInvoice(CDate(2000, 1, 1), "Third  Company,  Ltd.", "  Second    COMPANY ", 400, 34)));
     assert (!r.AddIssued(CInvoice(CDate(2000, 1, 1), "First Company", "Second Company ", 300, 30)));
     assert (!r.AddIssued(CInvoice(CDate(2000, 1, 4), "First Company", "First   Company", 200, 30)));
     assert (!r.AddIssued(CInvoice(CDate(2000, 1, 4), "Another Company", "First   Company", 200, 30)));
-
     assert (equalLists(r.Unmatched("First Company", CSortOpt().AddKey(CSortOpt::BY_SELLER, true).AddKey(CSortOpt::BY_BUYER, false).AddKey(CSortOpt::BY_DATE, false)),
                        list<CInvoice>
                            {
@@ -480,10 +521,6 @@ int main (void) {
                                CInvoice(CDate(2000, 1, 1), "Second     Company", "first Company", 300, 30.000000)
                            }));
 
-    assert (r.AddAccepted(CInvoice(CDate(2000, 1, 2), "First Company", "Second Company ", 200, 30)));
-    assert (r.AddAccepted(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
-    assert (!r.AddAccepted(CInvoice(CDate(2000, 1, 1), "First Company", " Third  Company,  Ltd.   ", 200, 30)));
-    assert (r.AddAccepted(CInvoice(CDate(2000, 1, 1), "Second company ", "First Company", 300, 32)));
 
     /*
     assert (r.RegisterCompany("first Company"));
