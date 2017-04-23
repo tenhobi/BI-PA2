@@ -65,44 +65,37 @@ string NormalizeName (const string& name) {
     string normalized = "";
 
     bool space = false;
-    bool start = true;
 
-    for (unsigned int i = 0; i < name.size(); ++i) {
+    unsigned int i = 0;
+    unsigned int j = 0;
+
+    for (i = 0; i < name.size(); ++i) {
+        if (name[i] != ' ') {
+            break;
+        }
+    }
+
+    for (j = name.size() - 1; j >= 0; --j) {
+        if (name[j] != ' ') {
+            break;
+        }
+    }
+
+    for (; i < j; ++i) {
         if (name[i] == ' ') {
             space = true;
-            continue;
-        } else if (name[i] >= 'A' && name[i] <= 'Z') {
-            if (space) {
-                if (start) {
-                    normalized += (name[i] + ('a' - 'A'));
-                    start = false;
-                    space = false;
-                    continue;
-                }
-
-                normalized += ' ';
-                space = false;
-            }
-
-            normalized += (name[i] + ('a' - 'A'));
             continue;
         }
 
         if (space) {
-            if (start) {
-                normalized += name[i];
-                start = false;
-                space = false;
-                continue;
-            }
-
             normalized += ' ';
             space = false;
         }
 
         normalized += name[i];
-        start = false;
     }
+
+    transform(normalized.begin(), normalized.end(), normalized.begin(), ::tolower);
 
     return normalized;
 }
@@ -111,10 +104,14 @@ string NormalizeName (const string& name) {
 
 class CInvoice {
 public:
-    CInvoice (const CDate& date, const string& seller, const string& buyer, unsigned int amount, double VAT) : m_Date(date), m_Seller(seller), m_Buyer(buyer), m_Amount(amount),
-                                                                                                               m_VAT(VAT) {
-        m_NormBuyer = NormalizeName(m_Buyer);
-        m_NormSeller = NormalizeName(m_Seller);
+    CInvoice (const CDate& date, const string& seller, const string& buyer, unsigned int amount, double VAT) : m_Date(date),
+                                                                                                               m_Seller(seller),
+                                                                                                               m_Buyer(buyer),
+                                                                                                               m_Amount(amount),
+                                                                                                               m_VAT(VAT),
+                                                                                                               m_NormBuyer(NormalizeName(m_Buyer)),
+                                                                                                               m_NormSeller(NormalizeName(m_Seller)) {
+        Id = 0;
     }
 
     bool isIssued = false;
@@ -125,7 +122,7 @@ public:
     }
 
     string Buyer (void) const {
-        return m_CompanyBuyerName;
+        return m_Buyer;
     }
 
     string NormBuyer (void) const {
@@ -133,7 +130,7 @@ public:
     }
 
     string Seller (void) const {
-        return m_CompanySellerName;
+        return m_Seller;
     }
 
     string NormSeller (void) const {
@@ -148,19 +145,14 @@ public:
         return m_VAT;
     }
 
-    string m_CompanySellerName;
-    string m_CompanyBuyerName;
-
     int Id;
-
-private:
     CDate m_Date;
     string m_Seller;
-    string m_NormSeller;
     string m_Buyer;
-    string m_NormBuyer;
     unsigned int m_Amount;
     double m_VAT;
+    string m_NormBuyer;
+    string m_NormSeller;
 };
 
 //---------------------------------------------------------------------------------------------
@@ -284,9 +276,11 @@ private:
 
 class CVATRegister {
 public:
-    CVATRegister (void) {}
+    CVATRegister (void) {
+        MYID = 0;
+    }
 
-    static int ID;
+    int MYID;
 
     bool RegisterCompany (const string& name) {
         string normalizedName = NormalizeName(name);
@@ -304,31 +298,28 @@ public:
             return false;
         }
 
-        string key = x.NormBuyer() + "_" +
-                     x.NormSeller() + "_" +
-                     to_string(x.Date().Year()) + "_" +
-                     to_string(x.Date().Month()) + "_" +
-                     to_string(x.Date().Day()) + "_" +
-                     to_string(x.Amount()) + "_" +
+        string key = x.NormBuyer() + "____X" +
+                     x.NormSeller() + "____X" +
+                     to_string(x.Date().Year()) + "____X" +
+                     to_string(x.Date().Month()) + "____X" +
+                     to_string(x.Date().Day()) + "____X" +
+                     to_string(x.Amount()) + "____X" +
                      to_string(x.VAT());
 
-        int myId = CVATRegister::ID++;
-
         if (companies.at(x.NormSeller()).invoices.count(key) == 0) {
+            int myId = MYID++;
             companies.at(x.NormSeller()).invoices.insert({key, x});
             companies.at(x.NormSeller()).invoices.at(key).isIssued = true;
-            companies.at(x.NormSeller()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
-            companies.at(x.NormSeller()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_Buyer = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_Seller = companies.at(x.NormSeller()).m_Name;
             companies.at(x.NormSeller()).invoices.at(key).Id = myId;
             companies.at(x.NormBuyer()).invoices.insert({key, x});
             companies.at(x.NormBuyer()).invoices.at(key).isIssued = true;
-            companies.at(x.NormBuyer()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
-            companies.at(x.NormBuyer()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_Buyer = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_Seller = companies.at(x.NormSeller()).m_Name;
             companies.at(x.NormBuyer()).invoices.at(key).Id = myId;
             return true;
-        }
-
-        if (companies.at(x.NormSeller()).invoices.count(key) == 1 && !companies.at(x.NormSeller()).invoices.at(key).isIssued) {
+        } else if (companies.at(x.NormSeller()).invoices.count(key) == 1 && !companies.at(x.NormSeller()).invoices.at(key).isIssued) {
             companies.at(x.NormSeller()).invoices.at(key).isIssued = true;
             companies.at(x.NormBuyer()).invoices.at(key).isIssued = true;
             return true;
@@ -342,31 +333,28 @@ public:
             return false;
         }
 
-        string key = x.NormBuyer() + "_" +
-                     x.NormSeller() + "_" +
-                     to_string(x.Date().Year()) + "_" +
-                     to_string(x.Date().Month()) + "_" +
-                     to_string(x.Date().Day()) + "_" +
-                     to_string(x.Amount()) + "_" +
+        string key = x.NormBuyer() + "____X" +
+                     x.NormSeller() + "____X" +
+                     to_string(x.Date().Year()) + "____X" +
+                     to_string(x.Date().Month()) + "____X" +
+                     to_string(x.Date().Day()) + "____X" +
+                     to_string(x.Amount()) + "____X" +
                      to_string(x.VAT());
 
-        int myId = CVATRegister::ID++;
-
         if (companies.at(x.NormSeller()).invoices.count(key) == 0) {
+            int myId = MYID++;
             companies.at(x.NormSeller()).invoices.insert({key, x});
             companies.at(x.NormSeller()).invoices.at(key).isAccepted = true;
-            companies.at(x.NormSeller()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
-            companies.at(x.NormSeller()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_Buyer = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormSeller()).invoices.at(key).m_Seller = companies.at(x.NormSeller()).m_Name;
             companies.at(x.NormSeller()).invoices.at(key).Id = myId;
             companies.at(x.NormBuyer()).invoices.insert({key, x});
             companies.at(x.NormBuyer()).invoices.at(key).isAccepted = true;
-            companies.at(x.NormBuyer()).invoices.at(key).m_CompanyBuyerName = companies.at(x.NormBuyer()).m_Name;
-            companies.at(x.NormBuyer()).invoices.at(key).m_CompanySellerName = companies.at(x.NormSeller()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_Buyer = companies.at(x.NormBuyer()).m_Name;
+            companies.at(x.NormBuyer()).invoices.at(key).m_Seller = companies.at(x.NormSeller()).m_Name;
             companies.at(x.NormBuyer()).invoices.at(key).Id = myId;
             return true;
-        }
-
-        if (companies.at(x.NormSeller()).invoices.count(key) == 1 && !companies.at(x.NormSeller()).invoices.at(key).isAccepted) {
+        } else if (companies.at(x.NormSeller()).invoices.count(key) == 1 && !companies.at(x.NormSeller()).invoices.at(key).isAccepted) {
             companies.at(x.NormSeller()).invoices.at(key).isAccepted = true;
             companies.at(x.NormBuyer()).invoices.at(key).isAccepted = true;
             return true;
@@ -376,12 +364,12 @@ public:
     }
 
     bool DelIssued (const CInvoice& x) {
-        string key = x.NormBuyer() + "_" +
-                     x.NormSeller() + "_" +
-                     to_string(x.Date().Year()) + "_" +
-                     to_string(x.Date().Month()) + "_" +
-                     to_string(x.Date().Day()) + "_" +
-                     to_string(x.Amount()) + "_" +
+        string key = x.NormBuyer() + "____X" +
+                     x.NormSeller() + "____X" +
+                     to_string(x.Date().Year()) + "____X" +
+                     to_string(x.Date().Month()) + "____X" +
+                     to_string(x.Date().Day()) + "____X" +
+                     to_string(x.Amount()) + "____X" +
                      to_string(x.VAT());
 
         if (companies.count(x.NormSeller()) == 0 || companies.count(x.NormBuyer()) == 0 || x.NormSeller() == x.NormBuyer()) {
@@ -393,8 +381,12 @@ public:
         }
 
         if (companies.at(x.NormSeller()).invoices.at(key).isAccepted) {
-            companies.at(x.NormSeller()).invoices.at(key).isIssued = false;
-            companies.at(x.NormBuyer()).invoices.at(key).isIssued = false;
+            if (companies.at(x.NormSeller()).invoices.at(key).isIssued) {
+                companies.at(x.NormSeller()).invoices.at(key).isIssued = false;
+                companies.at(x.NormBuyer()).invoices.at(key).isIssued = false;
+            } else {
+                return false;
+            }
         } else {
             companies.at(x.NormSeller()).invoices.erase(key);
             companies.at(x.NormBuyer()).invoices.erase(key);
@@ -404,12 +396,12 @@ public:
     }
 
     bool DelAccepted (const CInvoice& x) {
-        string key = x.NormBuyer() + "_" +
-                     x.NormSeller() + "_" +
-                     to_string(x.Date().Year()) + "_" +
-                     to_string(x.Date().Month()) + "_" +
-                     to_string(x.Date().Day()) + "_" +
-                     to_string(x.Amount()) + "_" +
+        string key = x.NormBuyer() + "____X" +
+                     x.NormSeller() + "____X" +
+                     to_string(x.Date().Year()) + "____X" +
+                     to_string(x.Date().Month()) + "____X" +
+                     to_string(x.Date().Day()) + "____X" +
+                     to_string(x.Amount()) + "____X" +
                      to_string(x.VAT());
 
         if (companies.count(x.NormSeller()) == 0 || companies.count(x.NormBuyer()) == 0 || x.NormSeller() == x.NormBuyer()) {
@@ -421,8 +413,12 @@ public:
         }
 
         if (companies.at(x.NormSeller()).invoices.at(key).isIssued) {
-            companies.at(x.NormSeller()).invoices.at(key).isAccepted = false;
-            companies.at(x.NormBuyer()).invoices.at(key).isAccepted = false;
+            if (companies.at(x.NormSeller()).invoices.at(key).isAccepted) {
+                companies.at(x.NormSeller()).invoices.at(key).isAccepted = false;
+                companies.at(x.NormBuyer()).invoices.at(key).isAccepted = false;
+            } else {
+                return false;
+            }
         } else {
             companies.at(x.NormSeller()).invoices.erase(key);
             companies.at(x.NormBuyer()).invoices.erase(key);
@@ -459,8 +455,6 @@ public:
     unordered_map<string, CCompany> companies;
 };
 
-int CVATRegister::ID = 0;
-
 #ifndef __PROGTEST__
 
 bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
@@ -475,9 +469,11 @@ bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
         cout << x.Seller() << " _ " << x.Buyer() << " _ " << x.Amount() << " _ " << x.VAT() << " _ " << x.Id << endl;
     }
 
-    return true;
+    cout << "--- referenced sort" << endl;
 
-    /*
+    for (auto x: b) {
+        cout << x.Seller() << " _ " << x.Buyer() << " _ " << x.Amount() << " _ " << x.VAT() << " _ " << x.Id << endl;
+    }
 
     if (a.size() != b.size()) {
         return false;
@@ -500,7 +496,7 @@ bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
                 return false;
             }
 
-            if (!ai.Date().Compare(bi.Date())) {
+            if (ai.Date().Compare(bi.Date())) {
                 cout << "eq 3" << endl;
                 return false;
             }
@@ -519,7 +515,6 @@ bool equalLists (const list<CInvoice>& a, const list<CInvoice>& b) {
 
     return true;
 
-     */
 }
 
 int main (void) {
