@@ -4,7 +4,7 @@
 ## Variables
 
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -pedantic -Wall -Werror
+CXXFLAGS := -std=c++11 -Wall -pedantic -Wno-long-long -Werror
 EXECUTABLE := program.out
 SOURCEDIR := src/
 SOURCES := $(shell find $(SOURCEDIR) -name "*.cpp")
