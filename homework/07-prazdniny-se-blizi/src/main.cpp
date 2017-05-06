@@ -41,9 +41,7 @@ public:
         return thing.Print(os);
     }
 
-    virtual shared_ptr<CThing> Clone () const {
-        return shared_ptr<CThing>( new CThing(*this));
-    }
+    virtual shared_ptr<CThing> Clone () const = 0;
 };
 
 class CKnife : public CThing {
