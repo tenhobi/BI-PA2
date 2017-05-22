@@ -8,5 +8,8 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.{cpp, hpp}]
+indent_brace_style = K&R
+
 [Makefile, Makefile.default]
 indent_style = tab

@@ -1,12 +1,6 @@
-# project related stuff
-cmake-build-debug/
-vgcore.*
 *.d
 *.o
 *.out
 
-# IDEs and editors
-.idea/
-
-# other
-.DS_Store
+cmake-build-debug/
+vgcore.*
