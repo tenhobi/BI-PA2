@@ -1,0 +1,8 @@
+#ifndef SEMESTRAL_WORK_MAP_HPP
+#define SEMESTRAL_WORK_MAP_HPP
+
+class Map {
+
+};
+
+#endif // SEMESTRAL_WORK_MAP_HPP

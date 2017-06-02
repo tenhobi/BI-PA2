@@ -1,0 +1,8 @@
+#ifndef SEMESTRAL_WORK_GAME_HPP
+#define SEMESTRAL_WORK_GAME_HPP
+
+class Game {
+
+};
+
+#endif // SEMESTRAL_WORK_GAME_HPP
