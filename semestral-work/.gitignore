@@ -1,6 +1,0 @@
-*.d
-*.o
-*.out
-
-cmake-build-debug/
-vgcore.*
