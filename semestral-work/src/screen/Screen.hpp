@@ -1,0 +1,8 @@
+#ifndef SEMESTRAL_WORK_SCREEN_HPP
+#define SEMESTRAL_WORK_SCREEN_HPP
+
+class Screen {
+
+};
+
+#endif // SEMESTRAL_WORK_SCREEN_HPP
