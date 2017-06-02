@@ -1,0 +1,8 @@
+#ifndef SEMESTRAL_WORK_MONSTER_HPP
+#define SEMESTRAL_WORK_MONSTER_HPP
+
+class Monster {
+
+};
+
+#endif // SEMESTRAL_WORK_MONSTER_HPP
