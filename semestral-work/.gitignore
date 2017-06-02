@@ -1,0 +1,8 @@
+bittnja3
+
+*.d
+*.o
+*.out
+
+cmake-build-debug/
+vgcore.*

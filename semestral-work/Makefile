@@ -6,7 +6,7 @@
 CXX := g++
 CXXFLAGS := -std=c++11 -Wall -pedantic -Wno-long-long -Werror
 EXECUTABLE := bittnja3
-SOURCES := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+SOURCES := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 CHECK := valgrind
 CHECKFLAGS := --leak-check=full --tool=memcheck
 
