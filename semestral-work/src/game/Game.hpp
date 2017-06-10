@@ -8,32 +8,35 @@
  */
 class Game {
 public:
-    /**
-     * A constructor with defined invasion limit.
-     * @param invasionLimit
-     */
-    Game (int invasionLimit);
+  /**
+   * A constructor with defined invasion limit.
+   * @param invasionLimit
+   */
+  Game (int invasionLimit);
 
-    /**
-     * A constructor with defined invasion limit and map.
-     * @param invasionLimit
-     * @param map
-     */
-    Game (int invasionLimit, Map map);
+  /**
+   * A constructor with defined invasion limit and map.
+   * @param invasionLimit
+   * @param map
+   */
+  Game (int invasionLimit, Map map);
 
-    void load ();
-    void save () const;
-    void start ();
+  void load ();
+
+  void save () const;
+
+  void start ();
 
 private:
-    int round;
-    int invasionLimit;
-    int invasionCount;
-    bool finished;
-    Map map;
+  int round;
+  int invasionLimit;
+  int invasionCount;
+  bool finished;
+  Map map;
 
-    void loop ();
-    void close ();
+  void loop ();
+
+  void close ();
 };
 
 #endif // SEMESTRAL_WORK_GAME_HPP

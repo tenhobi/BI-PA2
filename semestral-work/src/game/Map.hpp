@@ -6,18 +6,23 @@
 
 class Map {
 public:
-    std::vector<std::vector<Cell>> data;
+  std::vector<std::vector<Cell>> data;
 
-    bool load ();
-    bool save () const;
-    bool init ();
-    int getWidth () const;
-    int getHeight () const;
-    operator bool () const;
+  bool load ();
+
+  bool save () const;
+
+  bool init ();
+
+  int getWidth () const;
+
+  int getHeight () const;
+
+  operator bool () const;
 
 private:
-    int width;
-    int height;
+  int width;
+  int height;
 };
 
 #endif // SEMESTRAL_WORK_MAP_HPP

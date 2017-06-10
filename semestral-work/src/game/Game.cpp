@@ -6,7 +6,7 @@ Game::Game (int invasionLimit) : invasionLimit(invasionLimit) {
   this->load();
 }
 
-Game::Game (int invasionLimit, Map map): invasionLimit(invasionLimit), map(map) {
+Game::Game (int invasionLimit, Map map) : invasionLimit(invasionLimit), map(map) {
   if (!this->map) {
     this->load();
   }

@@ -5,6 +5,7 @@
 
 CXX := g++
 CXXFLAGS := -std=c++11 -Wall -pedantic -Wno-long-long -Werror
+LDFLAGS=-lncurses
 EXECUTABLE := bittnja3
 SOURCES := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
 CHECK := valgrind
@@ -21,16 +22,16 @@ COLOR_GOOD=\033[1;32m
 
 %.o: %.cpp
 	@echo "$(COLOR_STATUS)$^ -> $@$(COLOR_DEFAULT)"
-	@$(CXX) $(CXXFLAGS) -c -o $@ -c $<
-	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp > $*.d
+	@$(CXX) $(CXXFLAGS) -c -o $@ -c $< $(LDFLAGS)
+	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp > $*.d $(LDFLAGS)
 
 all:
 	@echo "$(COLOR_INFO)all$(COLOR_DEFAULT)"
 	@echo "$(COLOR_GOOD)ALL OK$(COLOR_DEFAULT)"
 
 compile: $(SOURCES:.cpp=.o)
-	@echo "$(COLOR_INFO)compiling with flags $(COLOR_DEFAULT)$(CXXFLAGS)"
-	@$(CXX) $(CXXFLAGS) $(SOURCES:.cpp=.o) -o $(EXECUTABLE)
+	@echo "$(COLOR_INFO)compiling with flags $(COLOR_DEFAULT)$(CXXFLAGS) $(LDFLAGS)"
+	@$(CXX) $(CXXFLAGS) $(SOURCES:.cpp=.o) -o $(EXECUTABLE) $(LDFLAGS)
 	@echo "$(COLOR_GOOD)COMPILE OK$(COLOR_DEFAULT)"
 
 run: compile

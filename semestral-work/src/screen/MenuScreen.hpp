@@ -5,9 +5,7 @@
 
 class MenuScreen : public Screen {
 public:
-    int getSize () {
-      return 42;
-    }
+  int process () const override;
 };
 
 #endif // SEMESTRAL_WORK_MENUSCREEN_HPP

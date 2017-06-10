@@ -5,11 +5,12 @@
 
 class Road : public Cell {
 public:
-    Road (bool startingEdge, bool finalEdge);
-    Road* next;
+  Road (bool startingEdge, bool finalEdge);
+
+  Road* next;
 private:
-    bool startingEdge;
-    bool finalEdge;
+  bool startingEdge;
+  bool finalEdge;
 };
 
 #endif // SEMESTRAL_WORK_ROAD_HPP

@@ -3,7 +3,7 @@
 
 class Cell {
 public:
-    Cell ();
+  Cell ();
 };
 
 #endif // SEMESTRAL_WORK_CELL_HPP
