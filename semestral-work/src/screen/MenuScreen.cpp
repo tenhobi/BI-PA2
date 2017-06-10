@@ -34,12 +34,12 @@ int MenuScreen::process () const {
   heading.activate();
 
   // Menu loop functionality.
-  loop();
+  loop(heading);
 
   return SCREEN_OK;
 }
 
-void MenuScreen::loop () const {
+void MenuScreen::loop (MenuHeading& heading) const {
   AboutScreen aboutScreen;
   ExitScreen exitScreen;
 
@@ -59,6 +59,8 @@ void MenuScreen::loop () const {
   while (isLooping) {
     int offsetCounter = 1;
     int index = 0;
+
+    heading.activate();
 
     for (MenuOption& mo: menuOptionList) {
       mo.print(offsetCounter++, index == active);

@@ -1,6 +1,8 @@
 #ifndef SEMESTRAL_WORK_MENUSCREEN_HPP
 #define SEMESTRAL_WORK_MENUSCREEN_HPP
 
+#include "../menu/MenuHeading.hpp"
+
 #include "Screen.hpp"
 
 /**
@@ -13,8 +15,9 @@ public:
 private:
   /**
    * Menu loop functionality - switching options, selection items, ...
+   * @param heading menu heading object which we want to redrawing
    */
-  void loop () const;
+  void loop (MenuHeading& heading) const;
 };
 
 #endif // SEMESTRAL_WORK_MENUSCREEN_HPP
