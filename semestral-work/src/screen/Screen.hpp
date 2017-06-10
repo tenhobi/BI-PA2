@@ -10,12 +10,13 @@
 // For some odd reason the KEY_ENTER is not the enter key. This should be the enter key code.
 #define REAL_ENTER_KEY 10
 
+// microseconds
 #define SCREEN_DELAY 1000000
 
 /**
  * Screen is the abstract class that provides basic console screen unit and functionality.
  */
-class Screen: public Processable {
+class Screen : public Processable {
 public:
   /**
    * Constructor initializes the window.

@@ -15,34 +15,34 @@ int LoadGameScreen::process () {
   wclear(window);
   wrefresh(window);
 
-  DIR* mapDir;
+  Game game;
+  BackScreen back;
+
+  DIR* saveDir;
   struct dirent* file;
 
-  mapDir = opendir("./data/map");
+  saveDir = opendir("./data/save");
+
+  std::vector<MenuOption> menuOptionList;
 
   int counter = 0;
 
-  if (mapDir != NULL) {
-    while ((file = readdir(mapDir))) {
+  if (saveDir != NULL) {
+    while ((file = readdir(saveDir))) {
       if (std::regex_match(file->d_name, std::regex("(.+)(\\.map)"))) {
         mvwprintw(window, counter++, 0, file->d_name);
+        menuOptionList.push_back(MenuOption(window, std::string(file->d_name), game));
       }
     }
   }
 
+  closedir(saveDir);
+
+  menuOptionList.push_back(MenuOption(window, "back to main menu", back));
+
   wrefresh(window);
 
-  Game game;
-  BackScreen back;
-
-  std::vector<MenuOption> menuOptionList = {
-    MenuOption(window, "one", game),
-    MenuOption(window, "two", game),
-    MenuOption(window, "three", game),
-    MenuOption(window, "back to main menu", back)
-  };
-
-  MenuHeading heading(window, "Load game");
+  MenuHeading heading(window, "Select game to load");
   heading.print((int) menuOptionList.size());
 
   usleep(SCREEN_DELAY);

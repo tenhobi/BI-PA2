@@ -60,5 +60,4 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
 
     wrefresh(window);
   }
-
 }

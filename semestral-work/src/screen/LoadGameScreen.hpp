@@ -11,4 +11,4 @@ public:
   int process () override;
 };
 
-#endif //SEMESTRAL_WORK_LOADGAMESCREEN_HPP
+#endif // SEMESTRAL_WORK_LOADGAMESCREEN_HPP

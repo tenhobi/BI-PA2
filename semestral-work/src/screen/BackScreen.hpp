@@ -3,7 +3,7 @@
 
 #include "Screen.hpp"
 
-class BackScreen: public Screen {
+class BackScreen : public Screen {
   int process () override;
 };
 
