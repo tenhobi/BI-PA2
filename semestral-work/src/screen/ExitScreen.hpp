@@ -3,6 +3,9 @@
 
 #include "Screen.hpp"
 
+/**
+ * Displays and process an exit screen and functionality.
+ */
 class ExitScreen : public Screen {
 public:
   int process () const override;

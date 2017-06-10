@@ -1,18 +1,34 @@
 #include "AboutScreen.hpp"
 
-// milliseconds
-#define SCREEN_DELAY 5000
-
 int AboutScreen::process () const {
-  mvwprintw(window, 0,0, "Lorem ipsum dolor sit amet, per amet invenire an, ei natum vitae senserit has. At usu nonumes copiosae, at iuvaret percipitur eos. In duo ignota periculis. At per dolore saperet perfecto, id nemore audire pro, mei nemore fabulas at. Mea eu blandit consequuntur. Feugait reprehendunt ea vix, ut vim autem aperiam verterem.\n\nLorem ipsum dolor sit amet, per amet invenire an, ei natum vitae senserit has. At usu nonumes copiosae, at iuvaret percipitur eos. In duo ignota periculis. At per dolore saperet perfecto, id nemore audire pro, mei nemore fabulas at. Mea eu blandit consequuntur. Feugait reprehendunt ea vix, ut vim autem aperiam verterem.\n\nLorem ipsum dolor sit amet, per amet invenire an.");
+  WINDOW* aboutBoxWindow = newwin(getmaxy(window) / 2, getmaxx(window) / 2,
+                                  (getmaxy(window) / 4), (getmaxx(window) / 4));
+  WINDOW* aboutWindow = newwin((getmaxy(window) / 2) - 2, (getmaxx(window) / 2) - 2,
+                               (getmaxy(window) / 4) + 1, (getmaxx(window) / 4) + 1);
+
+  box(aboutBoxWindow, 0, 0);
+
+  mvwprintw(aboutWindow, 0, 0,
+            "This Tower Defense game by Honza Bittner is one of a kind. The game had win multiple awards for the concept, play time, kid friendliness and much more."
+              "\n\nPlayer has to protect the kingdom and save us all using towers and awesome upgrade system."
+              "\n\nYou will find more info, screenshots, ... on the honzabittner.cz webpage.");
 
   wrefresh(window);
+  wrefresh(aboutBoxWindow);
+  wrefresh(aboutWindow);
 
-  // Use non blocking read.
-  timeout(SCREEN_DELAY);
   getch();
 
   wclear(window);
-  
+  wclear(aboutBoxWindow);
+  wclear(aboutWindow);
+
+  wrefresh(window);
+  wrefresh(aboutBoxWindow);
+  wrefresh(aboutWindow);
+
+  delwin(aboutBoxWindow);
+  delwin(aboutWindow);
+
   return SCREEN_OK;
 }

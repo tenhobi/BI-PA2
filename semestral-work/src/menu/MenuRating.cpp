@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include <string>
 
 #include "MenuRating.hpp"

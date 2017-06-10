@@ -3,6 +3,9 @@
 
 #include "Screen.hpp"
 
+/**
+ * Displays an about screen.
+ */
 class AboutScreen : public Screen {
 public:
   int process () const override;

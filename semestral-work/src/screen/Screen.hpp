@@ -13,7 +13,15 @@
  */
 class Screen {
 public:
+  /**
+   * Constructor initializes the window.
+   */
   Screen ();
+
+  /**
+   * Destructor, which deletes the window.
+   */
+  virtual ~Screen ();
 
   /**
    * Process the screen with its own loop and functionality.

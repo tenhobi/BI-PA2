@@ -23,13 +23,13 @@ int MenuScreen::process () const {
 
   usleep(DELAY);
 
-  WINDOW* subtexts = newwin(1, getmaxx(window), (getmaxy(window) / 2) - 3 - 0, 0);
-  MenuRating(subtexts, "Best console game of the year! ~ gamelife.com").print();
-  MenuRating(subtexts, "Very interesting concept. ~ pcgames.net").print();
-  MenuRating(subtexts, "Kids love it! <3 ~ gamesforkids.eu").print();
-  wclear(subtexts);
-  wrefresh(subtexts);
-  delwin(subtexts);
+  WINDOW* ratingWindow = newwin(1, getmaxx(window), (getmaxy(window) / 2) - 3 - 0, 0);
+  MenuRating(ratingWindow, "Best console game of the year! ~ gamelife.com").print();
+  MenuRating(ratingWindow, "Very interesting concept. ~ pcgames.net").print();
+  MenuRating(ratingWindow, "Kids love it! <3 ~ gamesforkids.eu").print();
+  wclear(ratingWindow);
+  wrefresh(ratingWindow);
+  delwin(ratingWindow);
 
   heading.activate();
 
@@ -37,10 +37,10 @@ int MenuScreen::process () const {
   ExitScreen exitScreen;
 
   std::vector<MenuOption> menuOptionList = {
-    MenuOption(window, "Start new game", aboutScreen),
+    MenuOption(window, "Begin", aboutScreen),
     MenuOption(window, "Load game", aboutScreen),
     MenuOption(window, "About", aboutScreen),
-    MenuOption(window, "Exit", exitScreen)
+    MenuOption(window, "End", exitScreen)
   };
 
   int pressedKey;
@@ -89,6 +89,5 @@ int MenuScreen::process () const {
     wrefresh(window);
   }
 
-  delwin(window);
   return SCREEN_OK;
 }
