@@ -8,6 +8,8 @@
 #include "../menu/MenuOption.hpp"
 #include "AboutScreen.hpp"
 #include "ExitScreen.hpp"
+#include "LoadGameScreen.hpp"
+#include "NewGameScreen.hpp"
 
 #include "MenuScreen.hpp"
 
@@ -40,12 +42,14 @@ int MenuScreen::process () const {
 }
 
 void MenuScreen::loop (MenuHeading& heading) const {
+  NewGameScreen newGameScreen;
+  LoadGameScreen loadGameScreen;
   AboutScreen aboutScreen;
   ExitScreen exitScreen;
 
   std::vector<MenuOption> menuOptionList = {
-    MenuOption(window, "Begin", aboutScreen),
-    MenuOption(window, "Load game", aboutScreen),
+    MenuOption(window, "Begin", newGameScreen),
+    MenuOption(window, "Load game", loadGameScreen),
     MenuOption(window, "About", aboutScreen),
     MenuOption(window, "End", exitScreen)
   };

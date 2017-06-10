@@ -1,22 +1,22 @@
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL = all
 .PHONY: all compile run check doc clean
 
 ## Variables
 
-CXX := g++
-CXXFLAGS := -std=c++11 -Wall -pedantic -Wno-long-long -Werror
-LDFLAGS=-lncurses
-EXECUTABLE := bittnja3
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -pedantic -Wno-long-long -Werror
+LDFLAGS = -lncurses
+EXECUTABLE = bittnja3
 SOURCES := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
-CHECK := valgrind
-CHECKFLAGS := --leak-check=full --tool=memcheck
+CHECK = valgrind
+CHECKFLAGS = --leak-check=full --tool=memcheck
 
 ## Colors
 
-COLOR_DEFAULT=\033[0m
-COLOR_STATUS=\033[1;33m
-COLOR_INFO=\033[1;36m
-COLOR_GOOD=\033[1;32m
+COLOR_DEFAULT = \033[0m
+COLOR_STATUS = \033[1;33m
+COLOR_INFO = \033[1;36m
+COLOR_GOOD = \033[1;32m
 
 ## Tasks
 
@@ -25,9 +25,7 @@ COLOR_GOOD=\033[1;32m
 	@$(CXX) $(CXXFLAGS) -c -o $@ -c $< $(LDFLAGS)
 	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp > $*.d $(LDFLAGS)
 
-all:
-	@echo "$(COLOR_INFO)all$(COLOR_DEFAULT)"
-	@echo "$(COLOR_GOOD)ALL OK$(COLOR_DEFAULT)"
+all: compile doc
 
 compile: $(SOURCES:.cpp=.o)
 	@echo "$(COLOR_INFO)compiling with flags $(COLOR_DEFAULT)$(CXXFLAGS) $(LDFLAGS)"
@@ -50,11 +48,12 @@ clean:
 
 doc:
 	@echo "$(COLOR_INFO)generating documentation$(COLOR_DEFAULT)"
+	doxygen Doxyfile
 	@echo "$(COLOR_GOOD)DOC OK$(COLOR_DEFAULT)"
 
 check: CXXFLAGS += -g -O2
 check: clean compile
-	@echo "$(COLOR_INFO)starting check in $(CHECK) with flags$(COLOR_DEFAULT) $(CHECKFLAGS)"
+	@echo "$(COLOR_INFO)starting check in $(CHECK) with flags $(COLOR_DEFAULT)$(CHECKFLAGS)"
 	$(CHECK) ./$(EXECUTABLE) $(CHECKFLAGS)
 	@echo "$(COLOR_GOOD)CHECK OK$(COLOR_DEFAULT)"
 

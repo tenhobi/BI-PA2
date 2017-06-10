@@ -1,4 +1,5 @@
 bittnja3
+doc/
 
 *.d
 *.o
@@ -6,3 +7,4 @@ bittnja3
 
 cmake-build-debug/
 vgcore.*
+
