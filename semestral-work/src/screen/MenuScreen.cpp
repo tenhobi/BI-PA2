@@ -33,6 +33,13 @@ int MenuScreen::process () const {
 
   heading.activate();
 
+  // Menu loop functionality.
+  loop();
+
+  return SCREEN_OK;
+}
+
+void MenuScreen::loop () const {
   AboutScreen aboutScreen;
   ExitScreen exitScreen;
 
@@ -88,6 +95,4 @@ int MenuScreen::process () const {
 
     wrefresh(window);
   }
-
-  return SCREEN_OK;
 }
