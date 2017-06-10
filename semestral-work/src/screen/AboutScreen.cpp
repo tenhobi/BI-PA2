@@ -1,6 +1,6 @@
 #include "AboutScreen.hpp"
 
-int AboutScreen::process () const {
+int AboutScreen::process () {
   WINDOW* aboutBoxWindow = newwin(getmaxy(window) / 2, getmaxx(window) / 2,
                                   (getmaxy(window) / 4), (getmaxx(window) / 4));
   WINDOW* aboutWindow = newwin((getmaxy(window) / 2) - 2, (getmaxx(window) / 2) - 2,
@@ -30,5 +30,5 @@ int AboutScreen::process () const {
   delwin(aboutBoxWindow);
   delwin(aboutWindow);
 
-  return SCREEN_OK;
+  return PROCESS_OK;
 }

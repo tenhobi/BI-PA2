@@ -1,5 +1,5 @@
 #include "NewGameScreen.hpp"
 
-int NewGameScreen::process () const {
-  return SCREEN_OK;
+int NewGameScreen::process () {
+  return PROCESS_OK;
 }

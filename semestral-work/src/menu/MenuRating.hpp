@@ -18,10 +18,7 @@ public:
    */
   MenuRating (WINDOW* window, const std::string text);
 
-  /**
-   * Prints item into the ncurses window.
-   */
-  void print () const override;
+  void print (int numberOfItems) const override;
 };
 
 #endif // SEMESTRAL_WORK_MENURATING_HPP

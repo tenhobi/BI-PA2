@@ -7,7 +7,7 @@
 
 MenuRating::MenuRating (WINDOW* window, const std::string text) : MenuItem(window, text) {}
 
-void MenuRating::print () const {
+void MenuRating::print (int numberOfItems) const {
   wclear(window);
 
   mvwprintw(window, 0, (getmaxx(window) - (int) text.size()) / 2, ctext);

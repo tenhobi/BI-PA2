@@ -17,15 +17,17 @@ public:
    */
   MenuHeading (WINDOW* window, const std::string text);
 
-  /**
-   * Prints item into the ncurses window.
-   */
-  void print () const override;
+  void print (int numberOfItems) const override;
 
   /**
    * Activates the heading styles.
    */
-  void activate ();
+
+  /**
+   * Print of active heading with relative position.
+   * @param numberOfItems
+   */
+  void activePrint (int numberOfItems);
 
 private:
   /**
@@ -41,7 +43,7 @@ private:
   /**
    * Color of the active heading.
    */
-  const short colorActive = ColorPairGenerator::addColor(COLOR_YELLOW + SCREEN_COLOR_BRIGHT, 0);
+  const short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SCREEN_COLOR_BRIGHT, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUHEADING_HPP

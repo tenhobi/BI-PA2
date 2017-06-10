@@ -3,10 +3,7 @@
 
 #include "ExitScreen.hpp"
 
-// milliseconds
-#define SCREEN_DELAY 5000
-
-int ExitScreen::process () const {
+int ExitScreen::process () {
   std::string heading = "Thank you for playing this game.";
   std::string note = "This game was developed by Honza Bittner in 2017.";
   std::string link = "Visit honzabittner.cz for more awesomeness!";
@@ -18,10 +15,10 @@ int ExitScreen::process () const {
   wrefresh(window);
 
   // Use non blocking read.
-  timeout(SCREEN_DELAY);
+  timeout(SCREEN_DELAY * 5);
   getch();
 
   wclear(window);
 
-  return SCREEN_EXIT;
+  return PROCESS_EXIT;
 }

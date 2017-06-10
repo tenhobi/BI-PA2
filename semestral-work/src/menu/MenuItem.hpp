@@ -20,7 +20,7 @@ public:
   /**
    * Basic function of the menu item, which prints item into the ncurses window.
    */
-  virtual void print () const = 0; // `= 0` makes this class abstract
+  virtual void print (int numberOfItems) const = 0; // `= 0` makes this class abstract
 
 protected:
   /**

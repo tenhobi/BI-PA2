@@ -2,9 +2,7 @@
 #include <iostream>
 #include "Game.hpp"
 
-Game::Game (int invasionLimit) : invasionLimit(invasionLimit) {
-  this->load();
-}
+Game::Game () {}
 
 Game::Game (int invasionLimit, Map map) : invasionLimit(invasionLimit), map(map) {
   if (!this->map) {
@@ -48,4 +46,8 @@ void Game::loop () {
 
 void Game::close () {
 
+}
+
+int Game::process () {
+  return PROCESS_OK;
 }

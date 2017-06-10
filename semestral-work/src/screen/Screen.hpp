@@ -3,15 +3,19 @@
 
 #include <ncurses.h>
 
+#include "../Processable.hpp"
+
 #define SCREEN_COLOR_BRIGHT 8
 
-#define SCREEN_OK 1
-#define SCREEN_EXIT 2
+// For some odd reason the KEY_ENTER is not the enter key. This should be the enter key code.
+#define REAL_ENTER_KEY 10
+
+#define SCREEN_DELAY 1000000
 
 /**
  * Screen is the abstract class that provides basic console screen unit and functionality.
  */
-class Screen {
+class Screen: public Processable {
 public:
   /**
    * Constructor initializes the window.
@@ -26,7 +30,7 @@ public:
   /**
    * Process the screen with its own loop and functionality.
    */
-  virtual int process () const = 0; // `= 0` makes this class abstract
+  virtual int process () override = 0; // `= 0` makes this class abstract
 protected:
   /**
    * Specific generic window of each Screen object.

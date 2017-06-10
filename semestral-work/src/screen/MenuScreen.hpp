@@ -10,14 +10,7 @@
  */
 class MenuScreen : public Screen {
 public:
-  int process () const override;
-
-private:
-  /**
-   * Menu loop functionality - switching options, selection items, ...
-   * @param heading menu heading object which we want to redrawing
-   */
-  void loop (MenuHeading& heading) const;
+  int process () override;
 };
 
 #endif // SEMESTRAL_WORK_MENUSCREEN_HPP

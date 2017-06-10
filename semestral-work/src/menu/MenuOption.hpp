@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "../Processable.hpp"
 #include "../screen/Screen.hpp"
 #include "../ColorPairGenerator.hpp"
 
@@ -24,21 +25,24 @@ public:
    * @param text text of the item
    * @param screen screen to process when this item is selected
    */
-  MenuOption (WINDOW* window, const std::string text, Screen& screen);
+  MenuOption (WINDOW* window, const std::string text, Processable& _process);
 
   /**
    * Special item printing function for the menu option item.
+   * @param numberOfItems
+   * @param offset
+   * @param active
    */
-  void print (int offset, bool active) const;
+  void print (int numberOfItems, int offset, bool active) const;
 
   /**
    * Prints item into the ncurses window with default settings.
    */
-  void print () const override;
+  void print (int numberOfItem) const override;
 
   /**
-   * Processes the linked screen.
-   * @return screen's process return code.
+   * Processes the linked process.
+   * @return process's process return code.
    */
   int process () const;
 
@@ -46,7 +50,7 @@ private:
   /**
    * Screen to process when the this menu option item is selected.
    */
-  Screen& screen;
+  Processable& _process;
 
   /**
    * Color of the item.

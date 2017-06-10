@@ -1,18 +1,19 @@
 #ifndef SEMESTRAL_WORK_GAME_HPP
 #define SEMESTRAL_WORK_GAME_HPP
 
+#include "../Processable.hpp"
+
 #include "Map.hpp"
 
 /**
  * A main class for the tower defense game, which process all initialization, saving, looping etc.
  */
-class Game {
+class Game: public Processable {
 public:
   /**
-   * A constructor with defined invasion limit.
-   * @param invasionLimit
+   * A constructor.
    */
-  Game (int invasionLimit);
+  Game ();
 
   /**
    * A constructor with defined invasion limit and map.
@@ -26,6 +27,8 @@ public:
   void save () const;
 
   void start ();
+
+  int process() override;
 
 private:
   int round;

@@ -16,32 +16,10 @@
 // microsecconds
 #define DELAY 1000000
 
-// For some odd reason the KEY_ENTER is not the enter key. This should be the enter key code.
-#define REAL_ENTER_KEY 10
+int MenuScreen::process () {
+  wclear(window);
+  wrefresh(window);
 
-int MenuScreen::process () const {
-  MenuHeading heading(window, "Honza Bittner's Tower Defense");
-  heading.print();
-
-  usleep(DELAY);
-
-  WINDOW* ratingWindow = newwin(1, getmaxx(window), (getmaxy(window) / 2) - 3 - 0, 0);
-  MenuRating(ratingWindow, "Best console game of the year! ~ gamelife.com").print();
-  MenuRating(ratingWindow, "Very interesting concept. ~ pcgames.net").print();
-  MenuRating(ratingWindow, "Kids love it! <3 ~ gamesforkids.eu").print();
-  wclear(ratingWindow);
-  wrefresh(ratingWindow);
-  delwin(ratingWindow);
-
-  heading.activate();
-
-  // Menu loop functionality.
-  loop(heading);
-
-  return SCREEN_OK;
-}
-
-void MenuScreen::loop (MenuHeading& heading) const {
   NewGameScreen newGameScreen;
   LoadGameScreen loadGameScreen;
   AboutScreen aboutScreen;
@@ -54,6 +32,19 @@ void MenuScreen::loop (MenuHeading& heading) const {
     MenuOption(window, "End", exitScreen)
   };
 
+  MenuHeading heading(window, "Honza Bittner's Tower Defense");
+  heading.print((int) menuOptionList.size());
+
+  usleep(DELAY);
+
+  WINDOW* ratingWindow = newwin(1, getmaxx(window), (getmaxy(window) / 2) - (int) (menuOptionList.size() / 2) + 1, 0);
+  MenuRating(ratingWindow, "Best console game of the year! ~ gamelife.com").print(0);
+  MenuRating(ratingWindow, "Very interesting concept. ~ pcgames.net").print(0);
+  MenuRating(ratingWindow, "Kids love it! <3 ~ gamesforkids.eu").print(0);
+  wclear(ratingWindow);
+  wrefresh(ratingWindow);
+  delwin(ratingWindow);
+
   int pressedKey;
   bool isLooping = true;
   int active = 0;
@@ -64,10 +55,10 @@ void MenuScreen::loop (MenuHeading& heading) const {
     int offsetCounter = 1;
     int index = 0;
 
-    heading.activate();
+    heading.activePrint((int) menuOptionList.size());
 
     for (MenuOption& mo: menuOptionList) {
-      mo.print(offsetCounter++, index == active);
+      mo.print((int) menuOptionList.size(), offsetCounter++, index == active);
       index++;
     }
 
@@ -91,7 +82,7 @@ void MenuScreen::loop (MenuHeading& heading) const {
       case REAL_ENTER_KEY:
       case KEY_RIGHT:
         puts("\a");
-        if (menuOptionList[active].process() == SCREEN_EXIT) {
+        if (menuOptionList[active].process() == PROCESS_EXIT) {
           isLooping = false;
         }
         break;
@@ -101,4 +92,6 @@ void MenuScreen::loop (MenuHeading& heading) const {
 
     wrefresh(window);
   }
+
+  return PROCESS_OK;
 }
