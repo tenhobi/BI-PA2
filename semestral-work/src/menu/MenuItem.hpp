@@ -17,6 +17,8 @@ public:
    */
   MenuItem (WINDOW* window, const std::string text);
 
+  virtual ~MenuItem ();
+
   /**
    * Prints this menu item into the ncurses window.
    *
