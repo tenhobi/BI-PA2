@@ -1,4 +1,5 @@
 #include <string>
+#include <ncurses.h>
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -22,9 +23,9 @@
 // Using in save () method, checks if write from file was success.
 #define FILE_WRITE_CHECK if (outFile.fail()) { errorScreen.process("Write into file has failed."); return false; }
 
-Game::Game (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame), map(Map(0, 0)) {}
+Game::Game (bool newGame) : newGame(newGame), map(Map(0, 0)) {}
 
-bool Game::load () {
+bool Game::load (std::string fileName) {
   InfoScreen infoScreen;
   ErrorScreen errorScreen;
 
@@ -195,16 +196,13 @@ bool Game::load () {
   return true;
 }
 
-bool Game::save () {
+bool Game::save (std::string fileName) {
   InfoScreen infoScreen;
   ErrorScreen errorScreen;
 
   std::ofstream outFile;
 
-  // TODO: name of file
-  std::string outputName = "muj-super-soubor";
-
-  outFile.open(std::string(SW_GAME_DATA_SAVE) + outputName + ".game");
+  outFile.open(std::string(SW_GAME_DATA_SAVE) + fileName + ".game");
 
   if (!outFile.is_open()) {
     return false;
@@ -314,22 +312,25 @@ bool Game::save () {
   return true;
 }
 
-void Game::start () {
+GameState Game::nextRound (WINDOW* game, WINDOW* stats) {
   InfoScreen infoScreen;
   infoScreen.process("Game started");
 
-  loop();
+  return GameState::IN_PROGRESS;
 }
 
-void Game::loop () {
-  InfoScreen infoScreen;
-  infoScreen.process("Round");
-}
-
-void Game::print () {
-
+GameState Game::print (WINDOW* game, WINDOW* stats) {
+  return GameState::IN_PROGRESS;
 }
 
 void Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX) {
 
+}
+
+int Game::getMapHeight () {
+  return map.height;
+}
+
+int Game::getMapWidth () {
+  return map.width;
 }

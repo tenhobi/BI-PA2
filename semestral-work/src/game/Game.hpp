@@ -2,10 +2,18 @@
 #define SEMESTRAL_WORK_GAME_HPP
 
 #include <string>
+#include <ncurses.h>
 
 #include "Tower.hpp"
 #include "Monster.hpp"
 #include "Map.hpp"
+
+enum GameState {
+  FINISHED,
+  WIN,
+  LOST,
+  IN_PROGRESS
+};
 
 /**
  * A main class for the tower defense game, which process all initialization, saving, looping etc.
@@ -14,36 +22,35 @@ class Game {
 public:
   /**
    * A constructor.
-   *
-   * @param fileName name of a game file
    */
-  Game (std::string fileName, bool newGame);
+  Game (bool newGame);
 
   /**
    * Loads the game from a file.
    *
    * @return success
    */
-  bool load ();
+  bool load (std::string fileName);
 
   /**
    * Saves the game to a file.
    *
    * @return success
    */
-  bool save ();
+  bool save (std::string fileName);
 
   /**
-   * Process the game.
+   * Process next round of the game.
    */
-  void start ();
+  GameState nextRound (WINDOW* game, WINDOW* stats);
+
+  GameState print (WINDOW* game, WINDOW* stats);
+
+  int getMapHeight ();
+
+  int getMapWidth ();
 
 protected:
-  /**
-   * File name of the input file.
-   */
-  std::string fileName;
-
   bool newGame;
 
   /**
@@ -92,13 +99,6 @@ protected:
   int numberOfTowersInMap;
 
   std::vector<Tower> towersInMap;
-
-  /**
-   * Loop of the game round.
-   */
-  void loop ();
-
-  void print ();
 
   void makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
 };
