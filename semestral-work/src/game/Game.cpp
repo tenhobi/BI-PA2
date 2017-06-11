@@ -216,7 +216,27 @@ bool Game::save () {
 
   for (int i = 0; i < map.height; ++i) {
     for (int j = 0; j < map.width; ++j) {
-      outFile << "#";
+      Cell* x = &*map.data[i][j];
+
+      // Cell is Wall
+      if (dynamic_cast<Wall*>(x) != NULL) {
+        outFile << "#";
+      }
+      // Cell is Road
+      else if (dynamic_cast<Road*>(x) != NULL) {
+        switch (dynamic_cast<Road*>(x)->getState()) {
+          case RoadState::START:
+            outFile << "-";
+            break;
+          case RoadState::END:
+            outFile << "=";
+            break;
+          default:
+            break;
+        }
+      } else {
+        outFile << " ";
+      }
     }
     outFile << std::endl;
   }

@@ -32,6 +32,8 @@ public:
    */
   bool isEmpty () const override;
 
+  RoadState getState ();
+
 protected:
   /**
    * State of the road cell.
