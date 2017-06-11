@@ -25,7 +25,7 @@ COLOR_GOOD = \033[1;32m
 	@$(CXX) $(CXXFLAGS) -c -o $@ -c $< $(LDFLAGS)
 	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp > $*.d $(LDFLAGS)
 
-all: compile doc
+all: doc compile
 
 compile: $(SOURCES:.cpp=.o)
 	@echo "$(COLOR_INFO)compiling with flags $(COLOR_DEFAULT)$(CXXFLAGS) $(LDFLAGS)"
@@ -39,9 +39,9 @@ run: compile
 
 clean:
 	@echo "$(COLOR_INFO)removing object files$(COLOR_DEFAULT)"
-	@rm -f -- src/*.o src/*/*.o
+	@rm -f -- src/*.o src/*/*.o src/*/*/*.o
 	@echo "$(COLOR_INFO)removing link files$(COLOR_DEFAULT)"
-	@rm -f -- src/*.d src/*/*.d
+	@rm -f -- src/*.d src/*/*.d src/*/*/*.d
 	@echo "$(COLOR_INFO)removing executable files$(COLOR_DEFAULT)"
 	@rm -f $(EXECUTABLE)
 	@echo "$(COLOR_GOOD)CLEAN OK$(COLOR_DEFAULT)"

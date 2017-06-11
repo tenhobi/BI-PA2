@@ -1,8 +1,9 @@
 #ifndef SEMESTRAL_WORK_MAP_HPP
 #define SEMESTRAL_WORK_MAP_HPP
 
-#include "cell/Cell.hpp"
 #include <vector>
+
+#include "cell/Cell.hpp"
 
 class Map {
 public:

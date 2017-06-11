@@ -39,7 +39,7 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
           active = 0;
         }
         break;
-      case REAL_ENTER_KEY:
+      case SW_KEY_ENTER:
       case KEY_RIGHT:
         puts("\a");
 

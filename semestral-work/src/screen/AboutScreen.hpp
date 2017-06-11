@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 
 /**
- * Displays an about screen.
+ * Displays and process an about screen and it's functionality.
  */
 class AboutScreen : public Screen {
 public:

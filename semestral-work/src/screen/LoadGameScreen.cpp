@@ -3,10 +3,12 @@
 #include <regex>
 #include <unistd.h>
 
-#include "../menu/MenuOption.hpp"
+#include "../Config.hpp"
+
 #include "../game/Game.hpp"
 #include "../menu/MenuHeading.hpp"
 #include "BackScreen.hpp"
+#include "../menu/MenuOption.hpp"
 #include "../menu/Menu.hpp"
 
 #include "LoadGameScreen.hpp"
@@ -15,22 +17,17 @@ int LoadGameScreen::process () {
   wclear(window);
   wrefresh(window);
 
-  Game game;
-  BackScreen back;
-
   DIR* saveDir;
   struct dirent* file;
 
-  saveDir = opendir("./data/save");
+  saveDir = opendir(SW_GAME_DATA_SAVE);
 
   std::vector<MenuOption> menuOptionList;
 
-  int counter = 0;
-
   if (saveDir != NULL) {
     while ((file = readdir(saveDir))) {
-      if (std::regex_match(file->d_name, std::regex("(.+)(\\.map)"))) {
-        mvwprintw(window, counter++, 0, file->d_name);
+      if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) +")"))) {
+        Game game(std::string(file->d_name));
         menuOptionList.push_back(MenuOption(window, std::string(file->d_name), game));
       }
     }
@@ -38,11 +35,12 @@ int LoadGameScreen::process () {
 
   closedir(saveDir);
 
+  BackScreen back;
   menuOptionList.push_back(MenuOption(window, "back to main menu", back));
 
   wrefresh(window);
 
-  MenuHeading heading(window, "Select game to load");
+  MenuHeading heading(window, "Select a game file to load");
   heading.print((int) menuOptionList.size());
 
   usleep(SCREEN_DELAY);

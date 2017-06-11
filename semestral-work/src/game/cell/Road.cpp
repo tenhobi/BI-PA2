@@ -1,3 +1,9 @@
 #include "Road.hpp"
 
-Road::Road (bool startingEdge, bool finalEdge) : startingEdge(startingEdge), finalEdge(finalEdge) {}
+Road::Road (RoadState state) : state(state) {
+
+}
+
+bool Road::isEmpty () const {
+  return false;
+}

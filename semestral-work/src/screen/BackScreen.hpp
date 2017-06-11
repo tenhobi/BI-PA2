@@ -3,7 +3,11 @@
 
 #include "Screen.hpp"
 
+/**
+ * Displays and process a back screen and it's functionality.
+ */
 class BackScreen : public Screen {
+public:
   int process () override;
 };
 

@@ -2,51 +2,13 @@
 #include <iostream>
 #include "Game.hpp"
 
-Game::Game () {}
+Game::Game (std::string fileName) {}
 
-Game::Game (int invasionLimit, Map map) : invasionLimit(invasionLimit), map(map) {
-  if (!this->map) {
-    this->load();
-  }
-}
+void Game::load () {}
 
-void Game::load () {
+void Game::save () {}
 
-}
-
-void Game::start () {
-
-}
-
-void Game::save () const {
-
-}
-
-void Game::loop () {
-
-  if (this->invasionCount < this->invasionLimit) {
-    std::string command;
-
-    std::cin >> command;
-
-    if (command == "exit") {
-      this->finished = true;
-      this->close();
-    } else if (command == "save") {
-      // save map
-    } else if (command == "tower") {
-      // tower instructions
-    }
-
-    if (!this->finished) {
-      this->loop();
-    }
-  }
-}
-
-void Game::close () {
-
-}
+void Game::loop () {}
 
 int Game::process () {
   return PROCESS_OK;

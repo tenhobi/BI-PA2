@@ -2,6 +2,7 @@
 #define SEMESTRAL_WORK_MENUHEADING_HPP
 
 #include "../ColorPairGenerator.hpp"
+#include "../Config.hpp"
 
 #include "MenuItem.hpp"
 
@@ -43,7 +44,7 @@ private:
   /**
    * Color of the active heading.
    */
-  const short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SCREEN_COLOR_BRIGHT, 0);
+  const short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SW_COLOR_BRIGHT, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUHEADING_HPP

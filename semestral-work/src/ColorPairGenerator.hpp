@@ -2,16 +2,17 @@
 #define SEMESTRAL_WORK_COLORPAIRGENERATOR_HPP
 
 /**
- * This static-like class serves the purpose of ncurses color pairs overlapping.
- * This class initializes ncurses color pairs using a static counter.
+ * Static-like class which serves the purpose of overpower the ncurses color pairs overlapping.
+ * Uses static-like generator of pairs.
  */
 class ColorPairGenerator {
 public:
   /**
    * Add initialization of ncurses color.
+   *
    * @param text color of a text
    * @param background color of a text background
-   * @return number of color pair
+   * @return number of the new color pair
    */
   static short addColor (short text, short background);
 

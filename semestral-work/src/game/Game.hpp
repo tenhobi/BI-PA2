@@ -8,38 +8,31 @@
 /**
  * A main class for the tower defense game, which process all initialization, saving, looping etc.
  */
-class Game: public Processable {
+class Game : public Processable {
 public:
   /**
    * A constructor.
+   *
+   * @param fileName name of a game file
    */
-  Game ();
-
-  /**
-   * A constructor with defined invasion limit and map.
-   * @param invasionLimit
-   * @param map
-   */
-  Game (int invasionLimit, Map map);
+  Game (std::string fileName);
 
   void load ();
 
-  void save () const;
+  void save ();
 
-  void start ();
-
-  int process() override;
+  int process () override;
 
 private:
   int round;
   int invasionLimit;
   int invasionCount;
+  bool saved = false;
   bool finished;
   Map map;
+  std::string fileName;
 
   void loop ();
-
-  void close ();
 };
 
 #endif // SEMESTRAL_WORK_GAME_HPP

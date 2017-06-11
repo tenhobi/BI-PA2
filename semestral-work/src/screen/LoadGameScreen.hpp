@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 
 /**
- * Displays and process a load game screen and functionality.
+ * Displays and process a load game screen and it's functionality.
  */
 class LoadGameScreen : public Screen {
 public:

@@ -6,6 +6,7 @@
 #include "../Processable.hpp"
 #include "../screen/Screen.hpp"
 #include "../ColorPairGenerator.hpp"
+#include "../Config.hpp"
 
 #include "MenuItem.hpp"
 
@@ -60,7 +61,7 @@ private:
   /**
    * Color of the active item.
    */
-  const short colorActive = ColorPairGenerator::addColor(COLOR_CYAN + SCREEN_COLOR_BRIGHT, 0);
+  const short colorActive = ColorPairGenerator::addColor(COLOR_CYAN + SW_COLOR_BRIGHT, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUOPTION_HPP

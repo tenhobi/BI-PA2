@@ -6,7 +6,7 @@
 #include "Screen.hpp"
 
 /**
- * Displays and process a menu screen and functionality.
+ * Displays and process a menu screen and it's functionality.
  */
 class MenuScreen : public Screen {
 public:

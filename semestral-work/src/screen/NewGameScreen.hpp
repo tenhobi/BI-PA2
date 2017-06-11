@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 
 /**
- * Displays and process a new game screen and functionality.
+ * Displays and process a new game screen and it's functionality.
  */
 class NewGameScreen : public Screen {
 public:

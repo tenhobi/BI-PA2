@@ -4,7 +4,7 @@
 #include "Screen.hpp"
 
 /**
- * Displays and process an exit screen and functionality.
+ * Displays and process an exit screen and it's functionality.
  */
 class ExitScreen : public Screen {
 public:
