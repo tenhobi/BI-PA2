@@ -9,14 +9,14 @@ class InfoScreen : public Screen {
 public:
   InfoScreen ();
 
-  virtual int process () override;
+  virtual ScreenState process () override;
 
   /**
    * Takes the text of the info and does process.
    *
    * @copydoc process
    */
-  virtual int process (std::string text);
+  virtual ScreenState process (std::string text);
 
   /**
    *
@@ -24,7 +24,7 @@ public:
    * @param time time to wait to any key press in milliseconds, or -1 for infinity time
    * @return
    */
-  virtual int process (std::string text, int time);
+  virtual ScreenState process (std::string text, int time);
 
 protected:
   short color;

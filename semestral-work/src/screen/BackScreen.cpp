@@ -1,11 +1,11 @@
 #include "BackScreen.hpp"
 
-int BackScreen::process () {
+ScreenState BackScreen::process () {
   if (exit) {
-    return SCREEN_EXIT;
+    return ScreenState::EXIT;
   }
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }
 
 BackScreen::BackScreen (bool exit) : exit(exit) {}

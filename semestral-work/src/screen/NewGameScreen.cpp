@@ -12,7 +12,7 @@
 
 #include "NewGameScreen.hpp"
 
-int NewGameScreen::process () {
+ScreenState NewGameScreen::process () {
   wclear(window);
   wrefresh(window);
 
@@ -60,5 +60,5 @@ int NewGameScreen::process () {
     delete gameScreenList[i];
   }
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }

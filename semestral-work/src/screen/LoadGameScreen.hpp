@@ -8,7 +8,7 @@
  */
 class LoadGameScreen : public Screen {
 public:
-  int process () override;
+  ScreenState process () override;
 };
 
 #endif // SEMESTRAL_WORK_LOADGAMESCREEN_HPP

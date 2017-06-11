@@ -5,11 +5,10 @@
 
 #include "../Config.hpp"
 
-// Continue in the current screen
-#define SCREEN_CONTINUE 1
-
-// Exit the current screen
-#define SCREEN_EXIT 2
+enum ScreenState {
+  CONTINUE, // Continue in the current screen
+  EXIT // Exit the current screen
+};
 
 /**
  * Provides basic console screen unit and it's functionality.
@@ -31,7 +30,7 @@ public:
    *
    * @return process status code.
    */
-  virtual int process ();
+  virtual ScreenState process ();
 
 protected:
   /**

@@ -16,7 +16,7 @@
 // microsecconds
 #define DELAY 1000000
 
-int MenuScreen::process () {
+ScreenState MenuScreen::process () {
   wclear(window);
   wrefresh(window);
 
@@ -52,5 +52,5 @@ int MenuScreen::process () {
   delete aboutScreen;
   delete exitScreen;
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }

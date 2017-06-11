@@ -3,7 +3,7 @@
 
 #include "ExitScreen.hpp"
 
-int ExitScreen::process () {
+ScreenState ExitScreen::process () {
   std::string heading = "Thank you for playing this game.";
   std::string note = "This game was developed by Honza Bittner in 2017.";
   std::string link = "Visit honzabittner.cz for more awesomeness!";
@@ -20,5 +20,5 @@ int ExitScreen::process () {
 
   wclear(window);
 
-  return SCREEN_EXIT;
+  return ScreenState::EXIT;
 }

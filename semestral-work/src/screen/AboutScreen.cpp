@@ -2,7 +2,7 @@
 
 #include "AboutScreen.hpp"
 
-int AboutScreen::process () {
+ScreenState AboutScreen::process () {
   WINDOW* aboutBoxWindow = newwin(getmaxy(window) / 2, getmaxx(window) / 2,
                                   (getmaxy(window) / 4), (getmaxx(window) / 4));
   WINDOW* aboutWindow = newwin((getmaxy(window) / 2) - 2, (getmaxx(window) / 2) - 2,
@@ -32,5 +32,5 @@ int AboutScreen::process () {
   delwin(aboutBoxWindow);
   delwin(aboutWindow);
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }

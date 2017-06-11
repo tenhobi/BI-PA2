@@ -8,7 +8,7 @@
  */
 class ExitScreen : public Screen {
 public:
-  int process () override;
+  ScreenState process () override;
 };
 
 #endif // SEMESTRAL_WORK_EXITSCREEN_HPP

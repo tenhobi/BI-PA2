@@ -11,15 +11,15 @@ InfoScreen::InfoScreen () : Screen() {
   headingText = "INFO";
 }
 
-int InfoScreen::process () {
+ScreenState InfoScreen::process () {
   return process("Unspecified info.", -1);
 }
 
-int InfoScreen::process (std::string text) {
+ScreenState InfoScreen::process (std::string text) {
   return process(text, -1);
 }
 
-int InfoScreen::process (std::string text, int time) {
+ScreenState InfoScreen::process (std::string text, int time) {
   wclear(window);
   wrefresh(window);
 
@@ -43,5 +43,5 @@ int InfoScreen::process (std::string text, int time) {
   wclear(window);
   wrefresh(window);
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }

@@ -17,7 +17,7 @@ public:
    */
   GameScreen (std::string fileName, bool newGame);
 
-  int process () override;
+  ScreenState process () override;
 
 protected:
   /**

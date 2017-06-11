@@ -11,7 +11,7 @@
 
 GameScreen::GameScreen (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame) {}
 
-int GameScreen::process () {
+ScreenState GameScreen::process () {
   ErrorScreen errorScreen;
   InfoScreen infoScreen;
 
@@ -19,7 +19,7 @@ int GameScreen::process () {
 
   if (!game.load(fileName)) {
     errorScreen.process("Load of the game from file " + fileName + " was terminated.");
-    return SCREEN_CONTINUE;
+    return ScreenState::CONTINUE;
   }
 
   wclear(window);
@@ -54,12 +54,10 @@ int GameScreen::process () {
 
   if (game.print(gameWindow, statsWindow) == GameState::FINISHED) {
     infoScreen.process("The game has been already finished.");
-    return SCREEN_CONTINUE;
+    return ScreenState::CONTINUE;
   }
 
-  bool isLooping = true;
-
-  while (isLooping) {
+  while (true) {
     wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
     wclear(gameWindow);
     wrefresh(gameWindow);
@@ -99,7 +97,7 @@ int GameScreen::process () {
     inputCommand = std::string(input);
 
     if (inputCommand == "exit") {
-      return SCREEN_EXIT;
+      return ScreenState::EXIT;
     } else if (inputCommand == "save") {
       infoScreen.process("Write the name of the file into the command window.");
       wclear(gameWindow);
@@ -160,13 +158,5 @@ int GameScreen::process () {
     } else {
       game.nextRound(gameWindow, statsWindow);
     }
-
-    // TODO:
-    isLooping = false;
   }
-
-  timeout(-1);
-  getch();
-
-  return SCREEN_EXIT;
 }

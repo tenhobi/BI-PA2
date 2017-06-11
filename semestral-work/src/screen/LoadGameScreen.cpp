@@ -11,7 +11,7 @@
 
 #include "LoadGameScreen.hpp"
 
-int LoadGameScreen::process () {
+ScreenState LoadGameScreen::process () {
   wclear(window);
   wrefresh(window);
 
@@ -59,5 +59,5 @@ int LoadGameScreen::process () {
     delete gameScreenList[i];
   }
 
-  return SCREEN_CONTINUE;
+  return ScreenState::CONTINUE;
 }

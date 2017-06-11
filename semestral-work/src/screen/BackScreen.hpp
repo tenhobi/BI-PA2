@@ -15,7 +15,7 @@ public:
    */
   BackScreen (bool exit);
 
-  int process () override;
+  ScreenState process () override;
 
 private:
   /**

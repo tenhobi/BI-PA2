@@ -50,7 +50,7 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
 //        puts("\a");
 
         switch (items[active].process()) {
-          case SCREEN_EXIT:
+          case ScreenState::EXIT:
             isLooping = false;
             break;
           default:

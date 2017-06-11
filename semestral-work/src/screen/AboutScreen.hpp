@@ -8,7 +8,7 @@
  */
 class AboutScreen : public Screen {
 public:
-  int process () override;
+  ScreenState process () override;
 };
 
 #endif // SEMESTRAL_WORK_ABOUTSCREEN_HPP

@@ -8,6 +8,6 @@ Screen::~Screen () {
   delwin(window);
 }
 
-int Screen::process () {
-  return SCREEN_CONTINUE;
+ScreenState Screen::process () {
+  return ScreenState::CONTINUE;
 }
