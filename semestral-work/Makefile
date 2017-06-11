@@ -1,5 +1,5 @@
-.DEFAULT_GOAL = all
 .PHONY: all compile run check doc clean
+.DEFAULT_GOAL = all
 
 ## Variables
 
@@ -68,5 +68,7 @@ help:
 	@echo "  $(COLOR_STATUS)doc$(COLOR_DEFAULT)       generates the project documentation"
 	@echo "  $(COLOR_STATUS)check$(COLOR_DEFAULT)     does a clean compilation and runs check tool"
 	@echo "  $(COLOR_STATUS)help$(COLOR_DEFAULT)      print this message"
+
+## Inlude D files
 
 -include $(SOURCES:.cpp=.d)
