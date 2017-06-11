@@ -4,10 +4,14 @@
 
 #include "Menu.hpp"
 
-void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption> items, bool exit) {
+void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items, bool exit) {
   int pressedKey;
   bool isLooping = true;
   int active = 0;
+
+  // Disable cursor.
+  noecho();
+  curs_set(FALSE);
 
   keypad(stdscr, TRUE);
 
@@ -41,13 +45,14 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
         break;
       case SW_KEY_ENTER:
       case KEY_RIGHT:
-        puts("\a");
+//        puts("\a");
 
         if (exit) {
           if (items[active].process() == PROCESS_EXIT) {
             isLooping = false;
           }
         } else {
+          items[active].process();
           isLooping = false;
           wclear(window);
           wrefresh(window);

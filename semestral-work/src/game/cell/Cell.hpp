@@ -6,7 +6,7 @@
 #include "../Monster.hpp"
 
 /**
- *
+ * Cell of the map.
  */
 class Cell {
 public:

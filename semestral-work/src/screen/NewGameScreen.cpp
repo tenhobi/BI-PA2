@@ -6,10 +6,10 @@
 #include "../Config.hpp"
 
 #include "../menu/MenuOption.hpp"
-#include "../game/Game.hpp"
 #include "../menu/MenuHeading.hpp"
-#include "BackScreen.hpp"
 #include "../menu/Menu.hpp"
+#include "BackScreen.hpp"
+#include "GameScreen.hpp"
 
 #include "NewGameScreen.hpp"
 
@@ -27,7 +27,7 @@ int NewGameScreen::process () {
   if (saveDir != NULL) {
     while ((file = readdir(saveDir))) {
       if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) +")"))) {
-        Game game(std::string(file->d_name));
+        GameScreen game(std::string(file->d_name));
         menuOptionList.push_back(MenuOption(window, std::string(file->d_name), game));
       }
     }
@@ -42,8 +42,6 @@ int NewGameScreen::process () {
 
   MenuHeading heading(window, "Select a game file to create a new game");
   heading.print((int) menuOptionList.size());
-
-  usleep(SCREEN_DELAY);
 
   Menu().process(window, heading, menuOptionList, false);
 

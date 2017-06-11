@@ -5,13 +5,15 @@
 
 #include "../Config.hpp"
 
-#include "../game/Game.hpp"
-#include "../menu/MenuHeading.hpp"
-#include "BackScreen.hpp"
 #include "../menu/MenuOption.hpp"
+#include "../menu/MenuHeading.hpp"
 #include "../menu/Menu.hpp"
+#include "BackScreen.hpp"
+#include "GameScreen.hpp"
 
 #include "LoadGameScreen.hpp"
+#include "ErrorScreen.hpp"
+#include "AboutScreen.hpp"
 
 int LoadGameScreen::process () {
   wclear(window);
@@ -24,26 +26,27 @@ int LoadGameScreen::process () {
 
   std::vector<MenuOption> menuOptionList;
 
+  std::vector<GameScreen> gameScreenList;
+
   if (saveDir != NULL) {
     while ((file = readdir(saveDir))) {
       if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) +")"))) {
-        Game game(std::string(file->d_name));
-        menuOptionList.push_back(MenuOption(window, std::string(file->d_name), game));
+        GameScreen game(std::string(file->d_name));
+        gameScreenList.push_back(game);
+        menuOptionList.push_back(MenuOption(window, std::string(file->d_name), gameScreenList[(gameScreenList.size() - 1)]));
       }
     }
   }
 
   closedir(saveDir);
 
-  BackScreen back;
+  AboutScreen back;
   menuOptionList.push_back(MenuOption(window, "back to main menu", back));
 
   wrefresh(window);
 
   MenuHeading heading(window, "Select a game file to load");
   heading.print((int) menuOptionList.size());
-
-  usleep(SCREEN_DELAY);
 
   Menu().process(window, heading, menuOptionList, false);
 

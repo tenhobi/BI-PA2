@@ -13,6 +13,7 @@
 #include "../menu/Menu.hpp"
 
 #include "MenuScreen.hpp"
+#include "ErrorScreen.hpp"
 
 // microsecconds
 #define DELAY 1000000
@@ -25,12 +26,14 @@ int MenuScreen::process () {
   LoadGameScreen loadGameScreen;
   AboutScreen aboutScreen;
   ExitScreen exitScreen;
+  ErrorScreen errorScreen;
 
   std::vector<MenuOption> menuOptionList = {
-    MenuOption(window, "Begin", newGameScreen),
-    MenuOption(window, "Load game", loadGameScreen),
-    MenuOption(window, "About", aboutScreen),
-    MenuOption(window, "End", exitScreen)
+     MenuOption(window, "Begin", newGameScreen),
+     MenuOption(window, "Load game", loadGameScreen),
+     MenuOption(window, "About", aboutScreen),
+     MenuOption(window, "Error", errorScreen),
+     MenuOption(window, "End", exitScreen)
   };
 
   MenuHeading heading(window, "Honza Bittner's Tower Defense");

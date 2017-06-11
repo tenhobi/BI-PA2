@@ -2,28 +2,19 @@
 #define SEMESTRAL_WORK_MAP_HPP
 
 #include <vector>
+#include <string>
 
 #include "cell/Cell.hpp"
 
+/**
+ * Map data holder of a game.
+ */
 class Map {
 public:
+  /**
+   * Map data, contains cells.
+   */
   std::vector<std::vector<Cell>> data;
-
-  bool load ();
-
-  bool save () const;
-
-  bool init ();
-
-  int getWidth () const;
-
-  int getHeight () const;
-
-  operator bool () const;
-
-private:
-  int width;
-  int height;
 };
 
 #endif // SEMESTRAL_WORK_MAP_HPP

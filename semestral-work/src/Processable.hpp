@@ -4,6 +4,7 @@
 #define PROCESS_OK 1
 #define PROCESS_EXIT 2
 #define PROCESS_BACK 3
+#define PROCESS_INPUT_ERROR 4
 
 /**
  * Super abstract class which provides an interface for processable objets.

@@ -17,21 +17,64 @@ public:
    */
   Game (std::string fileName);
 
-  void load ();
+  /**
+   * Loads the game from a file.
+   *
+   * @return success
+   */
+  bool load ();
 
+  /**
+   * Saves the game to a file.
+   */
   void save ();
 
   int process () override;
 
 private:
+  /**
+   * Money ammount.
+   */
+  int money;
+
+  /**
+   * Round number.
+   */
   int round;
+
+  /**
+   * Limit of monster invasion.
+   */
   int invasionLimit;
+
+  /**
+   * Current number of invaded monsters.
+   */
   int invasionCount;
+
+  /**
+   * Determines if the game has been changed since the last save.
+   */
   bool saved = false;
+
+  /**
+   * Determines if the game is finished.
+   */
   bool finished;
+
+  /**
+   * Map data.
+   */
   Map map;
+
+  /**
+   * File name of the input file.
+   */
   std::string fileName;
 
+  /**
+   * Loop of the game round.
+   */
   void loop ();
 };
 

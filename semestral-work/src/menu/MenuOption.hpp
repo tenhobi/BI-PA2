@@ -22,27 +22,27 @@ public:
 
   /**
    * Constructor.
+   *
    * @param window ncurses window to work with
    * @param text text of the item
-   * @param screen screen to process when this item is selected
+   * @param _process process to process when this item is selected
    */
   MenuOption (WINDOW* window, const std::string text, Processable& _process);
 
+  void print (int numberOfItem) const override;
+
   /**
    * Special item printing function for the menu option item.
-   * @param numberOfItems
-   * @param offset
-   * @param active
+   *
+   * @param numberOfItems number of items for object to know where to print itself
+   * @param offset y axis offset to print
+   * @param active state of the item
    */
   void print (int numberOfItems, int offset, bool active) const;
 
   /**
-   * Prints item into the ncurses window with default settings.
-   */
-  void print (int numberOfItem) const override;
-
-  /**
    * Processes the linked process.
+   *
    * @return process's process return code.
    */
   int process () const;

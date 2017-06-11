@@ -18,7 +18,9 @@ public:
   MenuItem (WINDOW* window, const std::string text);
 
   /**
-   * Basic function of the menu item, which prints item into the ncurses window.
+   * Prints this menu item into the ncurses window.
+   *
+   * @param numberOfItems number of items for object to know where to print itself
    */
   virtual void print (int numberOfItems) const = 0; // `= 0` makes this class abstract
 
