@@ -12,4 +12,11 @@
 
 #define SW_COLOR_BRIGHT 8
 
+#define SW_CHAR_WALL '#'
+#define SW_CHAR_START '-'
+#define SW_CHAR_END '='
+#define SW_CHAR_CELL ' '
+#define SW_CHAR_MONSTER '!'
+#define SW_CHAR_ROAD '@'
+
 #endif //SEMESTRAL_WORK_CONFIG_HPP

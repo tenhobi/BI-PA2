@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 
+#include "../Config.hpp"
 #include "../screen/InfoScreen.hpp"
 #include "../screen/ErrorScreen.hpp"
 #include "cell/Cell.hpp"
@@ -104,10 +105,10 @@ bool Game::load () {
         case '\n':
           j--;
           break;
-        case '#':
+        case SW_CHAR_WALL:
           map.data[i][j] = new Wall();
           break;
-        case '-':
+        case SW_CHAR_START:
           if (!hasStartOfRoad) {
             hasStartOfRoad = true;
             map.data[i][j] = new Road(RoadState::START);
@@ -118,7 +119,7 @@ bool Game::load () {
             return false;
           }
           break;
-        case '=':
+        case SW_CHAR_END:
           if (!hasEndOfRoad) {
             hasEndOfRoad = true;
             map.data[i][j] = new Road(RoadState::END);
@@ -129,7 +130,7 @@ bool Game::load () {
             return false;
           }
           break;
-        case ' ':
+        case SW_CHAR_CELL:
           map.data[i][j] = new Cell();
           break;
         default:
@@ -261,22 +262,22 @@ bool Game::save () {
 
       // Cell is Wall
       if (dynamic_cast<Wall*>(x) != NULL) {
-        outFile << "#";
+        outFile << SW_CHAR_WALL;
       }
       // Cell is Road
       else if (dynamic_cast<Road*>(x) != NULL) {
         switch (dynamic_cast<Road*>(x)->getState()) {
           case RoadState::START:
-            outFile << "-";
+            outFile << SW_CHAR_START;
             break;
           case RoadState::END:
-            outFile << "=";
+            outFile << SW_CHAR_END;
             break;
           default:
             break;
         }
       } else {
-        outFile << " ";
+        outFile << SW_CHAR_CELL;
       }
 
       FILE_WRITE_CHECK
