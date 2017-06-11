@@ -4,7 +4,7 @@
 ## Variables
 
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -pedantic -Wno-long-long -Werror
+CXXFLAGS = -std=c++11 -Werror -Wall -pedantic -Wno-long-long -O0 -ggdb
 LDFLAGS = -lncurses
 EXECUTABLE = bittnja3
 SOURCES := $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
@@ -23,7 +23,7 @@ COLOR_GOOD = \033[1;32m
 %.o: %.cpp
 	@echo "$(COLOR_STATUS)$^ -> $@$(COLOR_DEFAULT)"
 	@$(CXX) $(CXXFLAGS) -c -o $@ -c $< $(LDFLAGS)
-	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp > $*.d $(LDFLAGS)
+	@$(CXX) $(CXXFLAGS) -MM -MT $*.o $*.cpp $(LDFLAGS) > $*.d
 
 all: doc compile
 

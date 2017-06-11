@@ -10,6 +10,7 @@
 #include "cell/Cell.hpp"
 #include "cell/Wall.hpp"
 #include "cell/Road.hpp"
+#include "cell/Building.hpp"
 #include "Tower.hpp"
 
 #include "Game.hpp"
@@ -262,7 +263,7 @@ bool Game::save (std::string fileName) {
       if (dynamic_cast<Wall*>(x) != NULL) {
         outFile << SW_CHAR_WALL;
       }
-      // Cell is Road
+        // Cell is Road
       else if (dynamic_cast<Road*>(x) != NULL) {
         switch (dynamic_cast<Road*>(x)->getState()) {
           case RoadState::START:
@@ -320,6 +321,39 @@ GameState Game::nextRound (WINDOW* game, WINDOW* stats) {
 }
 
 GameState Game::print (WINDOW* game, WINDOW* stats) {
+//  for (int i = 0; i < map.height; ++i) {
+//    for (int j = 0; j < map.width; ++j) {
+//      Cell* x = &*map.data[i][j];
+//
+//      // Cell is Wall
+//      if (dynamic_cast<Wall*>(x) != NULL) {
+//        mvprintw(i, j, (char*) SW_CHAR_WALL);
+//      }
+//      // Cell is Road
+//      else if (dynamic_cast<Road*>(x) != NULL) {
+//        switch (dynamic_cast<Road*>(x)->getState()) {
+//          case RoadState::START:
+//            mvprintw(i, j, (char*) SW_CHAR_START);
+//            break;
+//          case RoadState::END:
+//            mvprintw(i, j, (char*) SW_CHAR_END);
+//            break;
+//          default:
+//            mvprintw(i, j, (char*) SW_CHAR_ROAD);
+//            break;
+//        }
+//      }
+//      // Cell is Building
+//      else if (dynamic_cast<Building*>(x) != NULL) {
+//        mvprintw(i, j, (char*) SW_CHAR_ROAD);
+//      }
+//      // Cell is regular Cell
+//      else {
+//        mvprintw(i, j, (char*) SW_CHAR_CELL);
+//      }
+//    }
+//  }
+
   return GameState::IN_PROGRESS;
 }
 

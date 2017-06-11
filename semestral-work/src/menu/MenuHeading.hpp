@@ -42,12 +42,12 @@ protected:
   /**
    * Color of the heading.
    */
-  short color = ColorPairGenerator::addColor(COLOR_YELLOW, 0);
+  short color = ColorPairGenerator::addColor(COLOR_MAGENTA, 0);
 
   /**
    * Color of the active heading.
    */
-  short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SW_COLOR_BRIGHT, 0);
+  short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUHEADING_HPP

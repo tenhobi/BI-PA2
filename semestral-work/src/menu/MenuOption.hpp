@@ -61,7 +61,7 @@ protected:
   /**
    * Color of the active item.
    */
-  const short colorActive = ColorPairGenerator::addColor(COLOR_CYAN + SW_COLOR_BRIGHT, 0);
+  const short colorActive = ColorPairGenerator::addColor(COLOR_CYAN, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUOPTION_HPP

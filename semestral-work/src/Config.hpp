@@ -10,8 +10,6 @@
 // For some odd reason the KEY_ENTER is not the enter key. This should be the enter key code.
 #define SW_KEY_ENTER 10
 
-#define SW_COLOR_BRIGHT 8
-
 #define SW_CHAR_WALL '#'
 #define SW_CHAR_START '-'
 #define SW_CHAR_END '='
