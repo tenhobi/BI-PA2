@@ -5,7 +5,7 @@ int BackScreen::process () {
     return SCREEN_EXIT;
   }
 
-  return SCREEN_BACK;
+  return SCREEN_CONTINUE;
 }
 
 BackScreen::BackScreen (bool exit): exit(exit) {}

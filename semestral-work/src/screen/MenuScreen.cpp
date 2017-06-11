@@ -53,5 +53,5 @@ int MenuScreen::process () {
   delete aboutScreen;
   delete exitScreen;
 
-  return SCREEN_OK;
+  return SCREEN_CONTINUE;
 }

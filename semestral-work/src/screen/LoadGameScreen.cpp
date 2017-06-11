@@ -61,5 +61,5 @@ int LoadGameScreen::process () {
     delete gameScreenList[i];
   }
 
-  return SCREEN_OK;
+  return SCREEN_CONTINUE;
 }

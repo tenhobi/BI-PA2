@@ -7,15 +7,15 @@
 GameScreen::GameScreen (std::string fileName) : fileName(fileName) {}
 
 int GameScreen::process () {
-//  Game game(fileName);
+  Game game(fileName);
 
-  ErrorScreen error;
-  error.process("Wrong game load file input! " + fileName);
+  if (!game.load()) {
+    ErrorScreen error;
+    error.process("Load error from " + fileName + " game file.");
+    return SCREEN_CONTINUE;
+  }
 
-//  if (game.process() == PROCESS_INPUT_ERROR) {
+  game.start();
 
-//    return PROCESS_BACK;
-//  }
-
-  return SCREEN_BACK;
+  return SCREEN_EXIT;
 }

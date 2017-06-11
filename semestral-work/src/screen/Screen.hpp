@@ -5,13 +5,11 @@
 
 #include "../Config.hpp"
 
-#define SCREEN_OK 1
-#define SCREEN_EXIT 2
-#define SCREEN_BACK 3
-#define SCREEN_INPUT_ERROR 4
+// Continue in the current screen
+#define SCREEN_CONTINUE 1
 
-// microseconds
-#define SCREEN_DELAY 1000000
+// Exit the current screen
+#define SCREEN_EXIT 2
 
 /**
  * Provides basic console screen unit and it's functionality.

@@ -44,6 +44,8 @@ clean:
 	@rm -f -- src/*.d src/*/*.d src/*/*/*.d
 	@echo "$(COLOR_INFO)removing executable files$(COLOR_DEFAULT)"
 	@rm -f $(EXECUTABLE)
+	@echo "$(COLOR_INFO)removing documentation files$(COLOR_DEFAULT)"
+	@rm -rf -- doc/
 	@echo "$(COLOR_GOOD)CLEAN OK$(COLOR_DEFAULT)"
 
 doc:

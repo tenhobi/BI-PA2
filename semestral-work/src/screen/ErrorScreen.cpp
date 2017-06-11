@@ -27,5 +27,5 @@ int ErrorScreen::process (std::string text) {
   wclear(window);
   wrefresh(window);
 
-  return SCREEN_OK;
+  return SCREEN_CONTINUE;
 }
