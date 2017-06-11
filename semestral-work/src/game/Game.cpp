@@ -15,6 +15,12 @@
 // milliseconds
 #define GAME_INFO_DELAY 500
 
+// Using in load () method, checks if read from file was success.
+#define FILE_READ_CHECK if (inFile.fail()) { errorScreen.process("Read from file has failed."); return false; }
+
+// Using in save () method, checks if write from file was success.
+#define FILE_WRITE_CHECK if (outFile.fail()) { errorScreen.process("Write into file has failed."); return false; }
+
 Game::Game (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame), map(Map(0, 0)) {}
 
 bool Game::load () {
@@ -37,10 +43,14 @@ bool Game::load () {
 
   inFile >> numberOfTowerTypes;
 
+  FILE_READ_CHECK
+
   for (int i = 0; i < numberOfTowerTypes; ++i) {
     int cost, height, width, attackPower, range, ammoPerRound;
 
     inFile >> cost >> height >> width >> attackPower >> range >> ammoPerRound;
+
+    FILE_READ_CHECK
 
     towerTypeList.push_back(
       Tower(cost, height, width, attackPower, range, ammoPerRound)
@@ -51,11 +61,15 @@ bool Game::load () {
 
   inFile >> numberOfMonsterTypes;
 
+  FILE_READ_CHECK
+
   for (int i = 0; i < numberOfMonsterTypes; ++i) {
     int health, armor;
     float speed;
 
     inFile >> health >> speed >> armor;
+
+    FILE_READ_CHECK
 
     monsterTypeList.push_back(
       Monster(health, speed, armor)
@@ -65,6 +79,8 @@ bool Game::load () {
   infoScreen.process("Map loading", GAME_INFO_DELAY);
 
   inFile >> map.height >> map.width;
+
+  FILE_READ_CHECK
 
   map.resize();
 
@@ -81,6 +97,8 @@ bool Game::load () {
       char input;
 
       input = (char) inFile.get();
+
+      FILE_READ_CHECK
 
       switch (input) {
         case '\n':
@@ -129,14 +147,20 @@ bool Game::load () {
 
   inFile >> round >> money >> invasionLimit >> invasionCount;
 
+  FILE_READ_CHECK
+
   infoScreen.process("Loading towers in map", GAME_INFO_DELAY);
 
   inFile >> numberOfTowersInMap;
+
+  FILE_READ_CHECK
 
   for (int i = 0; i < numberOfTowersInMap; ++i) {
     int type, leftTopCornerY, leftTopCornerX;
 
     inFile >> type >> leftTopCornerY >> leftTopCornerX;
+
+    FILE_READ_CHECK
 
     if (type > (int) towerTypeList.size() || type <= 0) {
       errorScreen.process("Not existed type of tower used.");
@@ -176,6 +200,7 @@ bool Game::save () {
 
   std::ofstream outFile;
 
+  // TODO: name of file
   std::string outputName = "muj-super-soubor";
 
   outFile.open(std::string(SW_GAME_DATA_SAVE) + outputName + ".game");
@@ -184,7 +209,11 @@ bool Game::save () {
     return false;
   }
 
+  // Tower types
+
   outFile << numberOfTowerTypes << std::endl << std::endl;
+
+  FILE_WRITE_CHECK
 
   for (int i = 0; i < (int) towerTypeList.size(); ++i) {
     outFile << towerTypeList[i].getCost() << std::endl;
@@ -194,11 +223,17 @@ bool Game::save () {
     outFile << towerTypeList[i].getAmmoPerRound() << std::endl;
 
     outFile << std::endl;
+
+    FILE_WRITE_CHECK
   }
 
   outFile << std::endl << std::endl;
 
+  // Monsters type
+
   outFile << numberOfMonsterTypes << std::endl << std::endl;
+
+  FILE_WRITE_CHECK
 
   for (int i = 0; i < (int) monsterTypeList.size(); ++i) {
     outFile << monsterTypeList[i].getHealth() << std::endl;
@@ -208,9 +243,15 @@ bool Game::save () {
     outFile << std::endl;
   }
 
+  FILE_WRITE_CHECK
+
   outFile << std::endl << std::endl;
 
+  // Map
+
   outFile << map.height << " " << map.width << std::endl;
+
+  FILE_WRITE_CHECK
 
   outFile << std::endl;
 
@@ -237,11 +278,15 @@ bool Game::save () {
       } else {
         outFile << " ";
       }
+
+      FILE_WRITE_CHECK
     }
     outFile << std::endl;
   }
 
   outFile << std::endl;
+
+  // Towers in map
 
   outFile << round << std::endl << std::endl;
   outFile << money << std::endl << std::endl;
@@ -250,12 +295,16 @@ bool Game::save () {
 
   outFile << numberOfTowersInMap << std::endl << std::endl;
 
+  FILE_WRITE_CHECK
+
   for (int i = 0; i < (int) towersInMap.size(); ++i) {
     for (int j = 0; j < (int) towerTypeList.size(); ++j) {
       if (towersInMap[i] == towerTypeList[j]) {
         outFile << j + 1 << std::endl;
         outFile << towersInMap[i].y << " " << towersInMap[i].x << std::endl;
         outFile << std::endl;
+
+        FILE_WRITE_CHECK
         break;
       }
     }
