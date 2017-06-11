@@ -30,7 +30,7 @@ int NewGameScreen::process () {
     // loop through files
     while ((file = readdir(saveDir))) {
       if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) + ")"))) {
-        GameScreen* gameScreen = new GameScreen(std::string(file->d_name));
+        GameScreen* gameScreen = new GameScreen(std::string(file->d_name), true);
         gameScreenList.push_back(gameScreen);
 
         menuOptionList.push_back(

@@ -1,5 +1,4 @@
 #include <ncurses.h>
-#include <string>
 
 #include "Screen.hpp"
 

@@ -1,3 +1,5 @@
+#include <ncurses.h>
+
 #include "AboutScreen.hpp"
 
 int AboutScreen::process () {

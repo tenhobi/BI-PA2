@@ -1,6 +1,10 @@
 #ifndef SEMESTRAL_WORK_GAME_HPP
 #define SEMESTRAL_WORK_GAME_HPP
 
+#include <string>
+
+#include "Tower.hpp"
+
 #include "Map.hpp"
 
 /**
@@ -13,7 +17,7 @@ public:
    *
    * @param fileName name of a game file
    */
-  Game (std::string fileName);
+  Game (std::string fileName, bool newGame);
 
   /**
    * Loads the game from a file.
@@ -24,8 +28,10 @@ public:
 
   /**
    * Saves the game to a file.
+   *
+   * @return success
    */
-  void save ();
+  bool save ();
 
   /**
    * Process the game.
@@ -33,6 +39,18 @@ public:
   void start ();
 
 private:
+  /**
+   * File name of the input file.
+   */
+  std::string fileName;
+
+  bool newGame;
+
+  /**
+   * Map data.
+   */
+  Map map;
+
   /**
    * Money ammount.
    */
@@ -63,20 +81,24 @@ private:
    */
   bool finished;
 
-  /**
-   * Map data.
-   */
-  Map map;
+  int numberOfTowerTypes;
 
-  /**
-   * File name of the input file.
-   */
-  std::string fileName;
+  std::vector<Tower> towerTypeList;
+
+  int numberOfMonsterTypes;
+
+  std::vector<Monster> monsterTypeList;
+
+  int numberOfTowersInMap;
+
+  std::vector<Tower> towersInMap;
 
   /**
    * Loop of the game round.
    */
   void loop ();
+
+  void makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
 };
 
 #endif // SEMESTRAL_WORK_GAME_HPP

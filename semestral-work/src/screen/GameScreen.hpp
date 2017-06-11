@@ -15,7 +15,7 @@ public:
    *
    * @param fileName input file name of the game
    */
-  GameScreen (std::string fileName);
+  GameScreen (std::string fileName, bool newGame);
 
   int process () override;
 
@@ -24,6 +24,8 @@ private:
    * Name of the input file.
    */
   std::string fileName;
+
+  bool newGame;
 };
 
 #endif // SEMESTRAL_WORK_GAMESCREEN_HPP

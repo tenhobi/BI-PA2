@@ -1,6 +1,6 @@
 #include <ncurses.h>
-#include <unistd.h>
 #include <vector>
+#include <unistd.h>
 #include <string>
 
 #include "../menu/MenuRating.hpp"

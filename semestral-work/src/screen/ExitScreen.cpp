@@ -1,5 +1,5 @@
+#include <ncurses.h>
 #include <string>
-#include <unistd.h>
 
 #include "ExitScreen.hpp"
 

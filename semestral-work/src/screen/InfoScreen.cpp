@@ -1,17 +1,21 @@
 #include <ncurses.h>
 #include <string>
 
-#include "ErrorScreen.hpp"
+#include "InfoScreen.hpp"
 
-int ErrorScreen::process () {
-  return process("Error occurred.");
+int InfoScreen::process () {
+  return process("Unspecified info.", -1);
 }
 
-int ErrorScreen::process (std::string text) {
+int InfoScreen::process (std::string text) {
+  return process(text, -1);
+}
+
+int InfoScreen::process (std::string text, int time) {
   wclear(window);
   wrefresh(window);
 
-  std::string headingText = "ERROR";
+  std::string headingText = "INFO";
 
   wattron(window, COLOR_PAIR(color));
   mvwprintw(window, ((getmaxy(window)) / 2) - 1, (getmaxx(window)) / 2 - (int) (headingText.size() / 2), headingText.c_str());
@@ -24,7 +28,7 @@ int ErrorScreen::process (std::string text) {
   wrefresh(window);
 
   // Use blocking read.
-  timeout(-1);
+  timeout(time);
   getch();
 
   wclear(window);

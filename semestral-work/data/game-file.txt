@@ -13,8 +13,14 @@ monsters:
 - armor
 
 map:
+- sizes: (no blank space line after)
+  - y
+  - x
+- data
 - round
 - money
+- invasion limit
+- invasion count
 - towers in map:
   - type
   - left corner position:

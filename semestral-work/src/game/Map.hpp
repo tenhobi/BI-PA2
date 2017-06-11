@@ -2,7 +2,6 @@
 #define SEMESTRAL_WORK_MAP_HPP
 
 #include <vector>
-#include <string>
 
 #include "cell/Cell.hpp"
 
@@ -12,9 +11,17 @@
 class Map {
 public:
   /**
-   * Map data, contains cells.
-   */
-  std::vector<std::vector<Cell>> data;
+  * Map data, contains cells.
+  */
+  std::vector<std::vector<Cell*>> data;
+
+  int height;
+  int width;
+
+  Map (int height, int width);
+  ~Map ();
+
+  void resize ();
 };
 
 #endif // SEMESTRAL_WORK_MAP_HPP
