@@ -10,12 +10,12 @@ int GameScreen::process () {
 //  Game game(fileName);
 
   ErrorScreen error;
-  error.process("Wrong game load file input!");
+  error.process("Wrong game load file input! " + fileName);
 
 //  if (game.process() == PROCESS_INPUT_ERROR) {
 
 //    return PROCESS_BACK;
 //  }
 
-  return PROCESS_OK;
+  return SCREEN_BACK;
 }

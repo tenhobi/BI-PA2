@@ -5,15 +5,18 @@
 
 #include "../Config.hpp"
 
-#include "../Processable.hpp"
+#define SCREEN_OK 1
+#define SCREEN_EXIT 2
+#define SCREEN_BACK 3
+#define SCREEN_INPUT_ERROR 4
 
 // microseconds
 #define SCREEN_DELAY 1000000
 
 /**
- * Abstract class that provides basic console screen unit and it's functionality.
+ * Provides basic console screen unit and it's functionality.
  */
-class Screen : public Processable {
+class Screen {
 public:
   /**
    * Constructor initializes the ncurses window.
@@ -30,7 +33,7 @@ public:
    *
    * @return process status code.
    */
-  virtual int process () override = 0; // `= 0` makes this class abstract
+  virtual int process ();
 protected:
   /**
    * Generic new window of this screen.

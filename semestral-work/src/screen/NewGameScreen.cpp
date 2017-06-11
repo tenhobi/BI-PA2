@@ -20,30 +20,46 @@ int NewGameScreen::process () {
   DIR* saveDir;
   struct dirent* file;
 
+  // opens directory
   saveDir = opendir(SW_GAME_DATA_TEMPLATE);
 
   std::vector<MenuOption> menuOptionList;
+  std::vector<GameScreen*> gameScreenList;
 
   if (saveDir != NULL) {
+    // loop through files
     while ((file = readdir(saveDir))) {
-      if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) +")"))) {
-        GameScreen game(std::string(file->d_name));
-        menuOptionList.push_back(MenuOption(window, std::string(file->d_name), game));
+      if (std::regex_match(file->d_name, std::regex("(.+)(" + std::string(SW_GAME_DATA_EXTENSION_REGEX) + ")"))) {
+        GameScreen* gameScreen = new GameScreen(std::string(file->d_name));
+        gameScreenList.push_back(gameScreen);
+
+        menuOptionList.push_back(
+          MenuOption(window, std::string(file->d_name), gameScreen)
+        );
       }
     }
   }
 
   closedir(saveDir);
 
-  BackScreen back;
-  menuOptionList.push_back(MenuOption(window, "back to main menu", back));
+  BackScreen* backScreen = new BackScreen(true);
+
+  menuOptionList.push_back(
+    MenuOption(window, "back to main menu", backScreen)
+  );
 
   wrefresh(window);
 
   MenuHeading heading(window, "Select a game file to create a new game");
   heading.print((int) menuOptionList.size());
 
-  Menu().process(window, heading, menuOptionList, false);
+  Menu().process(window, heading, menuOptionList);
 
-  return PROCESS_OK;
+  delete backScreen;
+
+  for (int i = 0; i < (int) gameScreenList.size(); ++i) {
+    delete gameScreenList[i];
+  }
+
+  return SCREEN_OK;
 }

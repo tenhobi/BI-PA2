@@ -1,13 +1,11 @@
 #include "BackScreen.hpp"
 
 int BackScreen::process () {
-  wclear(window);
-  wrefresh(window);
+  if (exit) {
+    return SCREEN_EXIT;
+  }
 
-  getch();
-
-  wclear(window);
-  wrefresh(window);
-
-  return PROCESS_BACK;
+  return SCREEN_BACK;
 }
+
+BackScreen::BackScreen (bool exit): exit(exit) {}

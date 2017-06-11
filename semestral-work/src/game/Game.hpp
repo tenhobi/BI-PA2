@@ -1,14 +1,12 @@
 #ifndef SEMESTRAL_WORK_GAME_HPP
 #define SEMESTRAL_WORK_GAME_HPP
 
-#include "../Processable.hpp"
-
 #include "Map.hpp"
 
 /**
  * A main class for the tower defense game, which process all initialization, saving, looping etc.
  */
-class Game : public Processable {
+class Game {
 public:
   /**
    * A constructor.
@@ -29,7 +27,10 @@ public:
    */
   void save ();
 
-  int process () override;
+  /**
+   * Process the game.
+   */
+  void start ();
 
 private:
   /**

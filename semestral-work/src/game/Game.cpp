@@ -25,6 +25,4 @@ void Game::save () {}
 
 void Game::loop () {}
 
-int Game::process () {
-  return PROCESS_OK;
-}
+void Game::start () {}

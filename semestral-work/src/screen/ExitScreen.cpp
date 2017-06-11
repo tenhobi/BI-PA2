@@ -15,10 +15,10 @@ int ExitScreen::process () {
   wrefresh(window);
 
   // Use non blocking read.
-  timeout(SCREEN_DELAY * 5);
+  timeout(5000);
   getch();
 
   wclear(window);
 
-  return PROCESS_EXIT;
+  return SCREEN_EXIT;
 }

@@ -1,0 +1,22 @@
+towers:
+- money
+- size:
+  - y
+  - x
+- attack
+- range
+- ammo per round (-1 == infinity)
+
+monsters:
+- health points
+- cell speed (float)
+- armor
+
+map:
+- round
+- money
+- towers in map:
+  - type
+  - left corner position:
+    - y
+    - x

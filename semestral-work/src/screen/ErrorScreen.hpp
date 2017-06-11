@@ -24,7 +24,8 @@ public:
   int process (std::string text);
 
 private:
-  const short color = ColorPairGenerator::addColor(COLOR_RED + SW_COLOR_BRIGHT, 0);
+  const short color = ColorPairGenerator::addColor(COLOR_RED, 0);
+  const short activeColor = ColorPairGenerator::addColor(COLOR_RED + SW_COLOR_BRIGHT, 0);
 };
 
 #endif // SEMESTRAL_WORK_ERRORSCREEN_HPP

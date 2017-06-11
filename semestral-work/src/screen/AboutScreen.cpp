@@ -30,5 +30,5 @@ int AboutScreen::process () {
   delwin(aboutBoxWindow);
   delwin(aboutWindow);
 
-  return PROCESS_OK;
+  return SCREEN_OK;
 }

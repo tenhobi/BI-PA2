@@ -5,8 +5,8 @@
 // microseconds
 #define DELAY 0
 
-MenuOption::MenuOption (WINDOW* window, const std::string text, Processable& _process) : MenuItem(window, text),
-                                                                                  _process(_process) {}
+MenuOption::MenuOption (WINDOW* window, const std::string text, Screen* screen) : MenuItem(window, text),
+                                                                                  screen(screen) {}
 
 void MenuOption::print (int numberOfItems, int offset, bool active) const {
   if (active) {
@@ -27,6 +27,6 @@ void MenuOption::print (int numberOfItem) const {
   print(numberOfItem, 0, false);
 }
 
-int MenuOption::process () const {
-  return _process.process();
+int MenuOption::process () {
+  return screen->process();
 }

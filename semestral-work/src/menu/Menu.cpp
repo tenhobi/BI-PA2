@@ -4,7 +4,7 @@
 
 #include "Menu.hpp"
 
-void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items, bool exit) {
+void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items) {
   int pressedKey;
   bool isLooping = true;
   int active = 0;
@@ -47,16 +47,16 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
       case KEY_RIGHT:
 //        puts("\a");
 
-        if (exit) {
-          if (items[active].process() == PROCESS_EXIT) {
+        switch (items[active].process()) {
+          case SCREEN_EXIT:
             isLooping = false;
-          }
-        } else {
-          items[active].process();
-          isLooping = false;
-          wclear(window);
-          wrefresh(window);
+            break;
+          default:
+            break;
         }
+
+        wclear(window);
+        wrefresh(window);
 
         break;
       default:

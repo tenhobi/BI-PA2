@@ -18,9 +18,8 @@ public:
    * @param window ncurses window to print
    * @param heading heading item
    * @param items menu options list
-   * @param exit determines the main menu which exits the app
    */
-  void process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items, bool exit);
+  void process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items);
 };
 
 #endif // SEMESTRAL_WORK_MENU_HPP

@@ -13,7 +13,6 @@
 #include "../menu/Menu.hpp"
 
 #include "MenuScreen.hpp"
-#include "ErrorScreen.hpp"
 
 // microsecconds
 #define DELAY 1000000
@@ -22,17 +21,15 @@ int MenuScreen::process () {
   wclear(window);
   wrefresh(window);
 
-  NewGameScreen newGameScreen;
-  LoadGameScreen loadGameScreen;
-  AboutScreen aboutScreen;
-  ExitScreen exitScreen;
-  ErrorScreen errorScreen;
+  NewGameScreen* newGameScreen = new NewGameScreen;
+  LoadGameScreen* loadGameScreen = new LoadGameScreen;
+  AboutScreen* aboutScreen = new AboutScreen;
+  ExitScreen* exitScreen = new ExitScreen;
 
   std::vector<MenuOption> menuOptionList = {
      MenuOption(window, "Begin", newGameScreen),
      MenuOption(window, "Load game", loadGameScreen),
      MenuOption(window, "About", aboutScreen),
-     MenuOption(window, "Error", errorScreen),
      MenuOption(window, "End", exitScreen)
   };
 
@@ -49,7 +46,12 @@ int MenuScreen::process () {
   wrefresh(ratingWindow);
   delwin(ratingWindow);
 
-  Menu().process(window, heading, menuOptionList, true);
+  Menu().process(window, heading, menuOptionList);
 
-  return PROCESS_OK;
+  delete newGameScreen;
+  delete loadGameScreen;
+  delete aboutScreen;
+  delete exitScreen;
+
+  return SCREEN_OK;
 }

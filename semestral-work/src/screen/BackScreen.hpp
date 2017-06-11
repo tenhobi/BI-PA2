@@ -8,7 +8,20 @@
  */
 class BackScreen : public Screen {
 public:
+  /**
+   * A constructor.
+   *
+   * @param exit determines the return code
+   */
+  BackScreen (bool exit);
+
   int process () override;
+
+private:
+  /**
+   * Determines if back means exit from screen loop.
+   */
+  bool exit = false;
 };
 
 #endif // SEMESTRAL_WORK_BACKSCREEN_HPP

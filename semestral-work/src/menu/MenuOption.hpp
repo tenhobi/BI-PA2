@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "../Processable.hpp"
 #include "../screen/Screen.hpp"
 #include "../ColorPairGenerator.hpp"
 #include "../Config.hpp"
@@ -25,9 +24,9 @@ public:
    *
    * @param window ncurses window to work with
    * @param text text of the item
-   * @param _process process to process when this item is selected
+   * @param screen screen to process when this item is selected
    */
-  MenuOption (WINDOW* window, const std::string text, Processable& _process);
+  MenuOption (WINDOW* window, const std::string text, Screen* screen);
 
   void print (int numberOfItem) const override;
 
@@ -45,13 +44,13 @@ public:
    *
    * @return process's process return code.
    */
-  int process () const;
+  int process ();
 
 private:
   /**
    * Screen to process when the this menu option item is selected.
    */
-  Processable& _process;
+  Screen* screen;
 
   /**
    * Color of the item.
