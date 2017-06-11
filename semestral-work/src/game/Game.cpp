@@ -313,16 +313,20 @@ bool Game::save () {
   return true;
 }
 
-void Game::loop () {
-  InfoScreen infoScreen;
-  infoScreen.process("Round");
-}
-
 void Game::start () {
   InfoScreen infoScreen;
   infoScreen.process("Game started");
 
   loop();
+}
+
+void Game::loop () {
+  InfoScreen infoScreen;
+  infoScreen.process("Round");
+}
+
+void Game::print () {
+
 }
 
 void Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX) {

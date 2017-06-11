@@ -7,22 +7,25 @@
 
 #include "Screen.hpp"
 
-class InfoScreen: Screen {
+class InfoScreen : public Screen {
 public:
-  int process () override;
+  InfoScreen ();
+
+  virtual int process () override;
 
   /**
    * Takes the text of the info and does process.
    *
    * @copydoc process
    */
-  int process (std::string text);
+  virtual int process (std::string text);
 
-  int process (std::string text, int time);
+  virtual int process (std::string text, int time);
 
-private:
-  const short color = ColorPairGenerator::addColor(COLOR_GREEN, 0);
-  const short activeColor = ColorPairGenerator::addColor(COLOR_GREEN + SW_COLOR_BRIGHT, 0);
+protected:
+  short color;
+  short activeColor;
+  std::string headingText;
 };
 
 #endif // SEMESTRAL_WORK_INFOSCREEN_HPP

@@ -19,7 +19,7 @@ public:
 
   int process () override;
 
-private:
+protected:
   /**
    * Name of the input file.
    */

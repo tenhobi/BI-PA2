@@ -98,6 +98,8 @@ private:
    */
   void loop ();
 
+  void print ();
+
   void makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
 };
 

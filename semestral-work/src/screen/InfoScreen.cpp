@@ -3,6 +3,12 @@
 
 #include "InfoScreen.hpp"
 
+InfoScreen::InfoScreen () : Screen() {
+  color = ColorPairGenerator::addColor(COLOR_GREEN, 0);
+  activeColor = ColorPairGenerator::addColor(COLOR_GREEN + SW_COLOR_BRIGHT, 0);
+  headingText = "INFO";
+}
+
 int InfoScreen::process () {
   return process("Unspecified info.", -1);
 }
@@ -18,7 +24,8 @@ int InfoScreen::process (std::string text, int time) {
   std::string headingText = "INFO";
 
   wattron(window, COLOR_PAIR(color));
-  mvwprintw(window, ((getmaxy(window)) / 2) - 1, (getmaxx(window)) / 2 - (int) (headingText.size() / 2), headingText.c_str());
+  mvwprintw(window, ((getmaxy(window)) / 2) - 1, (getmaxx(window)) / 2 - (int) (headingText.size() / 2),
+            headingText.c_str());
   wattroff(window, COLOR_PAIR(color));
 
   wattron(window, COLOR_PAIR(activeColor));

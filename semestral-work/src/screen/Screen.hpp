@@ -32,6 +32,7 @@ public:
    * @return process status code.
    */
   virtual int process ();
+
 protected:
   /**
    * Generic new window of this screen.
