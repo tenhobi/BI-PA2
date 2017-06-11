@@ -1,6 +1,8 @@
 #include <ncurses.h>
 
+#include "../Config.hpp"
 #include "MenuHeading.hpp"
+#include "MenuOption.hpp"
 
 #include "Menu.hpp"
 

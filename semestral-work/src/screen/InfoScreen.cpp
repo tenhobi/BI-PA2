@@ -1,6 +1,8 @@
 #include <ncurses.h>
 #include <string>
 
+#include "../ColorPairGenerator.hpp"
+
 #include "InfoScreen.hpp"
 
 InfoScreen::InfoScreen () : Screen() {

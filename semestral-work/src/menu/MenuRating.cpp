@@ -1,4 +1,7 @@
 #include <string>
+#include <ncurses.h>
+
+#include "MenuItem.hpp"
 
 #include "MenuRating.hpp"
 

@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Tower.hpp"
-
+#include "Monster.hpp"
 #include "Map.hpp"
 
 /**
@@ -38,7 +38,7 @@ public:
    */
   void start ();
 
-private:
+protected:
   /**
    * File name of the input file.
    */

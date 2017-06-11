@@ -4,11 +4,11 @@
 #include <fstream>
 
 #include "../screen/InfoScreen.hpp"
+#include "../screen/ErrorScreen.hpp"
 #include "cell/Cell.hpp"
 #include "cell/Wall.hpp"
 #include "cell/Road.hpp"
 #include "Tower.hpp"
-#include "../screen/ErrorScreen.hpp"
 
 #include "Game.hpp"
 

@@ -18,7 +18,7 @@ class Building : public Cell {
    */
   bool isEmpty () const override;
 
-private:
+protected:
   /**
    * Tower which is on top of this building cell.
    */

@@ -1,8 +1,6 @@
 #ifndef SEMESTRAL_WORK_MENUSCREEN_HPP
 #define SEMESTRAL_WORK_MENUSCREEN_HPP
 
-#include "../menu/MenuHeading.hpp"
-
 #include "Screen.hpp"
 
 /**

@@ -1,4 +1,7 @@
 #include <unistd.h>
+#include <ncurses.h>
+
+#include "MenuItem.hpp"
 
 #include "MenuOption.hpp"
 
@@ -11,11 +14,13 @@ MenuOption::MenuOption (WINDOW* window, const std::string text, Screen* screen) 
 void MenuOption::print (int numberOfItems, int offset, bool active) const {
   if (active) {
     wattron(window, COLOR_PAIR(colorActive));
-    mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset, (getmaxx(window) - (int) text.size()) / 2, ctext);
+    mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset,
+              (getmaxx(window) - (int) text.size()) / 2, ctext);
     wattroff(window, COLOR_PAIR(colorActive));
   } else {
     wattron(window, COLOR_PAIR(color));
-    mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset, (getmaxx(window) - (int) text.size()) / 2, ctext);
+    mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset,
+              (getmaxx(window) - (int) text.size()) / 2, ctext);
     wattroff(window, COLOR_PAIR(color));
   }
 

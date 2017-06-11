@@ -1,7 +1,6 @@
 #include <dirent.h>
 #include <iostream>
 #include <regex>
-#include <unistd.h>
 
 #include "../Config.hpp"
 

@@ -16,7 +16,7 @@ public:
    */
   static short addColor (short text, short background);
 
-private:
+protected:
   /**
    * Static counter of ncurses pair number.
    */

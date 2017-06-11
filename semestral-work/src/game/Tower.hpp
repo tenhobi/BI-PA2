@@ -27,9 +27,9 @@ public:
 
   int x;
 
-  bool operator == (Tower b);
+  bool operator== (Tower b);
 
-private:
+protected:
   int cost;
   int height;
   int width;

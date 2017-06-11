@@ -19,6 +19,7 @@ public:
   int width;
 
   Map (int height, int width);
+
   ~Map ();
 
   void resize ();

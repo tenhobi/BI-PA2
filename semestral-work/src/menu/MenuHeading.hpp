@@ -1,6 +1,9 @@
 #ifndef SEMESTRAL_WORK_MENUHEADING_HPP
 #define SEMESTRAL_WORK_MENUHEADING_HPP
 
+#include <ncurses.h>
+#include <string>
+
 #include "../ColorPairGenerator.hpp"
 #include "../Config.hpp"
 
@@ -30,7 +33,7 @@ public:
    */
   void activePrint (int numberOfItems);
 
-private:
+protected:
   /**
    * Determines if the heading is activeted or not.
    */
@@ -39,12 +42,12 @@ private:
   /**
    * Color of the heading.
    */
-  const short color = ColorPairGenerator::addColor(COLOR_YELLOW, 0);
+  short color = ColorPairGenerator::addColor(COLOR_YELLOW, 0);
 
   /**
    * Color of the active heading.
    */
-  const short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SW_COLOR_BRIGHT, 0);
+  short activeColor = ColorPairGenerator::addColor(COLOR_YELLOW + SW_COLOR_BRIGHT, 0);
 };
 
 #endif // SEMESTRAL_WORK_MENUHEADING_HPP

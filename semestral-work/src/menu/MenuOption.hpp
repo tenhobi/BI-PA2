@@ -1,12 +1,13 @@
 #ifndef SEMESTRAL_WORK_MENUOPTION_HPP
 #define SEMESTRAL_WORK_MENUOPTION_HPP
 
+#include <ncurses.h>
 #include <string>
 
 #include "../screen/Screen.hpp"
 #include "../ColorPairGenerator.hpp"
 #include "../Config.hpp"
-
+#include "../screen/Screen.hpp"
 #include "MenuItem.hpp"
 
 /**
@@ -46,7 +47,7 @@ public:
    */
   int process ();
 
-private:
+protected:
   /**
    * Screen to process when the this menu option item is selected.
    */

@@ -6,10 +6,11 @@
 GameScreen::GameScreen (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame) {}
 
 int GameScreen::process () {
+  ErrorScreen errorScreen;
+
   Game game(fileName, newGame);
 
   if (!game.load()) {
-    ErrorScreen errorScreen;
     errorScreen.process("Load of the game from file " + fileName + " was terminated.");
     return SCREEN_CONTINUE;
   }

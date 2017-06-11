@@ -11,7 +11,7 @@ public:
 
   int getArmor ();
 
-private:
+protected:
   int health;
   float speed;
   int armor;

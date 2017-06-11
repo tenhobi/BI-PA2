@@ -8,4 +8,4 @@ int BackScreen::process () {
   return SCREEN_CONTINUE;
 }
 
-BackScreen::BackScreen (bool exit): exit(exit) {}
+BackScreen::BackScreen (bool exit) : exit(exit) {}

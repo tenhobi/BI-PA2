@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "../ColorPairGenerator.hpp"
-
 #include "Screen.hpp"
 
 class InfoScreen : public Screen {
@@ -20,6 +18,12 @@ public:
    */
   virtual int process (std::string text);
 
+  /**
+   *
+   * @param text
+   * @param time time to wait to any key press in milliseconds, or -1 for infinity time
+   * @return
+   */
   virtual int process (std::string text, int time);
 
 protected:

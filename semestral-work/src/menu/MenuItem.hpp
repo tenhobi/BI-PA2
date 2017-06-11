@@ -2,6 +2,7 @@
 #define SEMESTRAL_WORK_MENUITEM_HPP
 
 #include <string>
+#include <ncurses.h>
 
 #include "../screen/Screen.hpp"
 
@@ -12,6 +13,7 @@ class MenuItem {
 public:
   /**
    * Constructor.
+   * 
    * @param window ncurses window
    * @param text text of menu item
    */

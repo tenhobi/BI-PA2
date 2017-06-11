@@ -1,10 +1,6 @@
 #ifndef SEMESTRAL_WORK_ROAD_HPP
 #define SEMESTRAL_WORK_ROAD_HPP
 
-#define ROAD_NORMAL 0
-#define ROAD_START 1
-#define ROAD_END 2
-
 #include "Cell.hpp"
 
 enum RoadState {
