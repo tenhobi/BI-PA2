@@ -21,6 +21,8 @@ public:
 
   float cellPart;
 
+  void attack (int power);
+
 protected:
   int health;
   float speed;

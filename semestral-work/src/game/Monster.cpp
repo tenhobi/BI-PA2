@@ -19,3 +19,15 @@ bool Monster::operator== (const Monster& monster) const {
          speed == monster.speed &&
          armor == monster.speed;
 }
+
+void Monster::attack (int power) {
+  if (armor >= 0) {
+    armor -= power;
+
+    if (armor < 0) {
+      health += armor;
+    }
+  } else {
+    health -= power;
+  }
+}

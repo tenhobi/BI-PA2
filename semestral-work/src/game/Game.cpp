@@ -410,14 +410,37 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
         wrefresh(statsWindow);
         wrefresh(towerWindow);
 
-        // tower attack
+        for (int i = 0; i < (int) towersInMap.size(); ++i) {
+          if (
+            roadList[it->pathIndex].first >= towersInMap[i]->y - towersInMap[i]->getRange() &&
+
+            roadList[it->pathIndex].first <=
+            towersInMap[i]->y + towersInMap[i]->getHeight() + towersInMap[i]->getRange() &&
+
+            roadList[it->pathIndex].second >= towersInMap[i]->x - towersInMap[i]->getRange() &&
+
+            roadList[it->pathIndex].second <=
+            towersInMap[i]->x + towersInMap[i]->getWidth() + towersInMap[i]->getRange()
+            ) {
+            infoScreen.process("match");
+            if (towersInMap[i]->currentAmmo == -1) {
+              it->attack(towersInMap[i]->getAttackPower());
+            }
+
+            if (towersInMap[i]->currentAmmo > 0) {
+              it->attack(towersInMap[i]->getAttackPower());
+              --towersInMap[i]->currentAmmo;
+            } else {
+              infoScreen.process("out of ammo");
+            }
+          }
+        }
 
         if (it->getHealth() <= 0) {
           monstersInMap.erase(it);
           money += GAME_KILL_MONEY;
-        }
-
-        if (it->pathIndex == (int) roadList.size() - 1) {
+          puts("\a");
+        } else if (it->pathIndex == (int) roadList.size() - 1) {
           monstersInMap.erase(it);
           invasionCount++;
 
@@ -439,7 +462,7 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
 
   round++;
 
-  if (startInvasionCount <= invasionCount) {
+  if (startInvasionCount == invasionCount) {
     money += GAME_WIN_MONEY;
   }
 
@@ -724,6 +747,11 @@ bool Game::addTower (int type, int y, int x) {
 
   if (type >= (int) towerTypeList.size() || type < 0) {
     errorScreen.process("Not existed type of tower used.");
+    return false;
+  }
+
+  if (y < 0 || y >= map.height || x < 0 || x >= map.width) {
+    errorScreen.process("Coordinates are wrong.");
     return false;
   }
 
