@@ -25,6 +25,12 @@
 // Using in save () method, checks if write from file was success.
 #define FILE_WRITE_CHECK if (outFile.fail()) { errorScreen.process("Write into file has failed."); return false; }
 
+#define GAME_MAX_MONSTERS 5
+
+#define GAME_KILL_MONEY 5
+#define GAME_WIN_MONEY 50
+#define GAME_ROUND_MONEY 25
+
 Game::Game (bool newGame) : newGame(newGame), map(Map(0, 0)) {}
 
 bool Game::load (std::string fileName) {
@@ -45,6 +51,8 @@ bool Game::load (std::string fileName) {
 
   infoScreen.process("Tower types loading.", GAME_INFO_DELAY);
 
+  int numberOfTowerTypes;
+
   inFile >> numberOfTowerTypes;
 
   FILE_READ_CHECK
@@ -62,6 +70,8 @@ bool Game::load (std::string fileName) {
   }
 
   infoScreen.process("Monster types loading.", GAME_INFO_DELAY);
+
+  int numberOfMonsterTypes;
 
   inFile >> numberOfMonsterTypes;
 
@@ -117,6 +127,7 @@ bool Game::load (std::string fileName) {
             map.data[i][j] = new Road(RoadState::START);
             startRoadY = i;
             startRoadX = j;
+            startCoords = std::pair<int, int>(startRoadY, startRoadX);
           } else {
             errorScreen.process("Multiple starts of road.");
             return false;
@@ -153,6 +164,8 @@ bool Game::load (std::string fileName) {
   FILE_READ_CHECK
 
   infoScreen.process("Loading towers in map.", GAME_INFO_DELAY);
+
+  int numberOfTowersInMap;
 
   inFile >> numberOfTowersInMap;
 
@@ -346,9 +359,12 @@ bool Game::save (std::string fileName) {
   return true;
 }
 
-GameState Game::nextRound () {
+GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towerWindow) {
   InfoScreen infoScreen;
+  ErrorScreen errorScreen;
   infoScreen.process("Round " + std::to_string(round));
+
+  int startInvasionCount = invasionCount;
 
   if (invasionCount >= invasionLimit) {
     infoScreen.process("You have already finished the game.");
@@ -356,12 +372,83 @@ GameState Game::nextRound () {
     return GameState::FINISHED;
   }
 
+  for (int i = 0; i < GAME_MAX_MONSTERS; ++i) {
+    int min = 0;
+    int max = (int) monsterTypeList.size() - 1;
+    int type = rand() % (max - min + 1) + min;
+
+    Monster tmp = Monster(monsterTypeList[type]);
+    tmp.coords = std::pair<int, int>(startCoords.first, startCoords.second);
+    tmp.pathIndex = 0;
+    tmp.cellPart = 0;
+    monstersInMap.push_back(tmp);
+  }
+
+  for (int i = 0; i < (int) towersInMap.size(); ++i) {
+    towersInMap[i]->initRound();
+  }
+
+  while (!monstersInMap.empty()) {
+    std::vector<Monster>::iterator it = monstersInMap.begin();
+    while (it != monstersInMap.end()) {
+      wclear(gameWindow);
+      wclear(statsWindow);
+      wclear(towerWindow);
+      print(gameWindow, statsWindow, towerWindow, false);
+      wrefresh(gameWindow);
+      wrefresh(statsWindow);
+      wrefresh(towerWindow);
+
+      it->cellPart += it->getSpeed();
+
+      if (it->cellPart >= 1) {
+        it->cellPart = 0;
+        it->pathIndex++;
+
+        print(gameWindow, statsWindow, towerWindow, false);
+        wrefresh(gameWindow);
+        wrefresh(statsWindow);
+        wrefresh(towerWindow);
+
+        // tower attack
+
+        if (it->getHealth() <= 0) {
+          monstersInMap.erase(it);
+          money += GAME_KILL_MONEY;
+        }
+
+        if (it->pathIndex == (int) roadList.size() - 1) {
+          monstersInMap.erase(it);
+          invasionCount++;
+
+          if (monstersInMap.empty()) {
+            break;
+          }
+        } else {
+          ++it;
+        }
+      } else {
+        ++it;
+      }
+    }
+
+    // milliseconds
+    timeout(100);
+    getch();
+  }
+
   round++;
 
+  if (startInvasionCount <= invasionCount) {
+    money += GAME_WIN_MONEY;
+  }
+
   if (invasionCount < invasionLimit) {
+    money += GAME_ROUND_MONEY;
     return GameState::IN_PROGRESS;
   }
 
+  infoScreen.process("You have lost the game, sorry. Monsters invaded your kingdom.");
   return GameState::LOST;
 }
 
@@ -386,14 +473,19 @@ GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWi
       }
         // Cell is Road
       else if (dynamic_cast<Road*>(x) != NULL) {
-        if (!dynamic_cast<Road*>(x)->monsterList.empty()) {
-          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_MONSTER).c_str());
-        } else if (dynamic_cast<Road*>(x)->getState() == RoadState::START) {
+        if (dynamic_cast<Road*>(x)->getState() == RoadState::START) {
           mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_START).c_str());
         } else if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
           mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_END).c_str());
-        } else if (showRoad) {
-          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_ROAD).c_str());
+        } else {
+          if (showRoad) {
+            mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_ROAD).c_str());
+          } else {
+            for (int k = 0; k < (int) monstersInMap.size(); ++k) {
+              mvwprintw(gameWindow, roadList[monstersInMap[k].pathIndex].first,
+                        roadList[monstersInMap[k].pathIndex].second, std::string(1, SW_CHAR_MONSTER).c_str());
+            }
+          }
         }
       }
         // Cell is regular Cell
@@ -410,15 +502,18 @@ GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWi
   wclear(statsWindow);
 
   mvwprintw(statsWindow, 0, 0, std::string("Round: " + std::to_string(round)).c_str());
-  mvwprintw(statsWindow, 1, 0, std::string("Money: " + std::to_string(money)).c_str());
-  mvwprintw(statsWindow, 2, 0,
+  mvwprintw(statsWindow, 1, 0, std::string("Monsters alive: " + std::to_string((int) monstersInMap.size())).c_str());
+  mvwprintw(statsWindow, 2, 0, std::string("Money: " + std::to_string(money)).c_str());
+  mvwprintw(statsWindow, 3, 0,
             std::string("Invasion: " + std::to_string(invasionCount) + "/" + std::to_string(invasionLimit)).c_str());
 
   wrefresh(statsWindow);
 
   // towers window print
 
-  mvwprintw(towersWindow, 0, 0, std::string("Towers types: " + std::to_string((int) towerTypeList.size()) + " | " + std::to_string((int) towersInMap.size())).c_str());
+  mvwprintw(towersWindow, 0, 0,
+            std::string("Towers types: " + std::to_string((int) towerTypeList.size()) + " | Towers in map: " +
+                        std::to_string((int) towersInMap.size())).c_str());
 
   for (int i = 0; i < (int) towerTypeList.size(); ++i) {
     mvwprintw(towersWindow, i + 1, 0, std::string(
@@ -459,9 +554,12 @@ bool Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX)
   int posY = startRoadY;
   int posX = startRoadX;
 
+  // generates route path list
+
   while (true) {
+//    infoScreen.process(std::to_string(posY) + "; " + std::to_string(posX));
+
     if (posY == -1 || posX == -1) {
-      errorScreen.process("Route can not be build. 1" + std::to_string(posY) + "; " + std::to_string(posX));
       return false;
     }
 
@@ -470,6 +568,7 @@ bool Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX)
 
       if (dynamic_cast<Road*>(x) != NULL) {
         if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
+          roadList.push_back(std::pair<int, int>(posY, posX));
           return true;
         }
       }
@@ -480,11 +579,12 @@ bool Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX)
 
     Cell* x = &*map.data[posY][posX];
 
-//    infoScreen.process(std::to_string(posY) + "; " + std::to_string(posX));
-
     if (dynamic_cast<Road*>(x) != NULL) {
       if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
-        break;
+        roadList.push_back(std::pair<int, int>(posY, posX));
+        return true;
+      } else if (dynamic_cast<Road*>(x)->getState() == RoadState::START) {
+        roadList.push_back(std::pair<int, int>(posY, posX));
       }
 
       dynamic_cast<Road*>(x)->next = std::pair<int, int>(mapCells[posY][posX].second.first,
@@ -502,6 +602,9 @@ bool Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX)
     Road* tmp = new Road(RoadState::NORMAL);
     tmp->next = std::pair<int, int>(mapCells[posY][posX].second.first, mapCells[posY][posX].second.second);
     map.data[posY][posX] = tmp;
+
+    roadList.push_back(std::pair<int, int>(posY, posX));
+
     posY = mapCells[posY][posX].second.first;
     posX = mapCells[posY][posX].second.second;
 
@@ -518,7 +621,7 @@ void Game::bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair
   for (int i = 0; i < (int) mapQueue.size(); ++i) {
     std::pair<int, int>& node = mapQueue.front();
 
-    if (node.second + 1 < (int) mapCells[0].size()) {
+    if ((node.second + 1) < (int) mapCells[0].size()) {
       if (mapCells[node.first][node.second + 1].second.first == -1 &&
           mapCells[node.first][node.second + 1].second.second == -1) {
 
@@ -612,7 +715,7 @@ Game::~Game () {
 }
 
 int Game::getNumberOfTowerTypes () {
-  return numberOfTowerTypes;
+  return (int) towerTypeList.size();
 }
 
 bool Game::addTower (int type, int y, int x) {
@@ -620,6 +723,11 @@ bool Game::addTower (int type, int y, int x) {
 
   if (type >= (int) towerTypeList.size() || type < 0) {
     errorScreen.process("Not existed type of tower used.");
+    return false;
+  }
+
+  if (towerTypeList[type].getCost() > money) {
+    errorScreen.process("Tower is too much expensive.");
     return false;
   }
 
@@ -651,7 +759,7 @@ bool Game::addTower (int type, int y, int x) {
     }
   }
 
-  numberOfTowersInMap++;
+  money -= towerTypeList[type].getCost();
 
   return true;
 }

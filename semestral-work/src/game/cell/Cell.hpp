@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#include "../Monster.hpp"
-
 /**
  * Cell of the map.
  */

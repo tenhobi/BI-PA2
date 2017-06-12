@@ -1,3 +1,5 @@
+#include "Game.hpp"
+
 #include "Tower.hpp"
 
 Tower::Tower (int cost, int height, int width, int attackPower, int range, int ammoPerRound) : cost(cost),
@@ -39,7 +41,7 @@ int Tower::getAmmoPerRound () {
   return ammoPerRound;
 }
 
-bool Tower::operator== (Tower b) {
+bool Tower::operator== (const Tower b) const {
   return
     cost == b.cost &&
     height == b.height &&
@@ -47,5 +49,9 @@ bool Tower::operator== (Tower b) {
     attackPower == b.attackPower &&
     range == b.range &&
     ammoPerRound == b.ammoPerRound;
+}
+
+void Tower::initRound () {
+  currentAmmo = ammoPerRound;
 }
 

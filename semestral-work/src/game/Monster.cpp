@@ -13,3 +13,9 @@ float Monster::getSpeed () {
 int Monster::getArmor () {
   return armor;
 }
+
+bool Monster::operator== (const Monster& monster) const {
+  return health == monster.health &&
+         speed == monster.speed &&
+         armor == monster.speed;
+}

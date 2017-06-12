@@ -1,5 +1,3 @@
-#include "../Monster.hpp"
-
 #include "Cell.hpp"
 
 Cell::Cell () {}

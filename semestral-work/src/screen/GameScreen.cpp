@@ -9,7 +9,7 @@
 
 #define MARGIN 1
 #define INPUT_SIZE (10 + 1)
-#define STATS_HEIGHT 3
+#define STATS_HEIGHT 4
 
 GameScreen::GameScreen (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame) {}
 
@@ -217,7 +217,14 @@ ScreenState GameScreen::process () {
         errorScreen.process("Cannot place tower to this place.");
       }
     } else if (inputCommand == "") {
-      game.nextRound();
+      switch (game.nextRound(gameWindow, statsWindow, towerWindow)) {
+        case GameState::IN_PROGRESS:
+          break;
+        case GameState::FINISHED:
+          return ScreenState::EXIT;
+        case GameState::LOST:
+          return ScreenState::EXIT;
+      }
 
       game.print(gameWindow, statsWindow, towerWindow, true);
 

@@ -12,7 +12,6 @@
 
 enum GameState {
   FINISHED,
-  WIN,
   LOST,
   IN_PROGRESS
 };
@@ -46,7 +45,7 @@ public:
   /**
    * Process next round of the game.
    */
-  GameState nextRound();
+  GameState nextRound(WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towerWindow);
 
   GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow);
 
@@ -98,17 +97,17 @@ protected:
    */
   bool finished;
 
-  int numberOfTowerTypes;
-
   std::vector<Tower> towerTypeList;
 
-  int numberOfMonsterTypes;
+  std::vector<Tower*> towersInMap;
 
   std::vector<Monster> monsterTypeList;
 
-  int numberOfTowersInMap;
+  std::vector<Monster> monstersInMap;
 
-  std::vector<Tower*> towersInMap;
+  std::vector<std::pair<int, int>> roadList;
+
+  std::pair<int, int> startCoords;
 
   int towerLetter = 'A';
 

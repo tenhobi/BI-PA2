@@ -29,9 +29,13 @@ public:
 
   int x;
 
-  bool operator== (Tower b);
+  bool operator== (const Tower b) const;
 
   int letter;
+
+  void initRound ();
+
+  int currentAmmo;
 
 protected:
   int cost;
