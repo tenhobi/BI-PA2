@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <sstream>
+#include <string>
 
 #include "../game/Game.hpp"
 #include "ErrorScreen.hpp"
@@ -7,8 +8,13 @@
 
 #include "GameScreen.hpp"
 
+// margin between windows
 #define MARGIN 1
+
+// command imput size
 #define INPUT_SIZE (10 + 1)
+
+// height of statistic window
 #define STATS_HEIGHT 4
 
 GameScreen::GameScreen (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame) {}

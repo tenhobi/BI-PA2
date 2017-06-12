@@ -21,6 +21,7 @@ bool Monster::operator== (const Monster& monster) const {
 }
 
 void Monster::attack (int power) {
+  // First will be attacked the armor, then the health.
   if (armor >= 0) {
     armor -= power;
 

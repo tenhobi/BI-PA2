@@ -20,4 +20,3 @@ void MenuRating::print (int numberOfItems) const {
   timeout(DELAY);
   getch();
 }
-

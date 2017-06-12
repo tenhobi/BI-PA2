@@ -5,6 +5,9 @@
 
 #include "../Config.hpp"
 
+/**
+ * State of the screen, which determines what to do with the screen after it's closing.
+ */
 enum ScreenState {
   CONTINUE, // Continue in the current screen
   EXIT // Exit the current screen

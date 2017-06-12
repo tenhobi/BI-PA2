@@ -16,6 +16,7 @@ class MenuHeading : public MenuItem {
 public:
   /**
    * Constructor.
+   *
    * @param window ncurses window to work with
    * @param text text of the item
    */
@@ -29,6 +30,7 @@ public:
 
   /**
    * Print of active heading with relative position.
+   *
    * @param numberOfItems
    */
   void activePrint (int numberOfItems);

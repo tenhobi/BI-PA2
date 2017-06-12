@@ -1,5 +1,3 @@
-#include "Game.hpp"
-
 #include "Tower.hpp"
 
 Tower::Tower (int cost, int height, int width, int attackPower, int range, int ammoPerRound) : cost(cost),
@@ -11,11 +9,11 @@ Tower::Tower (int cost, int height, int width, int attackPower, int range, int a
                                                                                                  ammoPerRound) {}
 
 Tower::Tower (const Tower& tower) : cost(tower.cost),
-                              height(tower.height),
-                              width(tower.width),
-                              attackPower(tower.attackPower),
-                              range(tower.range),
-                              ammoPerRound(tower.ammoPerRound) {}
+                                    height(tower.height),
+                                    width(tower.width),
+                                    attackPower(tower.attackPower),
+                                    range(tower.range),
+                                    ammoPerRound(tower.ammoPerRound) {}
 
 int Tower::getCost () {
   return cost;

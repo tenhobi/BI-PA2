@@ -7,6 +7,9 @@
 #include "Menu.hpp"
 
 void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>& items) {
+  wclear(window);
+  wrefresh(window);
+
   int pressedKey;
   bool isLooping = true;
   int active = 0;
@@ -18,6 +21,9 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
   keypad(stdscr, TRUE);
 
   while (isLooping) {
+    wclear(window);
+    wrefresh(window);
+
     int offsetCounter = 1;
     int index = 0;
 
@@ -47,8 +53,6 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
         break;
       case SW_KEY_ENTER:
       case KEY_RIGHT:
-//        puts("\a");
-
         switch (items[active].process()) {
           case ScreenState::EXIT:
             isLooping = false;
@@ -67,4 +71,6 @@ void Menu::process (WINDOW* window, MenuHeading heading, std::vector<MenuOption>
 
     wrefresh(window);
   }
+
+  wrefresh(window);
 }

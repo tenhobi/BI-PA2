@@ -17,14 +17,17 @@ void MenuOption::print (int numberOfItems, int offset, bool active) const {
     mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset,
               (getmaxx(window) - (int) text.size()) / 2, ctext);
     wattroff(window, COLOR_PAIR(colorActive));
+    wrefresh(window);
   } else {
     wattron(window, COLOR_PAIR(color));
     mvwprintw(window, ((getmaxy(window)) / 2) - (int) (numberOfItems / 2) + offset,
               (getmaxx(window) - (int) text.size()) / 2, ctext);
     wattroff(window, COLOR_PAIR(color));
+    wrefresh(window);
   }
 
   wrefresh(window);
+
   usleep(DELAY);
 }
 

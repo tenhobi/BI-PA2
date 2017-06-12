@@ -1,8 +1,6 @@
 #ifndef SEMESTRAL_WORK_CELL_HPP
 #define SEMESTRAL_WORK_CELL_HPP
 
-#include <vector>
-
 /**
  * Cell of the map.
  */
@@ -24,9 +22,6 @@ public:
    * @return boolean which determines if can be build on top of this cell
    */
   virtual bool isEmpty () const;
-
-protected:
-
 };
 
 #endif // SEMESTRAL_WORK_CELL_HPP

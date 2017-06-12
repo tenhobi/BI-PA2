@@ -15,13 +15,32 @@ public:
   */
   std::vector<std::vector<Cell*>> data;
 
+  /**
+   * Height of the map.
+   */
   int height;
+
+  /**
+   * Width of the map.
+   */
   int width;
 
+  /**
+   * A constructor.
+   *
+   * @param height height of the map
+   * @param width width of the map
+   */
   Map (int height, int width);
 
+  /**
+   * Destructor.
+   */
   ~Map ();
 
+  /**
+   * Resizes the map's data by it's height and width.
+   */
   void resize ();
 };
 

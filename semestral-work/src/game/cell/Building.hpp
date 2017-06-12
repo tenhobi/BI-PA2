@@ -10,6 +10,11 @@
  */
 class Building : public Cell {
 public:
+  /**
+   * A constructor.
+   *
+   * @param tower tower to link
+   */
   Building (Tower* tower);
 
   /**
@@ -19,6 +24,11 @@ public:
    */
   bool isEmpty () const override;
 
+  /**
+   * Return the tower in this building cell.
+   *
+   * @return pointer to tower object
+   */
   Tower* getTower ();
 
 protected:

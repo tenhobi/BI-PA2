@@ -14,6 +14,7 @@ public:
    * A constructor.
    *
    * @param fileName input file name of the game
+   * @param newGame determines if the game will be new or loaded from save
    */
   GameScreen (std::string fileName, bool newGame);
 
@@ -25,6 +26,9 @@ protected:
    */
   std::string fileName;
 
+  /**
+   * Determines if the game is new or saved. For purpose of file path.
+   */
   bool newGame;
 };
 

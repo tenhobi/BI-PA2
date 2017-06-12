@@ -10,6 +10,9 @@
 #include "Monster.hpp"
 #include "Map.hpp"
 
+/**
+ * Determines a state of the game.
+ */
 enum GameState {
   FINISHED,
   LOST,
@@ -21,11 +24,47 @@ enum GameState {
  */
 class Game {
 public:
+
+  /**
+   * Returns map height.
+   *
+   * @return map height
+   */
+  int getMapHeight ();
+
+  /**
+   * Return map width.
+   *
+   * @return map width
+   */
+  int getMapWidth ();
+
+  /**
+   * Returns number of tower types.
+   *
+   * @return number of tower type
+   */
+  int getNumberOfTowerTypes ();
+
+  /**
+   * Adds a tower to the game, if it complies all rules.
+   *
+   * @param type tower type
+   * @param y y coordination in the map
+   * @param x x coordination in the map
+   *
+   * @return boolean which detemines the success
+   */
+  bool addTower (int type, int y, int x);
+
   /**
    * A constructor.
    */
   Game (bool newGame);
 
+  /**
+   * A destructor.
+   */
   ~Game ();
 
   /**
@@ -45,25 +84,39 @@ public:
   /**
    * Process next round of the game.
    */
-  GameState nextRound(WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towerWindow);
+  GameState nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towerWindow);
 
+  /**
+   * Prints the game windows.
+   *
+   * @param gameWindow ncurses game window
+   * @param statsWindow ncurses statistic window
+   * @param towersWindow ncurses towers information window
+   *
+   * @return game state
+   */
   GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow);
 
+  /**
+   * Prints the game windows with or without visible road.
+   *
+   * @param gameWindow ncurses game window
+   * @param statsWindow ncurses statistic window
+   * @param towersWindow ncurses towers information window
+   * @param showRoad determines if the road cells should be visible
+   *
+   * @return game state
+   */
   GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow, bool showRoad);
 
-  int getMapHeight ();
-
-  int getMapWidth ();
-
-  int getNumberOfTowerTypes ();
-
-  bool addTower (int type, int y, int x);
-
 protected:
+  /**
+   * Determines the type of the game, if it's new or loaded from save.
+   */
   bool newGame;
 
   /**
-   * Map data.
+   * Map data with cells.
    */
   Map map;
 
@@ -97,22 +150,60 @@ protected:
    */
   bool finished;
 
+  /**
+   * List with types of towers.
+   */
   std::vector<Tower> towerTypeList;
 
+  /**
+   * List with towers which are in map.
+   */
   std::vector<Tower*> towersInMap;
 
+  /**
+   * List with types of monsters.
+   */
   std::vector<Monster> monsterTypeList;
 
+  /**
+   * List with monsters which are in map.
+   */
   std::vector<Monster> monstersInMap;
 
+  /**
+   * List of steps of the game road.
+   */
   std::vector<std::pair<int, int>> roadList;
 
+  /**
+   * Starting coordinations.
+   */
   std::pair<int, int> startCoords;
 
+  /**
+   * Letter for next tower.
+   */
   int towerLetter = 'A';
 
-  void bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>>& mapCells, std::queue<std::pair<int, int>>& mapQueue);
+  /**
+   * Road path search function.
+   *
+   * @param mapCells map of connections between cells.
+   * @param mapQueue queue of cells to process
+   */
+  void bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>>& mapCells,
+            std::queue<std::pair<int, int>>& mapQueue);
 
+  /**
+   * Makes a road using BFS function.
+   *
+   * @param startRoadY Y axis of start of road cell
+   * @param startRoadX X axis of start of road cell
+   * @param endRoadY Y axis of end of road cell
+   * @param endRoadX X axis of end of road cell
+   *
+   * @return boolean which determines if road can me build
+   */
   bool makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
 };
 

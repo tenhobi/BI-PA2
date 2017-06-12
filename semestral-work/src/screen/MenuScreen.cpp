@@ -13,7 +13,7 @@
 
 #include "MenuScreen.hpp"
 
-// microsecconds
+// microseconds
 #define DELAY 1000000
 
 ScreenState MenuScreen::process () {

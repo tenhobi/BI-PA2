@@ -1,10 +1,11 @@
 #ifndef SEMESTRAL_WORK_ROAD_HPP
 #define SEMESTRAL_WORK_ROAD_HPP
 
-#include "../Monster.hpp"
-
 #include "Cell.hpp"
 
+/**
+ * State enum for road cell object which determines it's state.
+ */
 enum RoadState {
   NORMAL,
   START,
@@ -30,8 +31,16 @@ public:
    */
   bool isEmpty () const override;
 
+  /**
+   * Getter of the state.
+   *
+   * @return state of road
+   */
   RoadState getState () const;
 
+  /**
+   * Next road cell to the end.
+   */
   std::pair<int, int> next;
 
 protected:

@@ -5,6 +5,7 @@
 Map::Map (int height, int width) : height(height), width(width) {}
 
 void Map::resize () {
+  // resize 2D map data
   data.resize((unsigned long) height, std::vector<Cell*>((unsigned long) width));
 }
 

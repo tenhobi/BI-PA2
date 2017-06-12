@@ -12,6 +12,7 @@ public:
    *
    * @param text color of a text
    * @param background color of a text background
+   *
    * @return number of the new color pair
    */
   static short addColor (short text, short background);

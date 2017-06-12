@@ -10,6 +10,7 @@
 // For some odd reason the KEY_ENTER is not the enter key. This should be the enter key code.
 #define SW_KEY_ENTER 10
 
+// Characters of the game.
 #define SW_CHAR_WALL '#'
 #define SW_CHAR_START '-'
 #define SW_CHAR_END '='

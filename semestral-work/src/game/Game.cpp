@@ -372,7 +372,7 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
     return GameState::FINISHED;
   }
 
-  for (int i = 0; i < GAME_MAX_MONSTERS; ++i) {
+  for (int i = 0; i < GAME_MAX_MONSTERS + round; ++i) {
     int min = 0;
     int max = (int) monsterTypeList.size() - 1;
     int type = rand() % (max - min + 1) + min;
@@ -422,7 +422,6 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
             roadList[it->pathIndex].second <=
             towersInMap[i]->x + towersInMap[i]->getWidth() + towersInMap[i]->getRange()
             ) {
-            infoScreen.process("match");
             if (towersInMap[i]->currentAmmo == -1) {
               it->attack(towersInMap[i]->getAttackPower());
             }
@@ -430,8 +429,6 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
             if (towersInMap[i]->currentAmmo > 0) {
               it->attack(towersInMap[i]->getAttackPower());
               --towersInMap[i]->currentAmmo;
-            } else {
-              infoScreen.process("out of ammo");
             }
           }
         }
