@@ -25,10 +25,10 @@ ScreenState InfoScreen::process (std::string text, int time) {
   std::string headingText = "INFO";
 
   wattron(window, COLOR_PAIR(color));
-  mvwprintw(window, ((getmaxy(window)) / 2) - 1, (getmaxx(window)) / 2 - (int) (headingText.size() / 2),
+  mvwprintw(window, ((getmaxy(window)) / 2) - 1, ((getmaxx(window)) / 2) - (int) (headingText.size() / 2),
             headingText.c_str());
 
-  mvwprintw(window, ((getmaxy(window)) / 2) + 1, (getmaxx(window)) / 2 - (int) (text.size() / 2), text.c_str());
+  mvwprintw(window, ((getmaxy(window)) / 2) + 1, ((getmaxx(window)) / 2) - (int) (text.size() / 2), text.c_str());
 
   wrefresh(window);
 

@@ -46,7 +46,7 @@ public:
   /**
    * Process next round of the game.
    */
-  GameState nextRound (WINDOW* game, WINDOW* stats);
+  GameState nextRound();
 
   GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow);
 
@@ -57,6 +57,8 @@ public:
   int getMapWidth ();
 
   int getNumberOfTowerTypes ();
+
+  bool addTower (int type, int y, int x);
 
 protected:
   bool newGame;

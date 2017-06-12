@@ -1,10 +1,11 @@
 #include <ncurses.h>
+#include <sstream>
 
 #include "../game/Game.hpp"
 #include "ErrorScreen.hpp"
+#include "../ColorPairGenerator.hpp"
 
 #include "GameScreen.hpp"
-#include "../ColorPairGenerator.hpp"
 
 #define MARGIN 1
 #define INPUT_SIZE (10 + 1)
@@ -44,7 +45,7 @@ ScreenState GameScreen::process () {
                                MARGIN + game.getMapHeight() + 3 * MARGIN,
                                (getmaxx(window) / 2) - (getmaxx(window) / 4));
 
-  WINDOW* towerWindow = newwin(game.getNumberOfTowerTypes(),
+  WINDOW* towerWindow = newwin(game.getNumberOfTowerTypes() + 1,
                                getmaxx(window) / 2,
                                MARGIN + game.getMapHeight() + 4 * MARGIN + STATS_HEIGHT,
                                (getmaxx(window) / 2) - (getmaxx(window) / 4));
@@ -104,6 +105,18 @@ ScreenState GameScreen::process () {
 
     inputCommand = std::string(input);
 
+    // trim input command
+
+    while (!inputCommand.empty() && std::isspace(*inputCommand.begin())) {
+      inputCommand.erase(inputCommand.begin());
+    }
+
+    while (!inputCommand.empty() && std::isspace(*inputCommand.rbegin())) {
+      inputCommand.erase(inputCommand.length() - 1);
+    }
+
+    // commands
+
     if (inputCommand == "exit") {
       wclear(gameWindow);
       wrefresh(gameWindow);
@@ -154,6 +167,18 @@ ScreenState GameScreen::process () {
     } else if (inputCommand == "tower") {
       infoScreen.process("Write the type of the tower and it's Y and X of the left top corner. Like '1 23 12'");
 
+      wclear(gameWindow);
+      wclear(commandWindow);
+      wclear(statsWindow);
+      wclear(towerWindow);
+
+      game.print(gameWindow, statsWindow, towerWindow, true);
+
+      wrefresh(gameWindow);
+      wrefresh(commandWindow);
+      wrefresh(statsWindow);
+      wrefresh(towerWindow);
+
       // turn on cursor
       echo();
       curs_set(TRUE);
@@ -171,14 +196,37 @@ ScreenState GameScreen::process () {
 
       inputCommand = std::string(input);
 
-      // TODO: get the input to the stream and read
-//      std::stringstream inputCommandStream;
-//
-//      int type, y, x;
-//
-//      inputCommandStream >> type >> y >> x;
+      // trim input
+
+      while (!inputCommand.empty() && std::isspace(*inputCommand.begin())) {
+        inputCommand.erase(inputCommand.begin());
+      }
+
+      while (!inputCommand.empty() && std::isspace(*inputCommand.rbegin())) {
+        inputCommand.erase(inputCommand.length() - 1);
+      }
+
+      std::stringstream inputCommandStream;
+      inputCommandStream.str(inputCommand);
+
+      int type, y, x;
+
+      inputCommandStream >> type >> y >> x;
+
+      if (!game.addTower(type, y, x)) {
+        errorScreen.process("Cannot place tower to this place.");
+      }
+    } else if (inputCommand == "") {
+      game.nextRound();
+
+      game.print(gameWindow, statsWindow, towerWindow, true);
+
+      wrefresh(gameWindow);
+      wrefresh(commandWindow);
+      wrefresh(statsWindow);
+      wrefresh(towerWindow);
     } else {
-      game.nextRound(gameWindow, statsWindow);
+      errorScreen.process("Wrong command.");
     }
   }
 }

@@ -43,7 +43,7 @@ bool Game::load (std::string fileName) {
     return false;
   }
 
-  infoScreen.process("Tower types loading", GAME_INFO_DELAY);
+  infoScreen.process("Tower types loading.", GAME_INFO_DELAY);
 
   inFile >> numberOfTowerTypes;
 
@@ -61,7 +61,7 @@ bool Game::load (std::string fileName) {
     );
   }
 
-  infoScreen.process("Monster types loading", GAME_INFO_DELAY);
+  infoScreen.process("Monster types loading.", GAME_INFO_DELAY);
 
   inFile >> numberOfMonsterTypes;
 
@@ -80,7 +80,7 @@ bool Game::load (std::string fileName) {
     );
   }
 
-  infoScreen.process("Map loading", GAME_INFO_DELAY);
+  infoScreen.process("Map loading.", GAME_INFO_DELAY);
 
   inFile >> map.height >> map.width;
 
@@ -152,7 +152,7 @@ bool Game::load (std::string fileName) {
 
   FILE_READ_CHECK
 
-  infoScreen.process("Loading towers in map", GAME_INFO_DELAY);
+  infoScreen.process("Loading towers in map.", GAME_INFO_DELAY);
 
   inFile >> numberOfTowersInMap;
 
@@ -198,23 +198,23 @@ bool Game::load (std::string fileName) {
       }
     }
   }
-
-  int counter = 0;
-
-  for (int i = 0; i < (int) map.data.size(); ++i) {
-    for (int j = 0; j < (int) map.data[i].size(); ++j) {
-      Cell* x = &*map.data[i][j];
-
-      // Cell is Wall
-      if (dynamic_cast<Building*>(x) != NULL) {
-        counter++;
-      }
-    }
-  }
+//
+//  int counter = 0;
+//
+//  for (int i = 0; i < (int) map.data.size(); ++i) {
+//    for (int j = 0; j < (int) map.data[i].size(); ++j) {
+//      Cell* x = &*map.data[i][j];
+//
+//      // Cell is Wall
+//      if (dynamic_cast<Building*>(x) != NULL) {
+//        counter++;
+//      }
+//    }
+//  }
 
   inFile.close();
 
-  infoScreen.process("Generating closest road from start to end", GAME_INFO_DELAY);
+  infoScreen.process("Generating closest road from start to end.", GAME_INFO_DELAY);
 
   return makeRoad(startRoadY, startRoadX, endRoadY, endRoadX);
 }
@@ -225,6 +225,16 @@ bool Game::save (std::string fileName) {
 
   std::ofstream outFile;
 
+  // trim file name
+
+  while (!fileName.empty() && std::isspace(*fileName.begin())) {
+    fileName.erase(fileName.begin());
+  }
+
+  while (!fileName.empty() && std::isspace(*fileName.rbegin())) {
+    fileName.erase(fileName.length() - 1);
+  }
+
   outFile.open(std::string(SW_GAME_DATA_SAVE) + fileName + ".game");
 
   if (!outFile.is_open()) {
@@ -233,7 +243,7 @@ bool Game::save (std::string fileName) {
 
   // Tower types
 
-  outFile << numberOfTowerTypes << std::endl << std::endl;
+  outFile << (int) towerTypeList.size() << std::endl << std::endl;
 
   FILE_WRITE_CHECK
 
@@ -253,7 +263,7 @@ bool Game::save (std::string fileName) {
 
   // Monsters type
 
-  outFile << numberOfMonsterTypes << std::endl << std::endl;
+  outFile << (int) monsterTypeList.size() << std::endl << std::endl;
 
   FILE_WRITE_CHECK
 
@@ -316,7 +326,7 @@ bool Game::save (std::string fileName) {
   outFile << invasionLimit << std::endl << std::endl;
   outFile << invasionCount << std::endl << std::endl;
 
-  outFile << numberOfTowersInMap << std::endl << std::endl;
+  outFile << (int) towersInMap.size() << std::endl << std::endl;
 
   FILE_WRITE_CHECK
 
@@ -336,11 +346,23 @@ bool Game::save (std::string fileName) {
   return true;
 }
 
-GameState Game::nextRound (WINDOW* game, WINDOW* stats) {
+GameState Game::nextRound () {
   InfoScreen infoScreen;
-  infoScreen.process("Game started");
+  infoScreen.process("Round " + std::to_string(round));
 
-  return GameState::IN_PROGRESS;
+  if (invasionCount >= invasionLimit) {
+    infoScreen.process("You have already finished the game.");
+    infoScreen.process("Money $" + std::to_string(money) + ", at round " + std::to_string(round));
+    return GameState::FINISHED;
+  }
+
+  round++;
+
+  if (invasionCount < invasionLimit) {
+    return GameState::IN_PROGRESS;
+  }
+
+  return GameState::LOST;
 }
 
 GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow) {
@@ -396,7 +418,7 @@ GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWi
 
   // towers window print
 
-  mvwprintw(towersWindow, 0, 0, "Towers types:");
+  mvwprintw(towersWindow, 0, 0, std::string("Towers types: " + std::to_string((int) towerTypeList.size()) + " | " + std::to_string((int) towersInMap.size())).c_str());
 
   for (int i = 0; i < (int) towerTypeList.size(); ++i) {
     mvwprintw(towersWindow, i + 1, 0, std::string(
@@ -591,4 +613,45 @@ Game::~Game () {
 
 int Game::getNumberOfTowerTypes () {
   return numberOfTowerTypes;
+}
+
+bool Game::addTower (int type, int y, int x) {
+  ErrorScreen errorScreen;
+
+  if (type >= (int) towerTypeList.size() || type < 0) {
+    errorScreen.process("Not existed type of tower used.");
+    return false;
+  }
+
+  for (int j = y; j < y + towerTypeList[type].getHeight(); ++j) {
+    for (int k = x; k < x + towerTypeList[type].getWidth(); ++k) {
+      if (!map.data[j][k]->isEmpty()) {
+        errorScreen.process("Tower cannot be created on not empty cell.");
+        return false;
+      }
+    }
+  }
+
+  Tower* tmp = new Tower(towerTypeList[type]);
+  tmp->y = y;
+  tmp->x = x;
+  tmp->letter = towerLetter++;
+
+  towersInMap.push_back(
+    tmp
+  );
+
+  for (int i = 0; i < (int) towersInMap.size(); ++i) {
+    for (int j = towersInMap[i]->y; j < towersInMap[i]->y + towersInMap[i]->getHeight(); ++j) {
+      for (int k = towersInMap[i]->x; k < towersInMap[i]->x + towersInMap[i]->getWidth(); ++k) {
+
+        delete map.data[j][k];
+        map.data[j][k] = new Building(towersInMap[i]);
+      }
+    }
+  }
+
+  numberOfTowersInMap++;
+
+  return true;
 }
