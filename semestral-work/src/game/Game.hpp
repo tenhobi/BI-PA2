@@ -48,11 +48,15 @@ public:
    */
   GameState nextRound (WINDOW* game, WINDOW* stats);
 
-  GameState print (WINDOW* gameWindow, WINDOW* statsWindow);
+  GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow);
+
+  GameState print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow, bool showRoad);
 
   int getMapHeight ();
 
   int getMapWidth ();
+
+  int getNumberOfTowerTypes ();
 
 protected:
   bool newGame;

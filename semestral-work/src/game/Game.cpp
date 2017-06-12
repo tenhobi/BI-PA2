@@ -343,10 +343,12 @@ GameState Game::nextRound (WINDOW* game, WINDOW* stats) {
   return GameState::IN_PROGRESS;
 }
 
-GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow) {
-  wclear(statsWindow);
-  mvwprintw(statsWindow, 0, 0, std::to_string(numberOfTowersInMap).c_str());
-  wrefresh(statsWindow);
+GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow) {
+  return print(gameWindow, statsWindow, towersWindow, false);
+}
+
+GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towersWindow, bool showRoad) {
+  // game window print
 
   for (int i = 0; i < map.height; ++i) {
     for (int j = 0; j < map.width; ++j) {
@@ -368,7 +370,7 @@ GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow) {
           mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_START).c_str());
         } else if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
           mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_END).c_str());
-        } else {
+        } else if (showRoad) {
           mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_ROAD).c_str());
         }
       }
@@ -380,6 +382,31 @@ GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow) {
   }
 
   wrefresh(gameWindow);
+
+  // stats window print
+
+  wclear(statsWindow);
+
+  mvwprintw(statsWindow, 0, 0, std::string("Round: " + std::to_string(round)).c_str());
+  mvwprintw(statsWindow, 1, 0, std::string("Money: " + std::to_string(money)).c_str());
+  mvwprintw(statsWindow, 2, 0,
+            std::string("Invasion: " + std::to_string(invasionCount) + "/" + std::to_string(invasionLimit)).c_str());
+
+  wrefresh(statsWindow);
+
+  // towers window print
+
+  mvwprintw(towersWindow, 0, 0, "Towers types:");
+
+  for (int i = 0; i < (int) towerTypeList.size(); ++i) {
+    mvwprintw(towersWindow, i + 1, 0, std::string(
+      std::to_string(i) + ": $" + std::to_string(towerTypeList[i].getCost()) + ", " +
+      std::to_string(towerTypeList[i].getHeight()) + "x" + std::to_string(towerTypeList[i].getWidth()) + ", ! " +
+      std::to_string(towerTypeList[i].getAttackPower()) + ", o " + std::to_string(towerTypeList[i].getRange()) +
+      ", :: " + std::to_string(towerTypeList[i].getAmmoPerRound())).c_str());
+  }
+
+  wrefresh(towersWindow);
 
   return GameState::IN_PROGRESS;
 }
@@ -560,4 +587,8 @@ Game::~Game () {
   for (int i = 0; i < (int) towersInMap.size(); ++i) {
     delete towersInMap[i];
   }
+}
+
+int Game::getNumberOfTowerTypes () {
+  return numberOfTowerTypes;
 }

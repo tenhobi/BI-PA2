@@ -8,6 +8,7 @@
 
 #define MARGIN 1
 #define INPUT_SIZE (10 + 1)
+#define STATS_HEIGHT 3
 
 GameScreen::GameScreen (std::string fileName, bool newGame) : fileName(fileName), newGame(newGame) {}
 
@@ -38,10 +39,15 @@ ScreenState GameScreen::process () {
                                  MARGIN + game.getMapHeight() + MARGIN,
                                  (getmaxx(window) / 2) - (INPUT_SIZE / 2));
 
-  WINDOW* statsWindow = newwin(3,
+  WINDOW* statsWindow = newwin(STATS_HEIGHT,
                                getmaxx(window),
                                MARGIN + game.getMapHeight() + 3 * MARGIN,
-                               (getmaxx(window) / 2) - (INPUT_SIZE / 2));
+                               (getmaxx(window) / 2) - (getmaxx(window) / 4));
+
+  WINDOW* towerWindow = newwin(game.getNumberOfTowerTypes(),
+                               getmaxx(window) / 2,
+                               MARGIN + game.getMapHeight() + 4 * MARGIN + STATS_HEIGHT,
+                               (getmaxx(window) / 2) - (getmaxx(window) / 4));
 
   wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_BLACK, COLOR_WHITE)));
   wrefresh(gameWindow);
@@ -49,34 +55,34 @@ ScreenState GameScreen::process () {
   wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_RED, COLOR_WHITE)));
   wrefresh(commandWindow);
 
-  wbkgd(statsWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_RED, COLOR_BLACK)));
   wrefresh(statsWindow);
+
+  wrefresh(towerWindow);
+
+  // input of command
 
   char input[INPUT_SIZE + 5];
   std::string inputCommand;
 
-  if (game.print(gameWindow, statsWindow) == GameState::FINISHED) {
+  if (game.print(gameWindow, statsWindow, towerWindow, true) == GameState::FINISHED) {
     infoScreen.process("The game has been already finished.");
     return ScreenState::CONTINUE;
   }
 
+  // loop
+
   while (true) {
-//    wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
     wclear(gameWindow);
-    wrefresh(gameWindow);
-
-//    wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_GREEN)));
     wclear(commandWindow);
-    wrefresh(commandWindow);
-
     wclear(statsWindow);
+    wclear(towerWindow);
+
+    game.print(gameWindow, statsWindow, towerWindow, true);
+
+    wrefresh(gameWindow);
+    wrefresh(commandWindow);
     wrefresh(statsWindow);
-
-    game.print(gameWindow, statsWindow);
-
-    // print map
-    // print towers
-    // print money, round, invasion
+    wrefresh(towerWindow);
 
     // turn on cursor
     echo();
@@ -93,7 +99,6 @@ ScreenState GameScreen::process () {
     wclear(commandWindow);
     wrefresh(commandWindow);
 
-    // TODO
     mvwprintw(window, 3, 0, input);
     wrefresh(window);
 
@@ -109,18 +114,24 @@ ScreenState GameScreen::process () {
       wclear(statsWindow);
       wrefresh(statsWindow);
 
+      wclear(towerWindow);
+      wrefresh(towerWindow);
+
       return ScreenState::EXIT;
     } else if (inputCommand == "save") {
       infoScreen.process("Write the name of the file into the command window.");
 
       wclear(gameWindow);
-      wrefresh(gameWindow);
-
       wclear(commandWindow);
-      wrefresh(commandWindow);
-
       wclear(statsWindow);
+      wclear(towerWindow);
+
+      game.print(gameWindow, statsWindow, towerWindow, true);
+
+      wrefresh(gameWindow);
+      wrefresh(commandWindow);
       wrefresh(statsWindow);
+      wrefresh(towerWindow);
 
       // turn on cursor
       echo();
