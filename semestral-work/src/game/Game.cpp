@@ -449,6 +449,7 @@ GameState Game::nextRound (WINDOW* gameWindow, WINDOW* statsWindow, WINDOW* towe
   }
 
   infoScreen.process("You have lost the game, sorry. Monsters invaded your kingdom.");
+  infoScreen.process("Money $" + std::to_string(money) + ", at round " + std::to_string(round));
   return GameState::LOST;
 }
 

@@ -223,6 +223,7 @@ ScreenState GameScreen::process () {
         case GameState::FINISHED:
           return ScreenState::EXIT;
         case GameState::LOST:
+          game.save("lost-game-results");
           return ScreenState::EXIT;
       }
 
