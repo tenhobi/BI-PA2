@@ -2,6 +2,8 @@
 #define SEMESTRAL_WORK_GAME_HPP
 
 #include <string>
+#include <queue>
+#include <vector>
 #include <ncurses.h>
 
 #include "Tower.hpp"
@@ -25,6 +27,8 @@ public:
    */
   Game (bool newGame);
 
+  ~Game ();
+
   /**
    * Loads the game from a file.
    *
@@ -44,7 +48,7 @@ public:
    */
   GameState nextRound (WINDOW* game, WINDOW* stats);
 
-  GameState print (WINDOW* game, WINDOW* stats);
+  GameState print (WINDOW* gameWindow, WINDOW* statsWindow);
 
   int getMapHeight ();
 
@@ -98,9 +102,13 @@ protected:
 
   int numberOfTowersInMap;
 
-  std::vector<Tower> towersInMap;
+  std::vector<Tower*> towersInMap;
 
-  void makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
+  int towerLetter = 'A';
+
+  void bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>>& mapCells, std::queue<std::pair<int, int>>& mapQueue);
+
+  bool makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX);
 };
 
 #endif // SEMESTRAL_WORK_GAME_HPP

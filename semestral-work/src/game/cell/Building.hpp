@@ -9,7 +9,8 @@
  * Building in the map.
  */
 class Building : public Cell {
-  Building (Tower& tower);
+public:
+  Building (Tower* tower);
 
   /**
    * The building can not be build on top of another building, so this is not an empty cell.
@@ -18,11 +19,13 @@ class Building : public Cell {
    */
   bool isEmpty () const override;
 
+  Tower* getTower ();
+
 protected:
   /**
    * Tower which is on top of this building cell.
    */
-  Tower& tower;
+  Tower* tower;
 };
 
 #endif // SEMESTRAL_WORK_BUILDING_HPP

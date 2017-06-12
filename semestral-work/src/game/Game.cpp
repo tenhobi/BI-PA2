@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <queue>
 
 #include "../Config.hpp"
 #include "../screen/InfoScreen.hpp"
@@ -139,7 +140,6 @@ bool Game::load (std::string fileName) {
           errorScreen.process("Wrong input character in map data.");
           return false;
       }
-
     }
   }
 
@@ -179,22 +179,44 @@ bool Game::load (std::string fileName) {
       }
     }
 
-    Tower tmp = towerTypeList[type - 1];
-    tmp.y = leftTopCornerY;
-    tmp.x = leftTopCornerX;
+    Tower* tmp = new Tower(towerTypeList[type - 1]);
+    tmp->y = leftTopCornerY;
+    tmp->x = leftTopCornerX;
+    tmp->letter = towerLetter++;
 
     towersInMap.push_back(
       tmp
     );
   }
 
+  for (int i = 0; i < (int) towersInMap.size(); ++i) {
+    for (int j = towersInMap[i]->y; j < towersInMap[i]->y + towersInMap[i]->getHeight(); ++j) {
+      for (int k = towersInMap[i]->x; k < towersInMap[i]->x + towersInMap[i]->getWidth(); ++k) {
+
+        delete map.data[j][k];
+        map.data[j][k] = new Building(towersInMap[i]);
+      }
+    }
+  }
+
+  int counter = 0;
+
+  for (int i = 0; i < (int) map.data.size(); ++i) {
+    for (int j = 0; j < (int) map.data[i].size(); ++j) {
+      Cell* x = &*map.data[i][j];
+
+      // Cell is Wall
+      if (dynamic_cast<Building*>(x) != NULL) {
+        counter++;
+      }
+    }
+  }
+
   inFile.close();
 
   infoScreen.process("Generating closest road from start to end", GAME_INFO_DELAY);
 
-  makeRoad(startRoadY, startRoadX, endRoadY, endRoadX);
-
-  return true;
+  return makeRoad(startRoadY, startRoadX, endRoadY, endRoadX);
 }
 
 bool Game::save (std::string fileName) {
@@ -273,6 +295,7 @@ bool Game::save (std::string fileName) {
             outFile << SW_CHAR_END;
             break;
           default:
+            outFile << SW_CHAR_CELL;
             break;
         }
       } else {
@@ -299,9 +322,9 @@ bool Game::save (std::string fileName) {
 
   for (int i = 0; i < (int) towersInMap.size(); ++i) {
     for (int j = 0; j < (int) towerTypeList.size(); ++j) {
-      if (towersInMap[i] == towerTypeList[j]) {
+      if (*towersInMap[i] == towerTypeList[j]) {
         outFile << j + 1 << std::endl;
-        outFile << towersInMap[i].y << " " << towersInMap[i].x << std::endl;
+        outFile << towersInMap[i]->y << " " << towersInMap[i]->x << std::endl;
         outFile << std::endl;
 
         FILE_WRITE_CHECK
@@ -320,45 +343,209 @@ GameState Game::nextRound (WINDOW* game, WINDOW* stats) {
   return GameState::IN_PROGRESS;
 }
 
-GameState Game::print (WINDOW* game, WINDOW* stats) {
-//  for (int i = 0; i < map.height; ++i) {
-//    for (int j = 0; j < map.width; ++j) {
-//      Cell* x = &*map.data[i][j];
-//
-//      // Cell is Wall
-//      if (dynamic_cast<Wall*>(x) != NULL) {
-//        mvprintw(i, j, (char*) SW_CHAR_WALL);
-//      }
-//      // Cell is Road
-//      else if (dynamic_cast<Road*>(x) != NULL) {
-//        switch (dynamic_cast<Road*>(x)->getState()) {
-//          case RoadState::START:
-//            mvprintw(i, j, (char*) SW_CHAR_START);
-//            break;
-//          case RoadState::END:
-//            mvprintw(i, j, (char*) SW_CHAR_END);
-//            break;
-//          default:
-//            mvprintw(i, j, (char*) SW_CHAR_ROAD);
-//            break;
-//        }
-//      }
-//      // Cell is Building
-//      else if (dynamic_cast<Building*>(x) != NULL) {
-//        mvprintw(i, j, (char*) SW_CHAR_ROAD);
-//      }
-//      // Cell is regular Cell
-//      else {
-//        mvprintw(i, j, (char*) SW_CHAR_CELL);
-//      }
-//    }
-//  }
+GameState Game::print (WINDOW* gameWindow, WINDOW* statsWindow) {
+  wclear(statsWindow);
+  mvwprintw(statsWindow, 0, 0, std::to_string(numberOfTowersInMap).c_str());
+  wrefresh(statsWindow);
+
+  for (int i = 0; i < map.height; ++i) {
+    for (int j = 0; j < map.width; ++j) {
+      Cell* x = &*map.data[i][j];
+
+      // Cell is Building
+      if (dynamic_cast<Building*>(x) != NULL) {
+        mvwprintw(gameWindow, i, j, std::string(1, dynamic_cast<Building*>(x)->getTower()->letter).c_str());
+      }
+        // Cell is Wall
+      else if (dynamic_cast<Wall*>(x) != NULL) {
+        mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_WALL).c_str());
+      }
+        // Cell is Road
+      else if (dynamic_cast<Road*>(x) != NULL) {
+        if (!dynamic_cast<Road*>(x)->monsterList.empty()) {
+          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_MONSTER).c_str());
+        } else if (dynamic_cast<Road*>(x)->getState() == RoadState::START) {
+          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_START).c_str());
+        } else if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
+          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_END).c_str());
+        } else {
+          mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_ROAD).c_str());
+        }
+      }
+        // Cell is regular Cell
+      else {
+        mvwprintw(gameWindow, i, j, std::string(1, SW_CHAR_CELL).c_str());
+      }
+    }
+  }
+
+  wrefresh(gameWindow);
 
   return GameState::IN_PROGRESS;
 }
 
-void Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX) {
+bool Game::makeRoad (int startRoadY, int startRoadX, int endRoadY, int endRoadX) {
+  ErrorScreen errorScreen;
+  InfoScreen infoScreen;
 
+  std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>> mapCells;
+  mapCells.resize((unsigned long) map.height,
+                  std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>((unsigned long) map.width));
+
+  // define default values
+  for (int i = 0; i < (int) mapCells.size(); ++i) {
+    for (int j = 0; j < (int) mapCells[i].size(); ++j) {
+      mapCells[i][j].first = std::pair<int, int>(i, j);
+      mapCells[i][j].second = std::pair<int, int>(-1, -1);
+    }
+  }
+
+  std::queue<std::pair<int, int>> mapQueue;
+
+  // put the end of map to the queue
+  mapQueue.push(std::pair<int, int>(endRoadY, endRoadX));
+
+  bfs(mapCells, mapQueue);
+
+  int posY = startRoadY;
+  int posX = startRoadX;
+
+  while (true) {
+    if (posY == -1 || posX == -1) {
+      errorScreen.process("Route can not be build. 1" + std::to_string(posY) + "; " + std::to_string(posX));
+      return false;
+    }
+
+    if (mapCells[posY][posX].second.first == -1 || mapCells[posY][posX].second.second == -1) {
+      Cell* x = &*map.data[posY][posX];
+
+      if (dynamic_cast<Road*>(x) != NULL) {
+        if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
+          return true;
+        }
+      }
+
+      errorScreen.process("Route can not be build. " + std::to_string(posY) + "; " + std::to_string(posX));
+      return false;
+    }
+
+    Cell* x = &*map.data[posY][posX];
+
+//    infoScreen.process(std::to_string(posY) + "; " + std::to_string(posX));
+
+    if (dynamic_cast<Road*>(x) != NULL) {
+      if (dynamic_cast<Road*>(x)->getState() == RoadState::END) {
+        break;
+      }
+
+      dynamic_cast<Road*>(x)->next = std::pair<int, int>(mapCells[posY][posX].second.first,
+                                                         mapCells[posY][posX].second.second);
+      posY = mapCells[posY][posX].second.first;
+      posX = mapCells[posY][posX].second.second;
+
+      if (posY == -1 || posX == -1) {
+        break;
+      }
+      continue;
+    }
+
+    delete map.data[posY][posX];
+    Road* tmp = new Road(RoadState::NORMAL);
+    tmp->next = std::pair<int, int>(mapCells[posY][posX].second.first, mapCells[posY][posX].second.second);
+    map.data[posY][posX] = tmp;
+    posY = mapCells[posY][posX].second.first;
+    posX = mapCells[posY][posX].second.second;
+
+    if (posY == -1 || posX == -1) {
+      break;
+    }
+  }
+
+  return true;
+}
+
+void Game::bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>>& mapCells,
+                std::queue<std::pair<int, int>>& mapQueue) {
+  for (int i = 0; i < (int) mapQueue.size(); ++i) {
+    std::pair<int, int>& node = mapQueue.front();
+
+    if (node.second + 1 < (int) mapCells[0].size()) {
+      if (mapCells[node.first][node.second + 1].second.first == -1 &&
+          mapCells[node.first][node.second + 1].second.second == -1) {
+
+        Cell* x = &*map.data[node.first][node.second + 1];
+        if (map.data[node.first][node.second + 1]->isEmpty() ||
+            (dynamic_cast<Road*>(x) != NULL && dynamic_cast<Road*>(x)->getState() == RoadState::START)) {
+
+          // set reference to this node
+          mapCells[node.first][node.second + 1].second.first = node.first;
+          mapCells[node.first][node.second + 1].second.second = node.second;
+
+          // add to queue
+          mapQueue.push(std::pair<int, int>(node.first, node.second + 1));
+        }
+      }
+    }
+
+    if (node.second - 1 >= 0) {
+      if (mapCells[node.first][node.second - 1].second.first == -1 &&
+          mapCells[node.first][node.second - 1].second.second == -1) {
+
+        Cell* x = &*map.data[node.first][node.second - 1];
+        if (map.data[node.first][node.second - 1]->isEmpty() ||
+            (dynamic_cast<Road*>(x) != NULL && dynamic_cast<Road*>(x)->getState() == RoadState::START)) {
+
+          // set reference to this node
+          mapCells[node.first][node.second - 1].second.first = node.first;
+          mapCells[node.first][node.second - 1].second.second = node.second;
+
+          // add to queue
+          mapQueue.push(std::pair<int, int>(node.first, node.second - 1));
+        }
+      }
+    }
+
+    if ((node.first + 1) < (int) mapCells.size()) {
+      if (mapCells[node.first + 1][node.second].second.first == -1 &&
+          mapCells[node.first + 1][node.second].second.second == -1) {
+
+        Cell* x = &*map.data[node.first + 1][node.second];
+        if (map.data[node.first + 1][node.second]->isEmpty() ||
+            (dynamic_cast<Road*>(x) != NULL && dynamic_cast<Road*>(x)->getState() == RoadState::START)) {
+
+          // set reference to this node
+          mapCells[node.first + 1][node.second].second.first = node.first;
+          mapCells[node.first + 1][node.second].second.second = node.second;
+
+          // add to queue
+          mapQueue.push(std::pair<int, int>(node.first + 1, node.second));
+        }
+      }
+    }
+
+    if ((node.first - 1) >= 0) {
+      if (mapCells[node.first - 1][node.second].second.first == -1 &&
+          mapCells[node.first - 1][node.second].second.second == -1) {
+        Cell* x = &*map.data[node.first - 1][node.second];
+        if (map.data[node.first - 1][node.second]->isEmpty() ||
+            (dynamic_cast<Road*>(x) != NULL && dynamic_cast<Road*>(x)->getState() == RoadState::START)) {
+
+          // set reference to this node
+          mapCells[node.first - 1][node.second].second.first = node.first;
+          mapCells[node.first - 1][node.second].second.second = node.second;
+
+          // add to queue
+          mapQueue.push(std::pair<int, int>(node.first - 1, node.second));
+        }
+      }
+    }
+
+    mapQueue.pop();
+  }
+
+  if (!mapQueue.empty()) {
+    bfs(mapCells, mapQueue);
+  }
 }
 
 int Game::getMapHeight () {
@@ -367,4 +554,10 @@ int Game::getMapHeight () {
 
 int Game::getMapWidth () {
   return map.width;
+}
+
+Game::~Game () {
+  for (int i = 0; i < (int) towersInMap.size(); ++i) {
+    delete towersInMap[i];
+  }
 }

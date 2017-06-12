@@ -4,6 +4,8 @@ bool Building::isEmpty () const {
   return false;
 }
 
-Building::Building (Tower& tower) : tower(tower) {
+Building::Building (Tower* tower) : tower(tower) {}
 
+Tower* Building::getTower () {
+  return tower;
 }

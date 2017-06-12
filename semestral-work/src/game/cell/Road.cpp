@@ -1,7 +1,15 @@
+#include "../Monster.hpp"
+
 #include "Road.hpp"
 
-Road::Road (RoadState state) : state(state) {
+Road::Road (RoadState state) : state(state) {}
 
+void Road::addMonster (Monster monster) {
+  monsterList.push_back(monster);
+}
+
+void Road::removeMonster (Monster monster) {
+  // todo: remove monster
 }
 
 bool Road::isEmpty () const {

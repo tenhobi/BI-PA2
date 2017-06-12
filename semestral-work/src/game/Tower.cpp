@@ -8,6 +8,13 @@ Tower::Tower (int cost, int height, int width, int attackPower, int range, int a
                                                                                                ammoPerRound(
                                                                                                  ammoPerRound) {}
 
+Tower::Tower (const Tower& tower) : cost(tower.cost),
+                              height(tower.height),
+                              width(tower.width),
+                              attackPower(tower.attackPower),
+                              range(tower.range),
+                              ammoPerRound(tower.ammoPerRound) {}
+
 int Tower::getCost () {
   return cost;
 }
@@ -41,3 +48,4 @@ bool Tower::operator== (Tower b) {
     range == b.range &&
     ammoPerRound == b.ammoPerRound;
 }
+

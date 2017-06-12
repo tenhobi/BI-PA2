@@ -1,6 +1,8 @@
 #ifndef SEMESTRAL_WORK_ROAD_HPP
 #define SEMESTRAL_WORK_ROAD_HPP
 
+#include "../Monster.hpp"
+
 #include "Cell.hpp"
 
 enum RoadState {
@@ -22,6 +24,20 @@ public:
   Road (RoadState state);
 
   /**
+   * Adds specific monster to a monster list of this cell.
+   *
+   * @param monster monster to add to the list of monsters
+   */
+  void addMonster (Monster monster);
+
+  /**
+   * Removes specific monster from the monster list.
+   *
+   * @param monster monster to remove from the list of monsters
+   */
+  void removeMonster (Monster monster);
+
+  /**
    * Road is always not empty.
    *
    * @return always false
@@ -29,6 +45,13 @@ public:
   bool isEmpty () const override;
 
   RoadState getState ();
+
+  std::pair<int, int> next;
+
+  /**
+   * List of monsters in this cell.
+   */
+  std::vector<Monster> monsterList;
 
 protected:
   /**

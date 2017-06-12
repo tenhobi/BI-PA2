@@ -43,11 +43,14 @@ ScreenState GameScreen::process () {
                                MARGIN + game.getMapHeight() + 3 * MARGIN,
                                (getmaxx(window) / 2) - (INPUT_SIZE / 2));
 
-  wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
+  wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_BLACK, COLOR_WHITE)));
   wrefresh(gameWindow);
 
-  wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_GREEN)));
+  wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_RED, COLOR_WHITE)));
   wrefresh(commandWindow);
+
+  wbkgd(statsWindow, COLOR_PAIR(ColorPairGenerator::addColor(COLOR_RED, COLOR_BLACK)));
+  wrefresh(statsWindow);
 
   char input[INPUT_SIZE + 5];
   std::string inputCommand;
@@ -58,11 +61,11 @@ ScreenState GameScreen::process () {
   }
 
   while (true) {
-    wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
+//    wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
     wclear(gameWindow);
     wrefresh(gameWindow);
 
-    wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_GREEN)));
+//    wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_GREEN)));
     wclear(commandWindow);
     wrefresh(commandWindow);
 
@@ -97,15 +100,23 @@ ScreenState GameScreen::process () {
     inputCommand = std::string(input);
 
     if (inputCommand == "exit") {
-      return ScreenState::EXIT;
-    } else if (inputCommand == "save") {
-      infoScreen.process("Write the name of the file into the command window.");
       wclear(gameWindow);
-      wbkgd(gameWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_BLUE)));
       wrefresh(gameWindow);
 
       wclear(commandWindow);
-      wbkgd(commandWindow, COLOR_PAIR(ColorPairGenerator::addColor(0, COLOR_GREEN)));
+      wrefresh(commandWindow);
+
+      wclear(statsWindow);
+      wrefresh(statsWindow);
+
+      return ScreenState::EXIT;
+    } else if (inputCommand == "save") {
+      infoScreen.process("Write the name of the file into the command window.");
+
+      wclear(gameWindow);
+      wrefresh(gameWindow);
+
+      wclear(commandWindow);
       wrefresh(commandWindow);
 
       wclear(statsWindow);

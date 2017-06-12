@@ -9,6 +9,8 @@ class Tower : public Cell {
 public:
   Tower (int cost, int height, int width, int attackPower, int range, int ammoPerRound);
 
+  Tower (const Tower& tower);
+
   std::vector<Cell> towerCells;
 
   int getCost ();
@@ -28,6 +30,8 @@ public:
   int x;
 
   bool operator== (Tower b);
+
+  int letter;
 
 protected:
   int cost;
