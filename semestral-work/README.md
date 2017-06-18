@@ -1,4 +1,4 @@
-# Semestral work
+# Semestral work – Tower defense
 
 Two-day work full of helplessness, crying and suffering.
 
