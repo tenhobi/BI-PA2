@@ -1,4 +1,4 @@
-# Homework
+# Homeworks
 
 ### [Image rotation](01-image-rotation)
 

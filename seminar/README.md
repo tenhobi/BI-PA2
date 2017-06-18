@@ -1,3 +1,3 @@
-# Seminar
+# Seminars
 
 Unadjusted structure of the seminars.
