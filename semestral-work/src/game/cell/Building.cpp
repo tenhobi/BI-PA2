@@ -6,6 +6,6 @@ bool Building::isEmpty () const {
 
 Building::Building (Tower* tower) : tower(tower) {}
 
-Tower* Building::getTower () {
+Tower* Building::getTower () const {
   return tower;
 }

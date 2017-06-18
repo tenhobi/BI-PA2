@@ -29,7 +29,7 @@ public:
    *
    * @return pointer to tower object
    */
-  Tower* getTower ();
+  Tower* getTower () const;
 
 protected:
   /**

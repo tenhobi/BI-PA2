@@ -721,11 +721,11 @@ void Game::bfs (std::vector<std::vector<std::pair<std::pair<int, int>, std::pair
   }
 }
 
-int Game::getMapHeight () {
+int Game::getMapHeight () const {
   return map.height;
 }
 
-int Game::getMapWidth () {
+int Game::getMapWidth () const {
   return map.width;
 }
 
@@ -735,7 +735,7 @@ Game::~Game () {
   }
 }
 
-int Game::getNumberOfTowerTypes () {
+int Game::getNumberOfTowerTypes () const {
   return (int) towerTypeList.size();
 }
 

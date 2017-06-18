@@ -30,21 +30,21 @@ public:
    *
    * @return map height
    */
-  int getMapHeight ();
+  int getMapHeight () const;
 
   /**
    * Return map width.
    *
    * @return map width
    */
-  int getMapWidth ();
+  int getMapWidth () const;
 
   /**
    * Returns number of tower types.
    *
    * @return number of tower type
    */
-  int getNumberOfTowerTypes ();
+  int getNumberOfTowerTypes () const;
 
   /**
    * Adds a tower to the game, if it complies all rules.
