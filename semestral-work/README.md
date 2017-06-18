@@ -1,6 +1,6 @@
 # Semestral work
 
-Two-day work full of helplessness, weeping and suffering.
+Two-day work full of helplessness, crying and suffering.
 
 My result: 11.70 / 12.00 :relaxed:
 
