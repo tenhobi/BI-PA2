@@ -1,5 +1,9 @@
 # Semestral work
 
+Two-day work full of helplessness, weeping and suffering.
+
+My result: 11.70 / 12.00 :relaxed:
+
 ## [Assignment (in Czech)](zadani.txt)
 
 ## Screenshot
