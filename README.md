@@ -1,6 +1,6 @@
 # BI-PA2
 
-My work on BI-PA2 in semester B162 at FIT CTU.
+My work on BI-PA2 in semester B162 at [FIT CTU](https://fit.cvut.cz/en).
 
 ## TL;DR
 
