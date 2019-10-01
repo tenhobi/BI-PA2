@@ -4,7 +4,7 @@ My work on BI-PA2 in semester B162 at [FIT CTU](https://fit.cvut.cz/en).
 
 ## TL;DR
 
-Yo, I am not that good, sorry for that – but it works... well, sometimes. Whatever. Enjoy my shared work. :thumbsup:
+It ain't mutch, but it's an honest work. :thumbsup:
 
 ## [Seminars](seminars)
 
